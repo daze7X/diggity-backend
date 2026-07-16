@@ -3,11 +3,11 @@
 namespace App\Filament\Resources\Portfolios\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction; // Tambah aksi hapus satuan
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn; // Pastikan ini di-import
+use Filament\Actions\EditAction; // Tambah aksi hapus satuan
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn; // Pastikan ini di-import
 use Filament\Tables\Table;
 
 class PortfoliosTable
@@ -30,10 +30,11 @@ class PortfoliosTable
                     ->label('Slug')
                     ->toggleable(isToggledHiddenByDefault: true), // Sembunyikan default biar gak menuh-menuhin tabel
 
-                TextColumn::make('category')
-                    ->label('Kategori Divisi')
+                TextColumn::make('category.name')
+                    ->label('Kategori')
                     ->badge() // Ubah kategori jadi badge estetik
                     ->color('primary') // Warna default ungu/biru khas Filament
+                    ->sortable()
                     ->searchable(),
 
                 TextColumn::make('created_at')

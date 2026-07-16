@@ -9,6 +9,18 @@ class Blog extends Model
 {
     use HasFactory;
 
-    // Tambahkan baris ini untuk membuka gerbang izin input data
-    protected $guarded = [];
+    protected $fillable = [
+        'category_id',
+        'title',
+        'slug',
+        'content',
+        'image',
+        'meta_title',
+        'meta_description',
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

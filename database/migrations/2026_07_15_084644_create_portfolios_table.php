@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('portfolios', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->string('slug')->unique();
-            $table->string('category'); // Misal: App Builder, Brand Growth, dll
             $table->text('technologies'); // Untuk list teknologi (Next.js, Tailwind, dll)
             $table->text('problem'); // Bagian Case Study: Masalah
             $table->text('solution'); // Bagian Case Study: Solusi

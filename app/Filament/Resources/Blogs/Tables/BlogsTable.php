@@ -3,11 +3,11 @@
 namespace App\Filament\Resources\Blogs\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction; // Kita import action delete satuan
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn; // Pastikan ini di-import untuk gambar
+use Filament\Actions\EditAction; // Kita import action delete satuan
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn; // Pastikan ini di-import untuk gambar
 use Filament\Tables\Table;
 
 class BlogsTable
@@ -26,6 +26,13 @@ class BlogsTable
                     ->searchable()
                     ->sortable()
                     ->wrap(), // Supaya kalau judulnya kepanjangan otomatis turun ke bawah (tidak kepotong)
+
+                TextColumn::make('category.name')
+                    ->label('Kategori')
+                    ->badge()
+                    ->color('info')
+                    ->sortable()
+                    ->searchable(),
 
                 TextColumn::make('slug')
                     ->label('Slug')

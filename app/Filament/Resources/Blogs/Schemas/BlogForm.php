@@ -3,10 +3,12 @@
 namespace App\Filament\Resources\Blogs\Schemas;
 
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\MarkdownEditor; // MarkdownEditor kembali aktif aman!
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class BlogForm
 {
@@ -14,12 +16,19 @@ class BlogForm
     {
         return $schema
             ->components([
+                Select::make('category_id')
+                    ->relationship('category', 'name')
+                    ->label('Kategori Artikel')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+
                 TextInput::make('title')
                     ->required()
                     ->maxLength(255)
                     ->lazy()
-                    ->afterStateUpdated(fn ($set, $state) => $set('slug', \Illuminate\Support\Str::slug($state))),
-                
+                    ->afterStateUpdated(fn ($set, $state) => $set('slug', Str::slug($state))),
+
                 TextInput::make('slug')
                     ->required()
                     ->maxLength(255)
