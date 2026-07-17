@@ -37,6 +37,16 @@ class PortfoliosTable
                     ->sortable()
                     ->searchable(),
 
+                TextColumn::make('client')
+                    ->label('Klien')
+                    ->searchable()
+                    ->toggleable(),
+
+                TextColumn::make('duration')
+                    ->label('Durasi')
+                    ->searchable()
+                    ->toggleable(),
+
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime('d M Y')

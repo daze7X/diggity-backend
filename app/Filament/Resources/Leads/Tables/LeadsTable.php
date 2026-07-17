@@ -29,6 +29,16 @@ class LeadsTable
                     ->label('No. Telepon')
                     ->searchable(),
 
+                TextColumn::make('company')
+                    ->label('Perusahaan')
+                    ->searchable()
+                    ->toggleable(),
+
+                TextColumn::make('service')
+                    ->label('Layanan')
+                    ->searchable()
+                    ->toggleable(),
+
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge() // Mengubah teks biasa jadi badge estetik

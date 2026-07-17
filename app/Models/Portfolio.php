@@ -10,9 +10,14 @@ class Portfolio extends Model
         'category_id',
         'title',
         'slug',
+        'client',
+        'duration',
         'technologies',
         'problem',
         'solution',
+        'strategy',
+        'execution',
+        'result',
         'image',
     ];
 

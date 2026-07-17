@@ -30,6 +30,14 @@ class LeadForm
                     ->required()
                     ->maxLength(50),
                     
+                TextInput::make('company')
+                    ->label('Perusahaan')
+                    ->maxLength(255),
+                    
+                TextInput::make('service')
+                    ->label('Layanan yang Diminati')
+                    ->maxLength(255),
+                    
                 Select::make('status')
                     ->label('Status Prospek')
                     ->options([

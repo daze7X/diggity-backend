@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Users\Schemas;
 
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,16 @@ class UserForm
                     ->email()
                     ->required()
                     ->unique(ignoreRecord: true),
+
+                Select::make('role')
+                    ->label('Role Akses')
+                    ->options([
+                        'admin' => 'Admin (Pengelola Konten)',
+                        'super_admin' => 'Super Admin (Akses Penuh)',
+                    ])
+                    ->required()
+                    ->default('admin')
+                    ->native(false),
 
                 TextInput::make('password')
                     ->label('Password')

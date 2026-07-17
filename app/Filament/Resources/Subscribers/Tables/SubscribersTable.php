@@ -1,52 +1,56 @@
 <?php
 
-namespace App\Filament\Resources\Users\Tables;
+namespace App\Filament\Resources\Subscribers\Tables;
 
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class UsersTable
+class SubscribersTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->label('Nama')
-                    ->searchable()
-                    ->sortable(),
-
                 TextColumn::make('email')
-                    ->label('Email')
+                    ->label('Alamat Email')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('role')
-                    ->label('Role')
+                TextColumn::make('status')
+                    ->label('Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'super_admin' => 'danger',
-                        'admin' => 'success',
+                        'active' => 'success',
+                        'inactive' => 'danger',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'super_admin' => 'Super Admin',
-                        'admin' => 'Admin',
+                        'active' => 'Aktif',
+                        'inactive' => 'Tidak Aktif',
                         default => $state,
                     })
-                    ->searchable()
                     ->sortable(),
 
                 TextColumn::make('created_at')
-                    ->label('Terdaftar Pada')
+                    ->label('Tanggal Subscribe')
                     ->dateTime('d M Y H:i')
                     ->sortable(),
             ])
-            ->actions([EditAction::make(), DeleteAction::make()])
-            ->bulkActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
+            ->filters([
+                //
+            ])
+            ->actions([
+                EditAction::make(),
+                DeleteAction::make(),
+            ])
+            ->bulkActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
     }
 }
