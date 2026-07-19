@@ -53,6 +53,7 @@ class PortfolioForm
 
                         FileUpload::make('image')
                             ->image()
+                            ->disk('public')
                             ->directory('portfolios')
                             ->nullable(),
                     ]),

@@ -24,6 +24,7 @@ class TeamForm
                 FileUpload::make('photo')
                     ->label('Foto Profil')
                     ->image()
+                    ->disk('public')
                     ->directory('team-photos')
                     ->avatar() // Mengubah rasio jadi lingkaran/kotak pas untuk foto profil
                     ->columnSpanFull(),

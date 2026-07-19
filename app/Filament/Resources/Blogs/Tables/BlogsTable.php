@@ -5,9 +5,9 @@ namespace App\Filament\Resources\Blogs\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction; // Kita import action delete satuan
+use Filament\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\TextColumn; // Pastikan ini di-import untuk gambar
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class BlogsTable
@@ -15,17 +15,22 @@ class BlogsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->contentGrid([
+                'md' => 2,
+                'lg' => 3,
+            ])
             ->columns([
-                ImageColumn::make('image') // Sesuaikan 'image' dengan nama kolom gambar di database kamu
+                ImageColumn::make('image')
                     ->label('Gambar Utama')
-                    ->square() // Memaksa thumbnail jadi kotak rapi
-                    ->size(50),
+                    ->height(150)
+                    ->width('100%'),
 
                 TextColumn::make('title')
                     ->label('Judul Artikel')
+                    ->weight('bold')
                     ->searchable()
                     ->sortable()
-                    ->wrap(), // Supaya kalau judulnya kepanjangan otomatis turun ke bawah (tidak kepotong)
+                    ->wrap(),
 
                 TextColumn::make('category.name')
                     ->label('Kategori')
@@ -34,22 +39,17 @@ class BlogsTable
                     ->sortable()
                     ->searchable(),
 
-                TextColumn::make('slug')
-                    ->label('Slug')
-                    ->toggleable(isToggledHiddenByDefault: true),
-
                 TextColumn::make('created_at')
                     ->label('Tanggal Rilis')
                     ->dateTime('d M Y')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: false),
+                    ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(), // Tombol hapus cepat langsung di baris data
+                EditAction::make()->slideOver(),
+                DeleteAction::make(),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

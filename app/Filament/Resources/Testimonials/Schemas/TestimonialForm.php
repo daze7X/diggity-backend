@@ -38,6 +38,7 @@ class TestimonialForm
                 FileUpload::make('avatar')
                     ->label('Foto Klien (Opsional)')
                     ->image()
+                    ->disk('public')
                     ->directory('client-avatars')
                     ->avatar()
                     ->columnSpanFull(),

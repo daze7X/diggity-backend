@@ -2,12 +2,13 @@
 
 namespace App\Filament\Resources\Leads\Tables;
 
+use App\Models\Lead;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction; // Tambah aksi hapus satuan
+use Filament\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\SelectColumn; // Opsional jika ingin ganti status langsung di tabel
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class LeadsTable
@@ -17,22 +18,11 @@ class LeadsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Nama Prospek')
+                    ->label('Prospek / Kontak')
+                    ->weight('bold')
                     ->searchable()
-                    ->sortable(),
-
-                TextColumn::make('email')
-                    ->label('Email')
-                    ->searchable(),
-
-                TextColumn::make('phone')
-                    ->label('No. Telepon')
-                    ->searchable(),
-
-                TextColumn::make('company')
-                    ->label('Perusahaan')
-                    ->searchable()
-                    ->toggleable(),
+                    ->sortable()
+                    ->description(fn (Lead $record): string => "Email: {$record->email} | WA: {$record->phone}" . ($record->company ? " | Perusahaan: {$record->company}" : "")),
 
                 TextColumn::make('service')
                     ->label('Layanan')
@@ -41,13 +31,13 @@ class LeadsTable
 
                 TextColumn::make('status')
                     ->label('Status')
-                    ->badge() // Mengubah teks biasa jadi badge estetik
+                    ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'new' => 'info',         // Biru
-                        'read' => 'warning',     // Kuning
-                        'contacted' => 'primary', // Ungu/Biru Tua
-                        'deal' => 'success',     // Hijau
-                        'rejected' => 'danger',   // Merah
+                        'new' => 'info',
+                        'read' => 'warning',
+                        'contacted' => 'primary',
+                        'deal' => 'success',
+                        'rejected' => 'danger',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
@@ -62,9 +52,9 @@ class LeadsTable
 
                 TextColumn::make('created_at')
                     ->label('Tanggal Masuk')
-                    ->dateTime('d M Y H:i') // Format tanggal lebih manusiawi
+                    ->dateTime('d M Y H:i')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: false), // Kita tampilkan biar tahu kapan pesan masuk
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('updated_at')
                     ->dateTime()
@@ -72,13 +62,29 @@ class LeadsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                // Nanti bisa kita isi filter berdasarkan status di sini
+                SelectFilter::make('status')
+                    ->label('Filter Status')
+                    ->options([
+                        'new' => 'Baru Masuk',
+                        'read' => 'Sudah Dibaca',
+                        'contacted' => 'Sedang Dihubungi',
+                        'deal' => 'Deal',
+                        'rejected' => 'Batal',
+                    ]),
+                SelectFilter::make('service')
+                    ->label('Filter Layanan')
+                    ->options([
+                        'App Builder Squad' => 'App Builder Squad',
+                        'Brand Growth Division' => 'Brand Growth Division',
+                        'Cloud & Server Squad' => 'Cloud & Server Squad',
+                        'Digital Skill Lab' => 'Digital Skill Lab',
+                    ]),
             ])
-            ->actions([ // Menggunakan ->actions() standar untuk baris tabel
-                EditAction::make(),
+            ->actions([
+                EditAction::make()->slideOver(),
                 DeleteAction::make(),
             ])
-            ->bulkActions([ // Memindahkan Bulk Action ke tempat yang benar
+            ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
