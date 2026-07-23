@@ -122,7 +122,7 @@ class DiggitySeeder extends Seeder
                 'execution' => 'Membangun arsitektur backend Laravel yang tangguh dengan database PostgreSQL terindeks, dipadukan dengan SPA Vue.js.',
                 'result' => 'Waktu koordinasi pengiriman terpangkas sebesar 65% dan efisiensi rute armada meningkat 30%.',
                 'solution' => 'ERP Logistik Terintegrasi Real-time.',
-                'image' => null
+                'image' => 'portfolios/logistik-nasional.jpg'
             ]
         );
 
@@ -139,7 +139,7 @@ class DiggitySeeder extends Seeder
                 'execution' => 'Menyusun materi iklan video estetik, memasang pixel pelacakan konversi presisi tinggi, dan optimasi landing page.',
                 'result' => 'Tingkat konversi melonjak menjadi 2.8% dan ROAS (Return on Ad Spend) rata-rata mencapai 4.2x.',
                 'solution' => 'Corong Konversi & Retargeting Dinamis.',
-                'image' => null
+                'image' => 'portfolios/growth-marketing.jpg'
             ]
         );
 
@@ -156,7 +156,7 @@ class DiggitySeeder extends Seeder
                 'execution' => 'Kontainerisasi aplikasi dengan Docker, deployment Kubernetes cluster, serta implementasi proteksi DDoS Cloudflare.',
                 'result' => 'Uptime server mencapai 99.99% dan kecepatan respon sistem meningkat 45% lebih cepat.',
                 'solution' => 'Arsitektur High-Availability Multi-Cloud.',
-                'image' => null
+                'image' => 'portfolios/multi-cloud.jpg'
             ]
         );
 
@@ -173,7 +173,7 @@ class DiggitySeeder extends Seeder
                 'execution' => 'Perancangan desain UI/UX interaktif di Figma, implementasi Next.js dengan ISR, dan optimasi core web vitals.',
                 'result' => 'Bounce rate turun menjadi 25% dan waktu load rata-rata di mobile terpangkas dari 5.2 detik ke 1.1 detik.',
                 'solution' => 'Portal Berita Teroptimasi Kecepatan.',
-                'image' => null
+                'image' => 'portfolios/news-portal.jpg'
             ]
         );
 
@@ -183,10 +183,10 @@ class DiggitySeeder extends Seeder
             [
                 'category_id' => $catApp->id,
                 'title' => '5 Teknologi Web Modern Terbaik di Tahun 2026',
-                'content' => '<p>Dunia pengembangan web bergerak sangat cepat. Di tahun 2026 ini, beberapa teknologi telah mendominasi industri karena kemampuannya memberikan performa maksimal dan efisiensi kode.</p><h3>1. Next.js 16</h3><p>Dengan peningkatan kecepatan compile dan dukungan server actions yang lebih matang, Next.js tetap menjadi andalan utama.</p><h3>2. Tailwind CSS v4</h3><p>Tailwind v4 menghadirkan mesin kompilasi baru yang jauh lebih ringan dan cepat.</p><p>Mengadopsi teknologi ini sekarang akan memberikan keunggulan kompetitif bagi produk digital bisnis Anda.</p>',
+                'content' => '<p>Dunia pengembangan web bergerak sangat cepat. Di tahun 2026 ini, beberapa teknologi telah dominasi industri karena kemampuannya memberikan performa maksimal dan efisiensi kode.</p><h3>1. Next.js 16</h3><p>Dengan peningkatan kecepatan compile dan dukungan server actions yang lebih matang, Next.js tetap menjadi andalan utama.</p><h3>2. Tailwind CSS v4</h3><p>Tailwind v4 menghadirkan mesin kompilasi baru yang jauh lebih ringan dan cepat.</p><p>Mengadopsi teknologi ini sekarang akan memberikan keunggulan kompetitif bagi produk digital bisnis Anda.</p>',
                 'meta_title' => '5 Teknologi Web Modern Terbaik 2026 | Diggity Blog',
                 'meta_description' => 'Pelajari 5 teknologi web development modern terbaik di tahun 2026 yang wajib diadopsi agensi dan bisnis digital untuk meningkatkan kecepatan website.',
-                'image' => null
+                'image' => 'blogs/web-tech-2026.jpg'
             ]
         );
 
@@ -198,7 +198,7 @@ class DiggitySeeder extends Seeder
                 'content' => '<p>SEO (Search Engine Optimization) bukan lagi sekadar menaruh kata kunci di artikel. Google kini menilai pengalaman pengguna, kecepatan website, dan otoritas topik secara menyeluruh.</p><h3>Langkah Utama SEO:</h3><ul><li>Riset Keyword dengan intensi pencarian yang tepat.</li><li>Optimasi On-Page (struktur heading, kecepatan muat gambar).</li><li>Membangun Backlink berkualitas secara alami.</li></ul>',
                 'meta_title' => 'Panduan Lengkap SEO Pemula 2026 | Diggity Blog',
                 'meta_description' => 'Pelajari strategi SEO dasar terbaik untuk pemula agar website Anda mendapat peringkat pertama di halaman pencarian Google secara organik.',
-                'image' => null
+                'image' => 'blogs/seo-guide.jpg'
             ]
         );
 
@@ -210,7 +210,7 @@ class DiggitySeeder extends Seeder
                 'content' => '<p>Migrasi server seringkali menjadi momok karena risiko kehilangan data dan downtime transaksi. Namun, dengan langkah yang tepat, Anda bisa melakukannya secara mulus.</p><h3>Langkah Aman Migrasi:</h3><ul><li>Backup database secara menyeluruh.</li><li>Gunakan staging server untuk pengetesan.</li><li>Turunkan nilai TTL DNS sebelum mengalihkan domain.</li></ul>',
                 'meta_title' => 'Cara Migrasi Server ke VPS Cloud Tanpa Downtime | Diggity Blog',
                 'meta_description' => 'Panduan langkah demi langkah memigrasikan database dan file server Anda ke cloud VPS hosting secara aman tanpa mengalami offline.',
-                'image' => null
+                'image' => 'blogs/server-migration.jpg'
             ]
         );
 
@@ -222,7 +222,7 @@ class DiggitySeeder extends Seeder
                 'content' => '<p>Aplikasi yang indah tidak ada gunanya jika pengguna kesulitan melakukan check-out. Pengalaman pengguna (UX) adalah kunci agar pelanggan terus kembali bertransaksi.</p><h3>Tips UX Berkonversi Tinggi:</h3><ul><li>Sederhanakan alur transaksi maksimal 3 langkah.</li><li>Gunakan hirarki tombol aksi (CTA) yang mencolok.</li><li>Sediakan feedback instan saat terjadi kesalahan input formulir.</li></ul>',
                 'meta_title' => 'Pentingnya UI/UX Design untuk Retention Rate | Diggity Blog',
                 'meta_description' => 'Pelajari korelasi erat antara desain antarmuka pengguna yang intuitif dengan peningkatan retensi kunjungan dan pembelian pelanggan.',
-                'image' => null
+                'image' => 'blogs/ui-ux-retention.jpg'
             ]
         );
 
@@ -234,7 +234,7 @@ class DiggitySeeder extends Seeder
                 'content' => '<p>Next.js sudah cepat, namun optimasi yang salah pada gambar dan dynamic package bisa memicu loading lambat. Berikut cara memaksimalkannya.</p><h3>Langkah Optimasi Next.js:</h3><ul><li>Gunakan komponen Next Image untuk kompresi otomatis.</li><li>Terapkan dynamic imports untuk modul yang berukuran besar.</li><li>Optimalkan server cache runtime.</li></ul>',
                 'meta_title' => '10 Cara Meningkatkan Kecepatan Website Next.js | Diggity Blog',
                 'meta_description' => 'Temukan teknik optimasi backend, caching, dan bundling untuk memangkas waktu loading website berbasis Next.js hingga dibawah 1 detik.',
-                'image' => null
+                'image' => 'blogs/nextjs-speed.jpg'
             ]
         );
 
