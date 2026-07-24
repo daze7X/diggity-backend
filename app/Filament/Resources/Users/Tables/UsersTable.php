@@ -46,7 +46,7 @@ class UsersTable
                     ->dateTime('d M Y H:i')
                     ->sortable(),
             ])
-            ->actions([EditAction::make(), DeleteAction::make()])
+            ->actions([EditAction::make()->slideOver(), DeleteAction::make()])
             ->bulkActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
     }
 }

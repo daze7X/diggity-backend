@@ -36,7 +36,7 @@ class FaqsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('order', 'asc') // Otomatis urutkan berdasarkan kolom order terendah
-            ->actions([EditAction::make(), DeleteAction::make()])
+            ->actions([EditAction::make()->slideOver(), DeleteAction::make()])
             ->bulkActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
     }
 }

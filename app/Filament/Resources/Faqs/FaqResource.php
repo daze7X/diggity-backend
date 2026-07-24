@@ -18,7 +18,9 @@ class FaqResource extends Resource
 {
     protected static ?string $model = Faq::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedQuestionMarkCircle;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Settings & System';
 
     protected static ?string $recordTitleAttribute = 'question';
 
@@ -43,8 +45,6 @@ class FaqResource extends Resource
     {
         return [
             'index' => ListFaqs::route('/'),
-            'create' => CreateFaq::route('/create'),
-            'edit' => EditFaq::route('/{record}/edit'),
         ];
     }
 }

@@ -51,7 +51,7 @@ class CareersTable
                 //
             ])
             ->actions([
-                EditAction::make(),
+                EditAction::make()->slideOver(),
                 DeleteAction::make(),
             ])
             ->bulkActions([

@@ -18,7 +18,9 @@ class CareerResource extends Resource
 {
     protected static ?string $model = Career::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBriefcase;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Content Management';
 
     public static function form(Schema $schema): Schema
     {
@@ -41,8 +43,6 @@ class CareerResource extends Resource
     {
         return [
             'index' => ListCareers::route('/'),
-            'create' => CreateCareer::route('/create'),
-            'edit' => EditCareer::route('/{record}/edit'),
         ];
     }
 }

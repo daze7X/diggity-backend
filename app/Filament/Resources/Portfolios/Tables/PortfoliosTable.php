@@ -57,7 +57,7 @@ class PortfoliosTable
                 //
             ])
             ->actions([
-                EditAction::make(),
+                EditAction::make()->slideOver(),
                 DeleteAction::make(), // Tombol hapus langsung di baris data
             ])
             ->bulkActions([

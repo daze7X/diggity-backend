@@ -18,7 +18,9 @@ class TeamResource extends Resource
 {
     protected static ?string $model = Team::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Settings & System';
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -43,8 +45,6 @@ class TeamResource extends Resource
     {
         return [
             'index' => ListTeams::route('/'),
-            'create' => CreateTeam::route('/create'),
-            'edit' => EditTeam::route('/{record}/edit'),
         ];
     }
 }

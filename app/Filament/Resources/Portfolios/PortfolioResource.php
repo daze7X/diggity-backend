@@ -18,7 +18,9 @@ class PortfolioResource extends Resource
 {
     protected static ?string $model = Portfolio::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSparkles;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Content Management';
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -43,8 +45,6 @@ class PortfolioResource extends Resource
     {
         return [
             'index' => ListPortfolios::route('/'),
-            'create' => CreatePortfolio::route('/create'),
-            'edit' => EditPortfolio::route('/{record}/edit'),
         ];
     }
 }

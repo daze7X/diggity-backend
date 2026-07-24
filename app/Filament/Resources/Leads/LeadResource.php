@@ -18,7 +18,9 @@ class LeadResource extends Resource
 {
     protected static ?string $model = Lead::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Inquiries & Leads';
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -43,8 +45,6 @@ class LeadResource extends Resource
     {
         return [
             'index' => ListLeads::route('/'),
-            'create' => CreateLead::route('/create'),
-            'edit' => EditLead::route('/{record}/edit'),
         ];
     }
 }

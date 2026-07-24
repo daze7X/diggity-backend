@@ -18,7 +18,9 @@ class TestimonialResource extends Resource
 {
     protected static ?string $model = Testimonial::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Content Management';
 
     protected static ?string $recordTitleAttribute = 'client_name';
 
@@ -43,8 +45,6 @@ class TestimonialResource extends Resource
     {
         return [
             'index' => ListTestimonials::route('/'),
-            'create' => CreateTestimonial::route('/create'),
-            'edit' => EditTestimonial::route('/{record}/edit'),
         ];
     }
 }

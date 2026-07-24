@@ -1,0 +1,237 @@
+/* Premium Visual Overhaul for Filament Admin Panel */
+/* Theme: Cohesive Glassmorphism for both Light & Dark Modes */
+
+/* ========================================== */
+/*   A. LIGHT MODE STYLING (DEFAULT)          */
+/* ========================================== */
+
+body, 
+.fi-layout {
+    background-color: #f8fafc !important; /* Soft light grey-blue */
+    background-image: 
+        linear-gradient(rgba(15, 23, 42, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.02) 1px, transparent 1px) !important;
+    background-size: 80px 80px !important;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Light Mode Background Glow Blobs */
+.fi-layout::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    width: 400px;
+    height: 400px;
+    background: rgba(59, 130, 246, 0.03) !important; /* Extremely soft light blue */
+    border-radius: 50% !important;
+    filter: blur(120px) !important;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.fi-layout::after {
+    content: '';
+    position: absolute;
+    bottom: 10%;
+    right: 5%;
+    width: 500px;
+    height: 500px;
+    background: rgba(148, 163, 184, 0.04) !important; /* Soft grey blob */
+    border-radius: 50% !important;
+    filter: blur(140px) !important;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Light Mode Glassmorphic Cards (Widgets, Sections, Tables) */
+.fi-wi-stats-overview-card, 
+.fi-ta-ctn, 
+.fi-fo-layout,
+.fi-section,
+.fi-wi-widget {
+    background: rgba(255, 255, 255, 0.7) !important; /* Translucent white */
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(15, 23, 42, 0.08) !important; /* Subtle dark border */
+    border-radius: 16px !important;
+    box-shadow: 0 10px 30px -10px rgba(10, 25, 47, 0.04), 0 1px 3px rgba(10, 25, 47, 0.01) !important;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Hover effects for Light Mode cards */
+.fi-wi-stats-overview-card:hover,
+.fi-ta-ctn:hover,
+.fi-section:hover {
+    transform: translateY(-2px);
+    border-color: rgba(59, 130, 246, 0.25) !important;
+    box-shadow: 0 20px 40px -12px rgba(59, 130, 246, 0.08), 0 0 15px rgba(59, 130, 246, 0.02) !important;
+}
+
+/* Light Mode Sidebar */
+.fi-sidebar {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    border-right: 1px solid rgba(15, 23, 42, 0.05) !important;
+}
+
+.fi-sidebar-item-active a {
+    border-radius: 10px !important;
+    background: rgba(59, 130, 246, 0.08) !important;
+    color: #2563eb !important;
+    font-weight: 600 !important;
+    border: 1px solid rgba(59, 130, 246, 0.15) !important;
+}
+
+.fi-sidebar-group {
+    background: rgba(15, 23, 42, 0.015);
+    border: 1px dashed rgba(15, 23, 42, 0.04);
+    border-radius: 12px;
+    padding: 6px;
+    margin-bottom: 10px;
+}
+
+/* Light Mode Topbar */
+.fi-topbar {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.05) !important;
+}
+
+
+/* ========================================== */
+/*   B. DARK MODE STYLING (PREFIXED WITH .dark)*/
+/* ========================================== */
+
+.dark body, 
+.dark .fi-layout {
+    background-color: #020617 !important; /* Deep Navy */
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px) !important;
+    background-size: 80px 80px !important;
+}
+
+/* Dark Mode Background Glow Blobs */
+.dark .fi-layout::before {
+    background: rgba(59, 130, 246, 0.06) !important; /* Electric Blue blob */
+    filter: blur(120px) !important;
+}
+
+.dark .fi-layout::after {
+    background: rgba(30, 64, 175, 0.05) !important; /* Deep Navy Blue blob */
+    filter: blur(140px) !important;
+}
+
+/* Dark Mode Glassmorphic Cards (Widgets, Sections, Tables) */
+.dark .fi-wi-stats-overview-card, 
+.dark .fi-ta-ctn, 
+.dark .fi-fo-layout,
+.dark .fi-section,
+.dark .fi-wi-widget {
+    background: rgba(15, 23, 42, 0.5) !important; /* Translucent Navy dark */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Hover effects for Dark Mode cards */
+.dark .fi-wi-stats-overview-card:hover,
+.dark .fi-ta-ctn:hover,
+.dark .fi-section:hover {
+    border-color: rgba(59, 130, 246, 0.3) !important; /* Glow border on hover */
+    box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.12), 0 0 20px rgba(59, 130, 246, 0.05) !important;
+}
+
+/* Dark Mode Sidebar */
+.dark .fi-sidebar {
+    background-color: rgba(2, 6, 23, 0.8) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark .fi-sidebar-item-active a {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.16) 0%, rgba(37, 99, 235, 0.06) 100%) !important;
+    color: #3b82f6 !important;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.15) !important;
+    border: 1px solid rgba(59, 130, 246, 0.25) !important;
+}
+
+.dark .fi-sidebar-group {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px dashed rgba(255, 255, 255, 0.04);
+}
+
+/* Dark Mode Topbar */
+.dark .fi-topbar {
+    background-color: rgba(2, 6, 23, 0.7) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+
+/* ========================================== */
+/*   C. GLOBAL CONTROLS & SHARED LAYOUTS      */
+/* ========================================== */
+
+/* Inputs & Form Fields */
+.fi-fo-text-input input, 
+.fi-fo-select select, 
+.fi-fo-textarea textarea {
+    border-radius: 10px !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+/* Dark mode inputs override */
+.dark .fi-fo-text-input input, 
+.dark .fi-fo-select select, 
+.dark .fi-fo-textarea textarea {
+    background-color: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #e2e8f0 !important;
+}
+
+.dark .fi-fo-text-input input:focus, 
+.dark .fi-fo-select select:focus, 
+.dark .fi-fo-textarea textarea:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Primary Button Design (Shared) */
+.fi-btn-color-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3) !important;
+    border: none !important;
+    transition: all 0.2s ease !important;
+}
+
+.fi-btn-color-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.45) !important;
+}
+
+/* Global scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+.dark ::-webkit-scrollbar-track {
+    background: #020617;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(15, 23, 42, 0.1);
+    border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(59, 130, 246, 0.3);
+}

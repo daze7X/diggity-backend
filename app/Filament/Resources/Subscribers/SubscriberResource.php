@@ -18,7 +18,9 @@ class SubscriberResource extends Resource
 {
     protected static ?string $model = Subscriber::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSquares2x2;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Inquiries & Leads';
 
     public static function form(Schema $schema): Schema
     {
@@ -41,8 +43,6 @@ class SubscriberResource extends Resource
     {
         return [
             'index' => ListSubscribers::route('/'),
-            'create' => CreateSubscriber::route('/create'),
-            'edit' => EditSubscriber::route('/{record}/edit'),
         ];
     }
 }

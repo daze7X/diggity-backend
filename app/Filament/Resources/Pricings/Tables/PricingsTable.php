@@ -50,7 +50,7 @@ class PricingsTable
                     ->label('Jumlah Fitur')
                     ->formatStateUsing(fn ($state): string => (is_array($state) ? count($state) : 0).' Fitur'),
             ])
-            ->actions([EditAction::make(), DeleteAction::make()])
+            ->actions([EditAction::make()->slideOver(), DeleteAction::make()])
             ->bulkActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
     }
 }

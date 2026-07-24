@@ -21,6 +21,6 @@ class CompanySettingsTable
                 TextColumn::make('whatsapp')
                     ->label('WhatsApp'),
             ])
-            ->actions([EditAction::make()]); // Hanya izinkan edit karena ini konfigurasi global
+            ->actions([EditAction::make()->slideOver()]); // Hanya izinkan edit karena ini konfigurasi global
     }
 }

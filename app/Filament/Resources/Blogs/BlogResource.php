@@ -18,7 +18,9 @@ class BlogResource extends Resource
 {
     protected static ?string $model = Blog::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Content Management';
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -43,8 +45,6 @@ class BlogResource extends Resource
     {
         return [
             'index' => ListBlogs::route('/'),
-            'create' => CreateBlog::route('/create'),
-            'edit' => EditBlog::route('/{record}/edit'),
         ];
     }
 }

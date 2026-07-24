@@ -34,7 +34,7 @@ class TestimonialsTable
                     ->formatStateUsing(fn ($state): string => str_repeat('⭐', (int) $state)) // Mengubah angka jadi ikon bintang otomatis
                     ->sortable(),
             ])
-            ->actions([EditAction::make(), DeleteAction::make()])
+            ->actions([EditAction::make()->slideOver(), DeleteAction::make()])
             ->bulkActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
     }
 }

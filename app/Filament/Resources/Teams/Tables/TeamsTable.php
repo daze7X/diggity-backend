@@ -35,7 +35,7 @@ class TeamsTable
                     ->color('primary')
                     ->toggleable(),
             ])
-            ->actions([EditAction::make(), DeleteAction::make()])
+            ->actions([EditAction::make()->slideOver(), DeleteAction::make()])
             ->bulkActions([BulkActionGroup::make([DeleteBulkAction::make()])]);
     }
 }

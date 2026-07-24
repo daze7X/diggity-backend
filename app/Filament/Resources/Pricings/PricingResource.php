@@ -18,7 +18,9 @@ class PricingResource extends Resource
 {
     protected static ?string $model = Pricing::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyDollar;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Settings & System';
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -43,8 +45,6 @@ class PricingResource extends Resource
     {
         return [
             'index' => ListPricings::route('/'),
-            'create' => CreatePricing::route('/create'),
-            'edit' => EditPricing::route('/{record}/edit'),
         ];
     }
 }
