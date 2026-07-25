@@ -44,7 +44,11 @@ Route::get('/services/{slug}', function ($slug) {
 
 // GET /api/portfolios
 Route::get('/portfolios', function () {
-    return response()->json(Portfolio::with('category')->latest()->get());
+    $portfolios = Portfolio::with('category')->latest()->get();
+    foreach ($portfolios as $portfolio) {
+        $portfolio->testimonial = Testimonial::where('company', $portfolio->client)->first();
+    }
+    return response()->json($portfolios);
 });
 
 // GET /api/portfolios/{slug}
