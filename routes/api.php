@@ -17,6 +17,7 @@ use App\Models\Career;
 use App\Models\JobApplication;
 use App\Models\Subscriber;
 use App\Mail\LeadSubmittedMail;
+use App\Mail\JobApplicationSubmittedMail;
 
 // GET /api/company-settings
 Route::get('/company-settings', function () {
@@ -165,6 +166,19 @@ Route::post('/job-applications', function (Request $request) {
         'cover_letter' => $validated['cover_letter'] ?? null,
         'status' => 'applied'
     ]);
+
+    // Load career relationship for the email mailable
+    $application->load('career');
+
+    // Fetch dynamic recipient email from Company Settings
+    $settings = CompanySetting::first();
+    $recipientEmail = $settings?->email ?? 'hrd@diggity.com';
+
+    try {
+        Mail::to($recipientEmail)->send(new JobApplicationSubmittedMail($application));
+    } catch (\Exception $e) {
+        Log::error('Failed to send job application email notification: ' . $e->getMessage());
+    }
 
     return response()->json([
         'success' => true,
