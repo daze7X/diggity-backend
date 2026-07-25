@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Models\Blog;
 use App\Models\Portfolio;
 use App\Models\Service;
@@ -14,6 +16,7 @@ use App\Models\Lead;
 use App\Models\Career;
 use App\Models\JobApplication;
 use App\Models\Subscriber;
+use App\Mail\LeadSubmittedMail;
 
 // GET /api/company-settings
 Route::get('/company-settings', function () {
@@ -103,6 +106,17 @@ Route::post('/leads', function (Request $request) {
     ]);
 
     $lead = Lead::create($validated);
+
+    // Fetch dynamic recipient email from Company Settings
+    $settings = CompanySetting::first();
+    $recipientEmail = $settings?->email ?? 'sales@diggity.com';
+
+    try {
+        Mail::to($recipientEmail)->send(new LeadSubmittedMail($lead));
+    } catch (\Exception $e) {
+        Log::error('Failed to send lead email notification: ' . $e->getMessage());
+    }
+
     return response()->json([
         'success' => true,
         'message' => 'Lead submitted successfully',
