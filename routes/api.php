@@ -32,6 +32,12 @@ Route::get('/services', function () {
     return response()->json(Service::with('category')->get());
 });
 
+// GET /api/services/{slug}
+Route::get('/services/{slug}', function ($slug) {
+    $service = Service::with('category')->where('slug', $slug)->firstOrFail();
+    return response()->json($service);
+});
+
 // GET /api/portfolios
 Route::get('/portfolios', function () {
     return response()->json(Portfolio::with('category')->latest()->get());
