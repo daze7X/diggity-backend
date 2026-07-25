@@ -50,6 +50,8 @@ Route::get('/portfolios', function () {
 // GET /api/portfolios/{slug}
 Route::get('/portfolios/{slug}', function ($slug) {
     $portfolio = Portfolio::with('category')->where('slug', $slug)->firstOrFail();
+    $testimonial = Testimonial::where('company', $portfolio->client)->first();
+    $portfolio->testimonial = $testimonial;
     return response()->json($portfolio);
 });
 
