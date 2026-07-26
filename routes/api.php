@@ -70,6 +70,43 @@ Route::get('/blogs/{slug}', function ($slug) {
     return response()->json($blog);
 });
 
+// GET /api/search
+Route::get('/search', function (Request $request) {
+    $query = $request->query('q');
+    if (empty($query)) {
+        return response()->json([
+            'services' => [],
+            'portfolios' => [],
+            'blogs' => []
+        ]);
+    }
+
+    $services = Service::with('category')
+        ->where('name', 'like', "%{$query}%")
+        ->orWhere('description', 'like', "%{$query}%")
+        ->limit(5)
+        ->get();
+
+    $portfolios = Portfolio::with('category')
+        ->where('title', 'like', "%{$query}%")
+        ->orWhere('problem', 'like', "%{$query}%")
+        ->orWhere('solution', 'like', "%{$query}%")
+        ->limit(5)
+        ->get();
+
+    $blogs = Blog::with('category')
+        ->where('title', 'like', "%{$query}%")
+        ->orWhere('content', 'like', "%{$query}%")
+        ->limit(5)
+        ->get();
+
+    return response()->json([
+        'services' => $services,
+        'portfolios' => $portfolios,
+        'blogs' => $blogs
+    ]);
+});
+
 // GET /api/teams
 Route::get('/teams', function () {
     return response()->json(Team::all());
