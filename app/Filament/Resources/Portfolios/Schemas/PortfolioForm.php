@@ -56,6 +56,15 @@ class PortfolioForm
                             ->disk('public')
                             ->directory('portfolios')
                             ->nullable(),
+
+                        FileUpload::make('gallery')
+                            ->label('Galeri Foto Proyek (Slideshow)')
+                            ->multiple()
+                            ->reorderable()
+                            ->image()
+                            ->disk('public')
+                            ->directory('portfolios/gallery')
+                            ->nullable(),
                     ]),
 
                 Section::make('Case Study')

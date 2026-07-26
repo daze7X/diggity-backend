@@ -19,10 +19,12 @@ class Portfolio extends Model
         'execution',
         'result',
         'image',
+        'gallery',
     ];
 
     protected $casts = [
         'technologies' => 'array',
+        'gallery' => 'array',
     ];
 
     public function category()
