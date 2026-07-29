@@ -37,12 +37,9 @@
     33 => 'Filament\\Tables\\TablesServiceProvider',
     34 => 'Filament\\Widgets\\WidgetsServiceProvider',
     35 => 'Kirschbaum\\PowerJoins\\PowerJoinsServiceProvider',
-    36 => 'Laravel\\Pail\\PailServiceProvider',
-    37 => 'Laravel\\Sail\\SailServiceProvider',
     38 => 'Laravel\\Tinker\\TinkerServiceProvider',
     39 => 'Livewire\\LivewireServiceProvider',
     40 => 'Carbon\\Laravel\\ServiceProvider',
-    41 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     42 => 'Termwind\\Laravel\\TermwindServiceProvider',
     43 => 'RyanChandler\\BladeCaptureDirective\\BladeCaptureDirectiveServiceProvider',
     44 => 'App\\Providers\\AppServiceProvider',
@@ -73,10 +70,8 @@
     20 => 'Filament\\Tables\\TablesServiceProvider',
     21 => 'Filament\\Widgets\\WidgetsServiceProvider',
     22 => 'Kirschbaum\\PowerJoins\\PowerJoinsServiceProvider',
-    23 => 'Laravel\\Pail\\PailServiceProvider',
     24 => 'Livewire\\LivewireServiceProvider',
     25 => 'Carbon\\Laravel\\ServiceProvider',
-    26 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     27 => 'Termwind\\Laravel\\TermwindServiceProvider',
     28 => 'RyanChandler\\BladeCaptureDirective\\BladeCaptureDirectiveServiceProvider',
     29 => 'App\\Providers\\AppServiceProvider',
@@ -238,8 +233,6 @@
     'validator' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'validation.presence' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'Illuminate\\Contracts\\Validation\\UncompromisedVerifier' => 'Illuminate\\Validation\\ValidationServiceProvider',
-    'Laravel\\Sail\\Console\\InstallCommand' => 'Laravel\\Sail\\SailServiceProvider',
-    'Laravel\\Sail\\Console\\PublishCommand' => 'Laravel\\Sail\\SailServiceProvider',
     'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
   ),
   'when' => 
@@ -281,9 +274,6 @@
     array (
     ),
     'Illuminate\\Validation\\ValidationServiceProvider' => 
-    array (
-    ),
-    'Laravel\\Sail\\SailServiceProvider' => 
     array (
     ),
     'Laravel\\Tinker\\TinkerServiceProvider' => 
