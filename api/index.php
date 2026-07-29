@@ -7,6 +7,12 @@ try {
     // Load the Laravel application
     $app = require_once __DIR__ . '/../bootstrap/app.php';
     
+    // Capture the request early
+    $request = Illuminate\Http\Request::capture();
+    
+    // Bind the request instance to the container so that bootstrap-time helpers (like asset() or route()) work
+    $app->instance('request', $request);
+    
     // Resolve the HTTP kernel
     $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
     
@@ -14,7 +20,6 @@ try {
     $kernel->bootstrap();
     
     // Handle the request normally if bootstrap succeeded
-    $request = Illuminate\Http\Request::capture();
     $response = $kernel->handle($request);
     $response->send();
     $kernel->terminate($request, $response);
