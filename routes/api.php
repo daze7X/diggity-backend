@@ -171,19 +171,68 @@ Route::post('/leads', function (Request $request) {
 // POST /api/subscribers
 Route::post('/subscribers', function (Request $request) {
     $validated = $request->validate([
-        'email' => 'required|email|unique:subscribers,email|max:255',
+        'email' => 'required|email|max:255',
     ]);
 
-    $subscriber = Subscriber::create([
-        'email' => $validated['email'],
-        'status' => 'active'
-    ]);
+    $subscriber = Subscriber::where('email', $validated['email'])->first();
+
+    if ($subscriber && $subscriber->status === 'active') {
+        return response()->json([
+            'success' => false,
+            'message' => 'Email Anda sudah terdaftar dan aktif.'
+        ], 422);
+    }
+
+    if ($subscriber) {
+        $subscriber->update(['status' => 'active']);
+    } else {
+        $subscriber = Subscriber::create([
+            'email' => $validated['email'],
+            'status' => 'active'
+        ]);
+    }
+
+    // Sync to Mailchimp (subscribes member)
+    \App\Services\MailchimpService::syncSubscriber($validated['email'], 'subscribed');
 
     return response()->json([
         'success' => true,
         'message' => 'Subscribed successfully',
         'data' => $subscriber
     ], 201);
+});
+
+// POST /api/subscribers/unsubscribe
+Route::post('/subscribers/unsubscribe', function (Request $request) {
+    $validated = $request->validate([
+        'email' => 'required|email|max:255',
+    ]);
+
+    $subscriber = Subscriber::where('email', $validated['email'])->first();
+
+    if (!$subscriber) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Email tidak ditemukan di sistem kami.'
+        ], 404);
+    }
+
+    if ($subscriber->status === 'inactive') {
+        return response()->json([
+            'success' => true,
+            'message' => 'Email Anda sudah dalam status berhenti berlangganan.'
+        ]);
+    }
+
+    $subscriber->update(['status' => 'inactive']);
+
+    // Sync to Mailchimp (unsubscribes member)
+    \App\Services\MailchimpService::syncSubscriber($validated['email'], 'unsubscribed');
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Anda telah sukses berhenti berlangganan dari newsletter kami.'
+    ]);
 });
 
 // POST /api/job-applications
