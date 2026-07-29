@@ -1,25 +1,26 @@
 <?php
 
 try {
-    // Forward all serverless requests to Laravel's public index entry point
-    require __DIR__ . '/../public/index.php';
+    // Load the Laravel application
+    $app = require_once __DIR__ . '/../bootstrap/app.php';
+    
+    // Resolve the HTTP kernel
+    $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+    
+    // Boot the kernel bootstrappers manually in a try-catch to bypass the exception handler crash
+    $kernel->bootstrap();
+    
+    // Handle the request normally if bootstrap succeeded
+    $request = Illuminate\Http\Request::capture();
+    $response = $kernel->handle($request);
+    $response->send();
+    $kernel->terminate($request, $response);
 } catch (\Throwable $e) {
     header("HTTP/1.1 500 Internal Server Error");
-    echo "<h1>Laravel Serverless Crash Report</h1>";
-    
-    // Check if there was a previous exception (the original error)
-    $originalError = $e;
-    while ($originalError->getPrevious() !== null) {
-        $originalError = $originalError->getPrevious();
-    }
-    
-    echo "<p><strong>Original Error Message:</strong> " . htmlspecialchars($originalError->getMessage()) . "</p>";
-    echo "<p><strong>File:</strong> " . htmlspecialchars($originalError->getFile()) . " on line " . $originalError->getLine() . "</p>";
-    echo "<p><strong>Code:</strong> " . $originalError->getCode() . "</p>";
-    echo "<h2>Original Stack Trace:</h2>";
-    echo "<pre>" . htmlspecialchars($originalError->getTraceAsString()) . "</pre>";
-    
-    echo "<hr><h2>Secondary Exception (Exception Handler Crash):</h2>";
+    echo "<h1>Original Laravel Bootstrap Exception Caught!</h1>";
     echo "<p><strong>Message:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
+    echo "<p><strong>File:</strong> " . htmlspecialchars($e->getFile()) . " on line " . $e->getLine() . "</p>";
+    echo "<p><strong>Class:</strong> " . get_class($e) . "</p>";
+    echo "<h2>Stack Trace:</h2>";
     echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
 }
