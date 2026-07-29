@@ -40,4 +40,8 @@ return [
         'list_id' => env('MAILCHIMP_LIST_ID'),
     ],
 
+    'recaptcha' => [
+        'secret_key' => env('RECAPTCHA_SECRET_KEY'),
+    ],
+
 ];

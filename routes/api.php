@@ -18,6 +18,49 @@ use App\Models\JobApplication;
 use App\Models\Subscriber;
 use App\Mail\LeadSubmittedMail;
 use App\Mail\JobApplicationSubmittedMail;
+use Illuminate\Support\Facades\Http;
+
+/**
+ * Verify Google reCAPTCHA v3 token.
+ * Gracefully bypasses if RECAPTCHA_SECRET_KEY is empty in .env.
+ */
+function verifyRecaptcha(?string $token, string $action): bool
+{
+    $secret = config('services.recaptcha.secret_key');
+    if (empty($secret)) {
+        Log::info("[reCAPTCHA Mock] Bypassed verification for action '{$action}' with token: " . ($token ?? 'none'));
+        return true;
+    }
+
+    if (empty($token)) {
+        Log::warning("[reCAPTCHA] Validation failed: Token is empty for action '{$action}'.");
+        return false;
+    }
+
+    try {
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => $secret,
+            'response' => $token,
+        ]);
+
+        if ($response->successful()) {
+            $body = $response->json();
+            $success = $body['success'] ?? false;
+            $score = $body['score'] ?? 0;
+            
+            Log::info("[reCAPTCHA] Verification for action '{$action}' - Success: " . ($success ? 'true' : 'false') . ", Score: {$score}");
+            
+            return $success && $score >= 0.5;
+        }
+
+        Log::error("[reCAPTCHA] Request failed: " . $response->body());
+        return false;
+    } catch (\Exception $e) {
+        Log::error("[reCAPTCHA Exception] Error occurred: " . $e->getMessage());
+        return false;
+    }
+}
+
 
 // GET /api/company-settings
 Route::get('/company-settings', function () {
@@ -140,6 +183,13 @@ Route::get('/careers/{slug}', function ($slug) {
 
 // POST /api/leads
 Route::post('/leads', function (Request $request) {
+    if (!verifyRecaptcha($request->input('recaptcha_token'), 'contact')) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Verifikasi reCAPTCHA spam bot gagal. Silakan coba kembali.'
+        ], 422);
+    }
+
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|max:255',
@@ -170,6 +220,13 @@ Route::post('/leads', function (Request $request) {
 
 // POST /api/subscribers
 Route::post('/subscribers', function (Request $request) {
+    if (!verifyRecaptcha($request->input('recaptcha_token'), 'newsletter')) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Verifikasi reCAPTCHA spam bot gagal. Silakan coba kembali.'
+        ], 422);
+    }
+
     $validated = $request->validate([
         'email' => 'required|email|max:255',
     ]);
@@ -237,6 +294,13 @@ Route::post('/subscribers/unsubscribe', function (Request $request) {
 
 // POST /api/job-applications
 Route::post('/job-applications', function (Request $request) {
+    if (!verifyRecaptcha($request->input('recaptcha_token'), 'career')) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Verifikasi reCAPTCHA spam bot gagal. Silakan coba kembali.'
+        ], 422);
+    }
+
     $validated = $request->validate([
         'career_id' => 'required|exists:careers,id',
         'name' => 'required|string|max:255',
