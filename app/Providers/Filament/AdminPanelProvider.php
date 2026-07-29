@@ -35,7 +35,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->sidebarCollapsibleOnDesktop()
             ->assets([
-                \Filament\Support\Assets\Css::make('custom-filament', asset('css/custom-filament.css')),
+                \Filament\Support\Assets\Css::make('custom-filament', '/css/custom-filament.css'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
