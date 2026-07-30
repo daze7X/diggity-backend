@@ -53,7 +53,7 @@ class PortfolioForm
 
                         FileUpload::make('image')
                             ->image()
-                            ->disk('public')
+                            ->disk(env('FILESYSTEM_DISK', 'public'))
                             ->directory('portfolios')
                             ->nullable(),
 
@@ -62,7 +62,7 @@ class PortfolioForm
                             ->multiple()
                             ->reorderable()
                             ->image()
-                            ->disk('public')
+                            ->disk(env('FILESYSTEM_DISK', 'public'))
                             ->directory('portfolios/gallery')
                             ->nullable(),
                     ]),

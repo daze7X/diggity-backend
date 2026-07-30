@@ -42,7 +42,7 @@ class BlogForm
                 FileUpload::make('image')
                     ->label('Gambar Utama')
                     ->image()
-                    ->disk('public')
+                    ->disk(env('FILESYSTEM_DISK', 'public'))
                     ->directory('blogs')
                     ->nullable(),
 
