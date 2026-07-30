@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Filesystem\AwsS3V3FilesystemAdapter;
 use League\Flysystem\Filesystem;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use Aws\S3\S3Client;
@@ -66,7 +66,7 @@ class AppServiceProvider extends ServiceProvider
                 }
             };
 
-            return new FilesystemAdapter(
+            return new AwsS3V3FilesystemAdapter(
                 new Filesystem($adapter, $config),
                 $adapter,
                 $config
