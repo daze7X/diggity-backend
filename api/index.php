@@ -10,6 +10,9 @@ try {
     // Capture the request early
     $request = Illuminate\Http\Request::capture();
     
+    // Force the base URL to be empty on Vercel to prevent Laravel from stripping '/api' from the path info
+    $request->setBaseUrl('');
+    
     // Bind the request instance to the container so that bootstrap-time helpers (like asset() or route()) work
     $app->instance('request', $request);
     
