@@ -9,6 +9,10 @@ class Career extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
     public function jobApplications(): HasMany
     {
         return $this->hasMany(JobApplication::class);

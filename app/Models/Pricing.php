@@ -10,5 +10,6 @@ class Pricing extends Model
 
     protected $casts = [
         'features' => 'array', // Supaya otomatis dikonversi jadi array PHP saat diakses
+        'is_popular' => 'boolean',
     ];
 }
