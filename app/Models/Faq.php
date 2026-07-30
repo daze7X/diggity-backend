@@ -11,4 +11,9 @@ class Faq extends Model
     protected $casts = [
         'is_published' => 'boolean',
     ];
+
+    public function setIsPublishedAttribute($value)
+    {
+        $this->attributes['is_published'] = filter_var($value, FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false';
+    }
 }
