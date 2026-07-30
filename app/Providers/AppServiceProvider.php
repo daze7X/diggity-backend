@@ -4,9 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Filesystem\AwsS3V3FilesystemAdapter;
+use Illuminate\Filesystem\AwsS3V3Adapter;
 use League\Flysystem\Filesystem;
-use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
+use League\Flysystem\AwsS3V3\AwsS3V3Adapter as FlysystemAwsS3V3Adapter;
 use Aws\S3\S3Client;
 
 class AppServiceProvider extends ServiceProvider
@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
 
             $client = new S3Client($s3Config);
             
-            $adapter = new class($client, $config['bucket'], $config['root'] ?? '', null, null, $config['options'] ?? []) extends AwsS3V3Adapter {
+            $adapter = new class($client, $config['bucket'], $config['root'] ?? '', null, null, $config['options'] ?? []) extends FlysystemAwsS3V3Adapter {
                 public $client;
                 public $bucket;
 
@@ -66,10 +66,11 @@ class AppServiceProvider extends ServiceProvider
                 }
             };
 
-            return new AwsS3V3FilesystemAdapter(
+            return new AwsS3V3Adapter(
                 new Filesystem($adapter, $config),
                 $adapter,
-                $config
+                $config,
+                $client
             );
         });
     }
