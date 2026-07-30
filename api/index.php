@@ -1,5 +1,9 @@
 <?php
 
+// Force the script name on Vercel to prevent Laravel from detecting '/api' as the base URL
+$_SERVER['SCRIPT_NAME'] = '/index.php';
+$_SERVER['PHP_SELF'] = '/index.php';
+
 try {
     // Register the Composer autoloader
     require_once __DIR__ . '/../vendor/autoload.php';
@@ -9,9 +13,6 @@ try {
     
     // Capture the request early
     $request = Illuminate\Http\Request::capture();
-    
-    // Force the base URL to be empty on Vercel to prevent Laravel from stripping '/api' from the path info
-    $request->setBaseUrl('');
     
     // Bind the request instance to the container so that bootstrap-time helpers (like asset() or route()) work
     $app->instance('request', $request);
