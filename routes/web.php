@@ -38,6 +38,8 @@ Route::get('/test-s3', function () {
             'driver' => config('filesystems.disks.s3.driver'),
             'endpoint' => config('filesystems.disks.s3.endpoint'),
             'bucket' => config('filesystems.disks.s3.bucket'),
+            'default_disk' => config('filesystems.default'),
+            'form_disk' => env('FILESYSTEM_DISK', 'public'),
         ]);
     } catch (\Exception $e) {
         return response()->json([
