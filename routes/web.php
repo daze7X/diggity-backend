@@ -73,3 +73,17 @@ Route::get('/list-s3', function () {
         ], 500);
     }
 });
+
+Route::get('/check-users', function () {
+    try {
+        return response()->json([
+            'status' => 'success',
+            'users' => \App\Models\User::all(['id', 'name', 'email'])->toArray()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+        ], 500);
+    }
+});
