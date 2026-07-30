@@ -172,7 +172,7 @@ Route::get('/pricings', function () {
 
 // GET /api/careers
 Route::get('/careers', function () {
-    return response()->json(Career::where('is_active', true)->latest()->get());
+    return response()->json(Career::where('is_active', 'true')->latest()->get());
 });
 
 // GET /api/careers/{slug}
