@@ -15,10 +15,6 @@ class BlogsTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->contentGrid([
-                'md' => 2,
-                'lg' => 3,
-            ])
             ->columns([
                 ImageColumn::make('image')
                     ->label('Gambar Utama')
