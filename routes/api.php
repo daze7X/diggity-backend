@@ -69,7 +69,7 @@ Route::get('/company-settings', function () {
         'email' => 'hello@diggity.com',
         'whatsapp' => '628123456789',
         'address' => 'Jakarta, Indonesia',
-        'instagram_url' => 'https://instagram.com',
+        'instagram_url' => 'https://instagram.com/diggity.id',
         'linkedin_url' => 'https://linkedin.com'
     ]);
 });
