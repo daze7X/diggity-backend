@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\Services\Tables;
 
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteAction; // Aksi hapus satuan
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction; // Aksi hapus satuan
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
