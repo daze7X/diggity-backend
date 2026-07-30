@@ -45,6 +45,16 @@ class AppServiceProvider extends ServiceProvider
             $client = new S3Client($s3Config);
             
             $adapter = new class($client, $config['bucket'], $config['root'] ?? '', null, null, $config['options'] ?? []) extends AwsS3V3Adapter {
+                public $client;
+                public $bucket;
+
+                public function __construct($client, $bucket, $prefix = '', $visibility = null, $mimeTypeDetector = null, $options = [])
+                {
+                    parent::__construct($client, $bucket, $prefix, $visibility, $mimeTypeDetector, $options);
+                    $this->client = $client;
+                    $this->bucket = $bucket;
+                }
+
                 public function copy(string $source, string $destination, \League\Flysystem\Config $config): void
                 {
                     try {
