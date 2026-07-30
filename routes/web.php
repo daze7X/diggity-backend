@@ -51,3 +51,19 @@ Route::get('/test-s3', function () {
         ], 500);
     }
 });
+
+Route::get('/list-s3', function () {
+    try {
+        $disk = \Illuminate\Support\Facades\Storage::disk('s3');
+        $files = $disk->allFiles();
+        return response()->json([
+            'status' => 'success',
+            'files' => $files,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+        ], 500);
+    }
+});
