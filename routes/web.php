@@ -25,6 +25,9 @@ Route::get('/test-s3', function () {
         $disk = \Illuminate\Support\Facades\Storage::disk('s3');
         
         $put = $disk->put('test-diagnostic.txt', 'Hello from Vercel S3 Test at ' . now()->toDateTimeString());
+        $copy = $disk->copy('test-diagnostic.txt', 'blogs/test-copy.txt');
+        $existsCopy = $disk->exists('blogs/test-copy.txt');
+        $deleteCopy = $existsCopy ? $disk->delete('blogs/test-copy.txt') : false;
         $exists = $disk->exists('test-diagnostic.txt');
         $content = $exists ? $disk->get('test-diagnostic.txt') : 'N/A';
         $delete = $exists ? $disk->delete('test-diagnostic.txt') : false;
@@ -32,6 +35,9 @@ Route::get('/test-s3', function () {
         return response()->json([
             'status' => 'success',
             'put' => $put,
+            'copy' => $copy,
+            'exists_copy' => $existsCopy,
+            'delete_copy' => $deleteCopy,
             'exists' => $exists,
             'content' => $content,
             'delete' => $delete,
