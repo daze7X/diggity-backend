@@ -522,4 +522,331 @@ Route::middleware('auth:sanctum')->group(function () {
         $enrollments = $request->user()->enrollments()->with(['course.category', 'progressTrackings'])->get();
         return response()->json($enrollments);
     });
+
+    Route::get('/user/courses/{slug}/learn', function (Request $request, $slug) {
+        $user = $request->user();
+        
+        $course = \App\Models\Course::with(['modules.lessons' => function ($q) {
+            $q->orderBy('sort_order', 'asc');
+        }])->where('slug', $slug)->firstOrFail();
+
+        $enrollment = \App\Models\Enrollment::where('user_id', $user->id)
+            ->where('course_id', $course->id)
+            ->where('status', 'active')
+            ->first();
+
+        if (!$enrollment) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki akses aktif untuk kelas ini.'
+            ], 403);
+        }
+
+        $completedLessonIds = \App\Models\ProgressTracking::where('enrollment_id', $enrollment->id)
+            ->where('is_completed', 'true')
+            ->pluck('lesson_id')
+            ->toArray();
+
+        return response()->json([
+            'success' => true,
+            'course' => $course,
+            'completed_lessons' => $completedLessonIds
+        ]);
+    });
+
+    Route::post('/user/courses/{slug}/lessons/{lesson_id}/complete', function (Request $request, $slug, $lessonId) {
+        $user = $request->user();
+
+        $course = \App\Models\Course::where('slug', $slug)->firstOrFail();
+        
+        $enrollment = \App\Models\Enrollment::where('user_id', $user->id)
+            ->where('course_id', $course->id)
+            ->where('status', 'active')
+            ->first();
+
+        if (!$enrollment) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akses ditolak.'
+            ], 403);
+        }
+
+        // Verify lesson belongs to the course
+        $lesson = \App\Models\Lesson::where('id', $lessonId)
+            ->whereHas('module', function ($q) use ($course) {
+                $q->where('course_id', $course->id);
+            })->firstOrFail();
+
+        \App\Models\ProgressTracking::updateOrCreate(
+            [
+                'enrollment_id' => $enrollment->id,
+                'lesson_id' => $lesson->id,
+            ],
+            [
+                'is_completed' => 'true',
+                'completed_at' => now(),
+            ]
+        );
+
+        // Check if all lessons completed to mark course completed
+        $totalLessons = \App\Models\Lesson::whereHas('module', function ($q) use ($course) {
+            $q->where('course_id', $course->id);
+        })->count();
+
+        $completedCount = \App\Models\ProgressTracking::where('enrollment_id', $enrollment->id)
+            ->where('is_completed', 'true')
+            ->count();
+
+        if ($completedCount >= $totalLessons) {
+            $enrollment->status = 'completed';
+            $enrollment->completed_at = now();
+            $enrollment->save();
+        }
+
+        $completedLessonIds = \App\Models\ProgressTracking::where('enrollment_id', $enrollment->id)
+            ->where('is_completed', 'true')
+            ->pluck('lesson_id')
+            ->toArray();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Progres materi berhasil disimpan.',
+            'completed_lessons' => $completedLessonIds,
+            'enrollment_status' => $enrollment->status
+        ]);
+    });
+
+    Route::post('/checkout', function (Request $request) {
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'purchasable_type' => 'required|string|in:product,course',
+            'purchasable_id' => 'required|integer',
+        ]);
+
+        $type = $validated['purchasable_type'];
+        $id = $validated['purchasable_id'];
+
+        $purchasableModel = null;
+        $price = 0;
+        $itemName = '';
+
+        if ($type === 'product') {
+            $purchasableModel = \App\Models\Product::findOrFail($id);
+            $price = $purchasableModel->price;
+            $itemName = $purchasableModel->name;
+
+            // Check if already has license
+            $hasLicense = \App\Models\UserLicense::where('user_id', $user->id)
+                ->where('product_id', $id)
+                ->where('status', 'active')
+                ->exists();
+
+            if ($hasLicense) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda sudah memiliki lisensi aktif untuk produk ini.'
+                ], 400);
+            }
+        } else {
+            $purchasableModel = \App\Models\Course::findOrFail($id);
+            $price = $purchasableModel->price;
+            $itemName = $purchasableModel->title;
+
+            // Check if already enrolled
+            $isEnrolled = \App\Models\Enrollment::where('user_id', $user->id)
+                ->where('course_id', $id)
+                ->whereIn('status', ['active', 'completed'])
+                ->exists();
+
+            if ($isEnrolled) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda sudah terdaftar di kelas ini.'
+                ], 400);
+            }
+        }
+
+        // Create Order
+        $order = \App\Models\Order::create([
+            'user_id' => $user->id,
+            'order_number' => 'DGTY-' . time() . '-' . rand(1000, 9999),
+            'total_amount' => $price,
+            'status' => 'pending',
+            'payment_method' => 'midtrans',
+            'payment_status' => 'pending',
+        ]);
+
+        // Create OrderItem
+        \App\Models\OrderItem::create([
+            'order_id' => $order->id,
+            'purchasable_type' => get_class($purchasableModel),
+            'purchasable_id' => $purchasableModel->id,
+            'price' => $price,
+            'quantity' => 1,
+        ]);
+
+        // Midtrans Parameters
+        $params = [
+            'transaction_details' => [
+                'order_id' => $order->order_number,
+                'gross_amount' => (int) $order->total_amount,
+            ],
+            'customer_details' => [
+                'first_name' => $user->name,
+                'email' => $user->email,
+            ],
+            'item_details' => [
+                [
+                    'id' => $purchasableModel->id,
+                    'price' => (int) $order->total_amount,
+                    'quantity' => 1,
+                    'name' => substr($itemName, 0, 50),
+                ]
+            ]
+        ];
+
+        $snapToken = '';
+        $redirectUrl = '';
+
+        try {
+            \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY', 'SB-Mid-server-your-key');
+            \Midtrans\Config::$isProduction = false;
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            $redirectUrl = \Midtrans\Snap::createTransaction($params)->redirect_url;
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Midtrans Exception: ' . $e->getMessage());
+            // Fallback mock payment simulator
+            $snapToken = 'mock-snap-token-' . uniqid();
+            $redirectUrl = url('/api/payment/mock-payment?order=' . $order->order_number);
+        }
+
+        return response()->json([
+            'success' => true,
+            'order' => $order,
+            'snap_token' => $snapToken,
+            'redirect_url' => $redirectUrl
+        ]);
+    });
+});
+
+// ==========================================
+// MIDTRANS PAYMENT CALLBACK & SIMULATOR API
+// ==========================================
+Route::post('/payment/callback', function (Request $request) {
+    // Decode Midtrans payload
+    $orderNumber = $request->input('order_id');
+    $transactionStatus = $request->input('transaction_status');
+    $fraudStatus = $request->input('fraud_status');
+
+    $order = \App\Models\Order::where('order_number', $orderNumber)->first();
+
+    if (!$order) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Order not found'
+        ], 404);
+    }
+
+    if ($order->payment_status === 'paid') {
+        return response()->json([
+            'success' => true,
+            'message' => 'Order already processed'
+        ]);
+    }
+
+    $isSuccess = false;
+
+    if ($transactionStatus == 'capture') {
+        if ($fraudStatus == 'challenge') {
+            // CHALLENGE
+        } else if ($fraudStatus == 'accept') {
+            $isSuccess = true;
+        }
+    } else if ($transactionStatus == 'settlement') {
+        $isSuccess = true;
+    } else if ($transactionStatus == 'deny' || $transactionStatus == 'expire' || $transactionStatus == 'cancel') {
+        $order->payment_status = 'failed';
+        $order->status = 'cancelled';
+        $order->save();
+    }
+
+    if ($isSuccess) {
+        $order->payment_status = 'paid';
+        $order->status = 'completed';
+        $order->save();
+
+        // Process purchased items
+        $items = \App\Models\OrderItem::where('order_id', $order->id)->get();
+        foreach ($items as $item) {
+            if ($item->purchasable_type === \App\Models\Product::class) {
+                // Create License
+                \App\Models\UserLicense::create([
+                    'user_id' => $order->user_id,
+                    'product_id' => $item->purchasable_id,
+                    'license_key' => 'DGTY-LIC-' . strtoupper(\Illuminate\Support\Str::random(16)),
+                    'status' => 'active',
+                    'activated_at' => now(),
+                ]);
+            } else if ($item->purchasable_type === \App\Models\Course::class) {
+                // Create Enrollment
+                \App\Models\Enrollment::create([
+                    'user_id' => $order->user_id,
+                    'course_id' => $item->purchasable_id,
+                    'enrolled_at' => now(),
+                    'status' => 'active',
+                ]);
+            }
+        }
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Payment status updated'
+    ]);
+});
+
+Route::get('/payment/mock-payment', function (Request $request) {
+    $orderNumber = $request->query('order');
+    $order = \App\Models\Order::where('order_number', $orderNumber)->first();
+
+    if (!$order) {
+        return "Order tidak ditemukan.";
+    }
+
+    if ($order->payment_status !== 'paid') {
+        $order->payment_status = 'paid';
+        $order->status = 'completed';
+        $order->save();
+
+        // Process purchased items
+        $items = \App\Models\OrderItem::where('order_id', $order->id)->get();
+        foreach ($items as $item) {
+            if ($item->purchasable_type === \App\Models\Product::class) {
+                // Create License
+                \App\Models\UserLicense::create([
+                    'user_id' => $order->user_id,
+                    'product_id' => $item->purchasable_id,
+                    'license_key' => 'DGTY-LIC-' . strtoupper(\Illuminate\Support\Str::random(16)),
+                    'status' => 'active',
+                    'activated_at' => now(),
+                ]);
+            } else if ($item->purchasable_type === \App\Models\Course::class) {
+                // Create Enrollment
+                \App\Models\Enrollment::create([
+                    'user_id' => $order->user_id,
+                    'course_id' => $item->purchasable_id,
+                    'enrolled_at' => now(),
+                    'status' => 'active',
+                ]);
+            }
+        }
+    }
+
+    // Redirect user back to frontend dashboard
+    $frontendUrl = env('NEXT_PUBLIC_SITE_URL', 'http://localhost:3000');
+    return redirect()->away($frontendUrl . '/dashboard/orders?payment=success');
 });
