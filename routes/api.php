@@ -414,3 +414,112 @@ Route::post('/talent-profiles', function (Request $request) {
         'data' => $profile
     ], 201);
 });
+
+// ==========================================
+// USER AUTHENTICATION & PORTAL API
+// ==========================================
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
+Route::post('/register', function (Request $request) {
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+    ]);
+
+    $user = User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'password' => Hash::make($validated['password']),
+        'role' => 'customer', // default role
+    ]);
+
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'success' => true,
+        'user' => $user,
+        'token' => $token,
+    ], 201);
+});
+
+Route::post('/login', function (Request $request) {
+    $validated = $request->validate([
+        'email' => 'required|string|email',
+        'password' => 'required|string',
+    ]);
+
+    $user = User::where('email', $validated['email'])->first();
+
+    if (! $user || ! Hash::check($validated['password'], $user->password)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Email atau password salah.'
+        ], 401);
+    }
+
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'success' => true,
+        'user' => $user,
+        'token' => $token,
+    ]);
+});
+
+// Protected routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', function (Request $request) {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Logged out successfully'
+        ]);
+    });
+
+    Route::get('/user', function (Request $request) {
+        return response()->json($request->user());
+    });
+
+    Route::put('/user', function (Request $request) {
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile updated successfully',
+            'user' => $user
+        ]);
+    });
+
+    Route::get('/user/orders', function (Request $request) {
+        $orders = $request->user()->orders()->with('items.product')->latest()->get();
+        return response()->json($orders);
+    });
+
+    Route::get('/user/products', function (Request $request) {
+        $licenses = $request->user()->licenses()->with('product')->get();
+        return response()->json($licenses);
+    });
+
+    Route::get('/user/courses', function (Request $request) {
+        $enrollments = $request->user()->enrollments()->with(['course.category', 'progressTrackings'])->get();
+        return response()->json($enrollments);
+    });
+});
