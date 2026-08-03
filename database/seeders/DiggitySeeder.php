@@ -10,14 +10,38 @@ use App\Models\Blog;
 use App\Models\Team;
 use App\Models\Testimonial;
 use App\Models\Faq;
-use App\Models\Pricing;
 use App\Models\CompanySetting;
 use App\Models\Career;
+use App\Models\Product;
+use App\Models\Course;
+use App\Models\Module;
+use App\Models\Lesson;
+use App\Models\TalentProfile;
+use App\Models\User;
 
 class DiggitySeeder extends Seeder
 {
     public function run(): void
     {
+        // 0. Super Admin & Demo Users
+        $admin = User::updateOrCreate(
+            ['email' => 'admin@diggity.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => bcrypt('password'),
+                'role' => 'admin',
+            ]
+        );
+
+        $user = User::updateOrCreate(
+            ['email' => 'customer@example.com'],
+            [
+                'name' => 'Budi Setiawan',
+                'password' => bcrypt('password'),
+                'role' => 'customer',
+            ]
+        );
+
         // 1. Company Settings
         CompanySetting::updateOrCreate(
             ['email' => 'hello@diggity.com'],
@@ -30,13 +54,28 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        // 2. Categories
-        $catApp = Category::updateOrCreate(['name' => 'App Builder Squad'], ['slug' => 'app-builder-squad']);
-        $catBrand = Category::updateOrCreate(['name' => 'Brand Growth Division'], ['slug' => 'brand-growth-division']);
-        $catCloud = Category::updateOrCreate(['name' => 'Cloud Service Hub'], ['slug' => 'cloud-service-hub']);
-        $catLab = Category::updateOrCreate(['name' => 'Digital Skill Lab'], ['slug' => 'digital-skill-lab']);
+        // 2. Categories for Services (type: service)
+        $catApp = Category::updateOrCreate(['name' => 'App Builder Squad'], ['slug' => 'app-builder-squad', 'type' => 'service']);
+        $catBrand = Category::updateOrCreate(['name' => 'Brand Growth Division'], ['slug' => 'brand-growth-division', 'type' => 'service']);
+        $catCloud = Category::updateOrCreate(['name' => 'Cloud Service Hub'], ['slug' => 'cloud-service-hub', 'type' => 'service']);
+        $catLab = Category::updateOrCreate(['name' => 'Digital Skill Lab'], ['slug' => 'digital-skill-lab', 'type' => 'service']);
 
-        // 3. Services
+        // 2.1 Categories for Blogs/Insights (type: blog)
+        $catTechBlog = Category::updateOrCreate(['name' => 'Technology Insights'], ['slug' => 'technology-insights', 'type' => 'blog']);
+        $catMarketingBlog = Category::updateOrCreate(['name' => 'Marketing Trends'], ['slug' => 'marketing-trends', 'type' => 'blog']);
+        $catCloudBlog = Category::updateOrCreate(['name' => 'Cloud & Security'], ['slug' => 'cloud-security', 'type' => 'blog']);
+
+        // 2.2 Categories for Products (type: product)
+        $catSoftware = Category::updateOrCreate(['name' => 'Business Software'], ['slug' => 'business-software', 'type' => 'product']);
+        $catAIProducts = Category::updateOrCreate(['name' => 'AI Products'], ['slug' => 'ai-products', 'type' => 'product']);
+        $catCloudProducts = Category::updateOrCreate(['name' => 'Cloud Products'], ['slug' => 'cloud-products', 'type' => 'product']);
+        $catMarketplace = Category::updateOrCreate(['name' => 'Digital Marketplace'], ['slug' => 'digital-marketplace', 'type' => 'product']);
+
+        // 2.3 Categories for Academy (type: academy)
+        $catBootcamp = Category::updateOrCreate(['name' => 'Bootcamp'], ['slug' => 'bootcamp', 'type' => 'academy']);
+        $catWebinar = Category::updateOrCreate(['name' => 'Webinar & Workshop'], ['slug' => 'webinar-workshop', 'type' => 'academy']);
+
+        // 3. Services (Solutions)
         // App Builder Squad
         Service::updateOrCreate(
             ['slug' => 'website-development'],
@@ -97,7 +136,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        // Digital Skill Lab
+        // Digital Skill Lab (Service)
         Service::updateOrCreate(
             ['slug' => 'corporate-training-bootcamp'],
             [
@@ -108,7 +147,125 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        // 4. Portfolios
+        // 4. Products (Ready-to-use digital products)
+        Product::updateOrCreate(
+            ['slug' => 'diggity-erp'],
+            [
+                'category_id' => $catSoftware->id,
+                'name' => 'Diggity ERP',
+                'sku' => 'DG-ERP-01',
+                'price' => 15000000.00,
+                'billing_period' => 'yearly',
+                'description' => 'Sistem ERP lengkap untuk manajemen inventori, keuangan, penggajian karyawan, dan absensi.',
+                'features' => ['Modul Akuntansi & Keuangan', 'Manajemen Inventori & Gudang', 'Penggajian (Payroll) & HR', 'Laporan Real-time'],
+                'gallery' => ['products/erp-dashboard.jpg', 'products/erp-inventory.jpg'],
+                'license_info' => 'Lisensi tahunan untuk 1 server perusahaan.',
+                'version' => '1.2.0',
+                'is_active' => true,
+                'is_popular' => true,
+            ]
+        );
+
+        Product::updateOrCreate(
+            ['slug' => 'diggity-ai-agent'],
+            [
+                'category_id' => $catAIProducts->id,
+                'name' => 'Diggity AI Agent',
+                'sku' => 'DG-AI-AG',
+                'price' => 2500000.00,
+                'billing_period' => 'monthly',
+                'description' => 'Asisten pintar kecerdasan buatan untuk mengotomatisasi percakapan customer service dan lead generation.',
+                'features' => ['Integrasi WhatsApp & Telegram', 'Custom AI Training Data', 'Dashboard Analitik Chat', 'Multi-agent Handoff'],
+                'gallery' => ['products/ai-dashboard.jpg'],
+                'license_info' => 'Langganan bulanan per chatbot aktif.',
+                'version' => '1.0.5',
+                'is_active' => true,
+                'is_popular' => false,
+            ]
+        );
+
+        Product::updateOrCreate(
+            ['slug' => 'sleek-dashboard-ui-kit'],
+            [
+                'category_id' => $catMarketplace->id,
+                'name' => 'Sleek Dashboard UI Kit',
+                'sku' => 'DG-SLK-UI',
+                'price' => 450000.00,
+                'billing_period' => 'one_time',
+                'description' => 'Desain dashboard premium siap pakai dengan Figma file dan React component lengkap.',
+                'features' => ['100+ UI Components', 'Figma & React Code Terintegrasi', 'Dukungan Mode Gelap & Terang', 'Pembaruan Gratis Selamanya'],
+                'gallery' => ['products/sleek-preview.jpg'],
+                'license_info' => 'Lisensi personal/komersial satu kali bayar.',
+                'version' => '2.0.0',
+                'file_path' => 'products/sleek-dashboard-ui-kit.zip',
+                'is_active' => true,
+                'is_popular' => true,
+            ]
+        );
+
+        // 5. Courses (Academy)
+        $course1 = Course::updateOrCreate(
+            ['slug' => 'fullstack-laravel-nextjs-bootcamp'],
+            [
+                'category_id' => $catBootcamp->id,
+                'title' => 'Fullstack Laravel & Next.js Bootcamp',
+                'description' => 'Pelatihan intensif 12 minggu untuk menguasai pembuatan aplikasi web skala industri dengan backend API Laravel 12 dan frontend Next.js 16.',
+                'syllabus' => 'Minggu 1-3: RESTful API Laravel & PostgreSQL; Minggu 4-6: Next.js App Router & Server Actions; Minggu 7-9: JWT Authentication & State Management; Minggu 10-12: Project Akhir & Deployment VPS.',
+                'instructor_name' => 'Budi Pratama',
+                'instructor_title' => 'Senior Fullstack Engineer',
+                'price' => 3500000.00,
+                'is_active' => true,
+                'is_featured' => true,
+                'image' => 'courses/laravel-nextjs-bootcamp.jpg'
+            ]
+        );
+
+        // Seed Course Modules
+        $module1 = Module::updateOrCreate(
+            ['course_id' => $course1->id, 'title' => 'Introduction to Laravel API'],
+            ['description' => 'Belajar dasar rekayasa API, routing, controller, dan migrations di Laravel.', 'sort_order' => 1]
+        );
+        $module2 = Module::updateOrCreate(
+            ['course_id' => $course1->id, 'title' => 'Next.js Frontend Integration'],
+            ['description' => 'Menghubungkan aplikasi frontend Next.js dengan API Laravel.', 'sort_order' => 2]
+        );
+
+        // Seed Lessons
+        Lesson::updateOrCreate(
+            ['module_id' => $module1->id, 'slug' => 'routing-dan-controller-api'],
+            [
+                'title' => 'Routing dan Controller API di Laravel',
+                'content_type' => 'video',
+                'content' => 'Dalam video ini kita akan belajar bagaimana mendefinisikan route API dan menghubungkannya dengan controller.',
+                'video_url' => 'https://player.vimeo.com/video/123456789',
+                'duration_minutes' => 15,
+                'sort_order' => 1
+            ]
+        );
+        Lesson::updateOrCreate(
+            ['module_id' => $module1->id, 'slug' => 'eloquent-orm-dan-database-seeding'],
+            [
+                'title' => 'Eloquent ORM dan Database Seeding',
+                'content_type' => 'article',
+                'content' => 'Eloquent ORM adalah fitur canggih Laravel untuk manipulasi database menggunakan paradigma pemrograman berorientasi objek (OOP).',
+                'video_url' => null,
+                'duration_minutes' => 10,
+                'sort_order' => 2
+            ]
+        );
+        Lesson::updateOrCreate(
+            ['module_id' => $module2->id, 'slug' => 'fetching-data-pada-nextjs'],
+            [
+                'title' => 'Fetching Data pada Next.js (SSR & ISR)',
+                'content_type' => 'video',
+                'content' => 'Belajar cara mengambil data dari API Laravel menggunakan fetch pada Server Components Next.js.',
+                'video_url' => 'https://player.vimeo.com/video/987654321',
+                'duration_minutes' => 20,
+                'sort_order' => 1
+            ]
+        );
+
+        // 6. Portfolios
         Portfolio::updateOrCreate(
             ['slug' => 'sistem-informasi-logistik-nasional'],
             [
@@ -160,30 +317,13 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Portfolio::updateOrCreate(
-            ['slug' => 'redesign-portal-berita-nasional'],
-            [
-                'category_id' => $catApp->id,
-                'title' => 'Desain Ulang Portal Berita Interaktif',
-                'client' => 'IndoNews Media',
-                'duration' => '3 Bulan',
-                'technologies' => ['Next.js', 'Tailwind CSS', 'Figma', 'GraphQL'],
-                'problem' => 'Kecepatan loading portal berita lambat di perangkat mobile sehingga meningkatkan bounce rate pengunjung hingga 70%.',
-                'strategy' => 'Merancang ulang antarmuka visual yang modern dan menerapkan arsitektur Static Site Generation (SSG) performa tinggi.',
-                'execution' => 'Perancangan desain UI/UX interaktif di Figma, implementasi Next.js dengan ISR, dan optimasi core web vitals.',
-                'result' => 'Bounce rate turun menjadi 25% dan waktu load rata-rata di mobile terpangkas dari 5.2 detik ke 1.1 detik.',
-                'solution' => 'Portal Berita Teroptimasi Kecepatan.',
-                'image' => 'portfolios/news-portal.jpg'
-            ]
-        );
-
-        // 5. Blogs
+        // 7. Blogs (Insights)
         Blog::updateOrCreate(
             ['slug' => '5-teknologi-web-modern-terbaik-2026'],
             [
-                'category_id' => $catApp->id,
+                'category_id' => $catTechBlog->id,
                 'title' => '5 Teknologi Web Modern Terbaik di Tahun 2026',
-                'content' => '<p>Dunia pengembangan web bergerak sangat cepat. Di tahun 2026 ini, beberapa teknologi telah dominasi industri karena kemampuannya memberikan performa maksimal dan efisiensi kode.</p><h3>1. Next.js 16</h3><p>Dengan peningkatan kecepatan compile dan dukungan server actions yang lebih matang, Next.js tetap menjadi andalan utama.</p><h3>2. Tailwind CSS v4</h3><p>Tailwind v4 menghadirkan mesin kompilasi baru yang jauh lebih ringan dan cepat.</p><p>Mengadopsi teknologi ini sekarang akan memberikan keunggulan kompetitif bagi produk digital bisnis Anda.</p>',
+                'content' => '<p>Dunia pengembangan web bergerak sangat cepat. Di tahun 2026 ini, beberapa teknologi telah dominasi industri karena kemampuannya memberikan performa maksimal dan efisiensi kode.</p><h3>1. Next.js 16</h3><p>Dengan peningkatan kecepatan compile dan dukungan server actions yang lebih matang, Next.js tetap menjadi andalan utama.</p><h3>2. Tailwind CSS v4</h3><p>Tailwind v4 menghadirkan mesin kompilasi baru yang jauh lebih ringan dan cepat.</p>',
                 'meta_title' => '5 Teknologi Web Modern Terbaik 2026 | Diggity Blog',
                 'meta_description' => 'Pelajari 5 teknologi web development modern terbaik di tahun 2026 yang wajib diadopsi agensi dan bisnis digital untuk meningkatkan kecepatan website.',
                 'image' => 'blogs/web-tech-2026.jpg'
@@ -193,9 +333,9 @@ class DiggitySeeder extends Seeder
         Blog::updateOrCreate(
             ['slug' => 'panduan-seo-pemula-ranking-satu-google'],
             [
-                'category_id' => $catBrand->id,
+                'category_id' => $catMarketingBlog->id,
                 'title' => 'Panduan SEO Pemula untuk Menembus Peringkat 1 Google',
-                'content' => '<p>SEO (Search Engine Optimization) bukan lagi sekadar menaruh kata kunci di artikel. Google kini menilai pengalaman pengguna, kecepatan website, dan otoritas topik secara menyeluruh.</p><h3>Langkah Utama SEO:</h3><ul><li>Riset Keyword dengan intensi pencarian yang tepat.</li><li>Optimasi On-Page (struktur heading, kecepatan muat gambar).</li><li>Membangun Backlink berkualitas secara alami.</li></ul>',
+                'content' => '<p>SEO (Search Engine Optimization) bukan lagi sekadar menaruh kata kunci di artikel. Google kini menilai pengalaman pengguna, kecepatan website, dan otoritas topik secara menyeluruh.</p>',
                 'meta_title' => 'Panduan Lengkap SEO Pemula 2026 | Diggity Blog',
                 'meta_description' => 'Pelajari strategi SEO dasar terbaik untuk pemula agar website Anda mendapat peringkat pertama di halaman pencarian Google secara organik.',
                 'image' => 'blogs/seo-guide.jpg'
@@ -205,40 +345,16 @@ class DiggitySeeder extends Seeder
         Blog::updateOrCreate(
             ['slug' => 'cara-migrasi-server-ke-vps-tanpa-downtime'],
             [
-                'category_id' => $catCloud->id,
+                'category_id' => $catCloudBlog->id,
                 'title' => 'Cara Migrasi Server ke VPS Cloud Tanpa Downtime',
-                'content' => '<p>Migrasi server seringkali menjadi momok karena risiko kehilangan data dan downtime transaksi. Namun, dengan langkah yang tepat, Anda bisa melakukannya secara mulus.</p><h3>Langkah Aman Migrasi:</h3><ul><li>Backup database secara menyeluruh.</li><li>Gunakan staging server untuk pengetesan.</li><li>Turunkan nilai TTL DNS sebelum mengalihkan domain.</li></ul>',
+                'content' => '<p>Migrasi server seringkali menjadi momok karena risiko kehilangan data dan downtime transaksi. Namun, dengan langkah yang tepat, Anda bisa melakukannya secara mulus.</p>',
                 'meta_title' => 'Cara Migrasi Server ke VPS Cloud Tanpa Downtime | Diggity Blog',
                 'meta_description' => 'Panduan langkah demi langkah memigrasikan database dan file server Anda ke cloud VPS hosting secara aman tanpa mengalami offline.',
                 'image' => 'blogs/server-migration.jpg'
             ]
         );
 
-        Blog::updateOrCreate(
-            ['slug' => 'pentingnya-ui-ux-design-untuk-retention-rate'],
-            [
-                'category_id' => $catApp->id,
-                'title' => 'Pentingnya UI/UX Design untuk Meningkatkan Retention Rate',
-                'content' => '<p>Aplikasi yang indah tidak ada gunanya jika pengguna kesulitan melakukan check-out. Pengalaman pengguna (UX) adalah kunci agar pelanggan terus kembali bertransaksi.</p><h3>Tips UX Berkonversi Tinggi:</h3><ul><li>Sederhanakan alur transaksi maksimal 3 langkah.</li><li>Gunakan hirarki tombol aksi (CTA) yang mencolok.</li><li>Sediakan feedback instan saat terjadi kesalahan input formulir.</li></ul>',
-                'meta_title' => 'Pentingnya UI/UX Design untuk Retention Rate | Diggity Blog',
-                'meta_description' => 'Pelajari korelasi erat antara desain antarmuka pengguna yang intuitif dengan peningkatan retensi kunjungan dan pembelian pelanggan.',
-                'image' => 'blogs/ui-ux-retention.jpg'
-            ]
-        );
-
-        Blog::updateOrCreate(
-            ['slug' => '10-cara-meningkatkan-kecepatan-website-nextjs'],
-            [
-                'category_id' => $catApp->id,
-                'title' => '10 Cara Meningkatkan Kecepatan Website Next.js Anda',
-                'content' => '<p>Next.js sudah cepat, namun optimasi yang salah pada gambar dan dynamic package bisa memicu loading lambat. Berikut cara memaksimalkannya.</p><h3>Langkah Optimasi Next.js:</h3><ul><li>Gunakan komponen Next Image untuk kompresi otomatis.</li><li>Terapkan dynamic imports untuk modul yang berukuran besar.</li><li>Optimalkan server cache runtime.</li></ul>',
-                'meta_title' => '10 Cara Meningkatkan Kecepatan Website Next.js | Diggity Blog',
-                'meta_description' => 'Temukan teknik optimasi backend, caching, dan bundling untuk memangkas waktu loading website berbasis Next.js hingga dibawah 1 detik.',
-                'image' => 'blogs/nextjs-speed.jpg'
-            ]
-        );
-
-        // 6. Teams
+        // 8. Teams
         Team::updateOrCreate(
             ['name' => 'Ahmad Fauzi'],
             [
@@ -260,22 +376,8 @@ class DiggitySeeder extends Seeder
                 'photo' => null
             ]
         );
-        Team::updateOrCreate(
-            ['name' => 'Rian Hidayat'],
-            [
-                'position' => 'Cloud Infrastructure Engineer',
-                'photo' => null
-            ]
-        );
-        Team::updateOrCreate(
-            ['name' => 'Mega Lestari'],
-            [
-                'position' => 'Digital Marketing Specialist',
-                'photo' => null
-            ]
-        );
 
-        // 7. Testimonials
+        // 9. Testimonials
         Testimonial::updateOrCreate(
             ['client_name' => 'Hendra Wijaya'],
             [
@@ -294,87 +396,16 @@ class DiggitySeeder extends Seeder
                 'avatar' => null
             ]
         );
-        Testimonial::updateOrCreate(
-            ['client_name' => 'Gunawan Wibisono'],
-            [
-                'company' => 'PT Global Finance Indonesia',
-                'review' => 'Infrastruktur multi-cloud yang dibangun Diggity sangat andal. Server kami tidak pernah mengalami down lagi saat lonjakan transaksi bulanan.',
-                'rating' => 5,
-                'avatar' => null
-            ]
-        );
-        Testimonial::updateOrCreate(
-            ['client_name' => 'Dian Sasmita'],
-            [
-                'company' => 'Edutech Nusantara',
-                'review' => 'Corporate training Next.js dari Diggity meningkatkan produktivitas tim developer kami secara drastis. Materi sangat terstruktur dan aplikatif.',
-                'rating' => 5,
-                'avatar' => null
-            ]
-        );
 
-        // 8. FAQs
+        // 10. FAQs
         Faq::updateOrCreate(
             ['question' => 'Teknologi apa saja yang digunakan oleh Diggity?'],
             [
                 'answer' => 'Kami menggunakan stack teknologi modern terbaik seperti Next.js, React, TypeScript, Tailwind CSS untuk frontend, serta Laravel, Node.js, dan PostgreSQL/MySQL untuk backend.'
             ]
         );
-        Faq::updateOrCreate(
-            ['question' => 'Berapa lama estimasi waktu pembuatan website atau aplikasi?'],
-            [
-                'answer' => 'Waktu pengerjaan bervariasi bergantung pada kompleksitas produk. Landing page standar membutuhkan waktu 1-2 minggu, sedangkan sistem ERP kustom atau aplikasi mobile biasanya memakan waktu 2-4 bulan.'
-            ]
-        );
-        Faq::updateOrCreate(
-            ['question' => 'Apakah Diggity menyediakan garansi pemeliharaan (maintenance)?'],
-            [
-                'answer' => 'Ya, setiap produk digital yang kami bangun mendapatkan garansi pemeliharaan gratis selama 3 bulan pertama setelah rilis untuk memastikan kestabilan sistem.'
-            ]
-        );
-        Faq::updateOrCreate(
-            ['question' => 'Bagaimana skema pembayaran untuk pengerjaan proyek kustom?'],
-            [
-                'answer' => 'Skema pembayaran dilakukan bertahap (term-based) berbasis milestone pengerjaan, biasanya dibagi menjadi DP awal, penyelesaian desain UI/UX, rilis versi beta, dan pelunasan saat go-live.'
-            ]
-        );
-        Faq::updateOrCreate(
-            ['question' => 'Apakah Diggity membantu migrasi server dari hosting lama?'],
-            [
-                'answer' => 'Ya, kami membantu migrasi basis data, file aset, serta penataan konfigurasi domain dari server hosting lama ke cloud server / VPS baru secara aman tanpa downtime.'
-            ]
-        );
 
-        // 9. Pricings
-        Pricing::updateOrCreate(
-            ['name' => 'Starter Pack'],
-            [
-                'price' => 4999000,
-                'period' => 'One-time',
-                'features' => ['1 Landing Page Premium', 'Desain UI/UX Kustom', 'Responsif Mobile & Tablet', 'Integrasi Form Kontak', 'Domain & Hosting 1 Tahun', 'Garansi Bug-Fix 1 Bulan'],
-                'is_popular' => false
-            ]
-        );
-        Pricing::updateOrCreate(
-            ['name' => 'Business Pro'],
-            [
-                'price' => 14999000,
-                'period' => 'One-time',
-                'features' => ['Hingga 5 Halaman Utama', 'CMS Admin Panel (Filament)', 'Integrasi Blog / News', 'Kecepatan Muat Super Cepat', 'Google Analytics & GTM Setup', 'SEO On-Page Dasar', 'Garansi Pemeliharaan 3 Bulan'],
-                'is_popular' => true
-            ]
-        );
-        Pricing::updateOrCreate(
-            ['name' => 'Enterprise Custom'],
-            [
-                'price' => 29999000,
-                'period' => 'One-time',
-                'features' => ['Aplikasi Web / ERP Kustom', 'Aplikasi Mobile (Android/iOS)', 'Desain UX Kompleks & Animasi', 'Integrasi Payment Gateway', 'Keamanan Lapis Tinggi & Backup', 'Dukungan Prioritas 24/7'],
-                'is_popular' => false
-            ]
-        );
-
-        // 10. Careers
+        // 11. Careers (Job Connect Vacancies)
         Career::updateOrCreate(
             ['slug' => 'senior-fullstack-developer-laravel-nextjs'],
             [
@@ -382,48 +413,25 @@ class DiggitySeeder extends Seeder
                 'department' => 'App Builder Squad',
                 'type' => 'Full-time',
                 'location' => 'BSD City, Tangerang (Hybrid)',
-                'description' => '<p>Kami mencari Senior Fullstack Developer berpengalaman untuk merancang, membangun, dan memelihara aplikasi web berskala enterprise menggunakan Laravel 12 dan Next.js 15.</p>',
+                'description' => '<p>Kami mencari Senior Fullstack Developer berpengalaman untuk merancang, membangun, dan memelihara aplikasi web berskala enterprise menggunakan Laravel 12 dan Next.js 16.</p>',
                 'requirements' => '<ul><li>Pengalaman kerja minimal 3 tahun sebagai Fullstack Web Developer.</li><li>Menguasai Laravel, PHP, Next.js, React, TypeScript, dan SQL database.</li><li>Memahami manajemen server VPS, Git, dan integrasi API pihak ketiga.</li></ul>',
                 'is_active' => true
             ]
         );
-        
-        Career::updateOrCreate(
-            ['slug' => 'digital-ads-specialist'],
-            [
-                'title' => 'Digital Ads Specialist (Google & Meta Ads)',
-                'department' => 'Brand Growth Division',
-                'type' => 'Full-time',
-                'location' => 'Remote (Indonesia)',
-                'description' => '<p>Kami mencari spesialis iklan digital yang andal untuk merancang kampanye iklan berbayar di Meta Ads, Google Ads, dan TikTok Ads guna mendatangkan prospek dan mengoptimalkan anggaran klien.</p>',
-                'requirements' => '<ul><li>Pengalaman minimal 2 tahun dalam optimasi iklan berbayar dengan anggaran besar.</li><li>Mampu menganalisis data melalui Google Analytics 4 dan melakukan A/B testing audiens.</li><li>Memiliki sertifikasi resmi Google Ads atau Meta Blueprint adalah nilai plus.</li></ul>',
-                'is_active' => true
-            ]
-        );
 
-        Career::updateOrCreate(
-            ['slug' => 'ui-ux-designer-designer-squad'],
+        // 12. Talent Profiles (Job Connect Submissions)
+        TalentProfile::updateOrCreate(
+            ['email' => 'rian.hidayat@example.com'],
             [
-                'title' => 'UI/UX Designer',
-                'department' => 'App Builder Squad',
-                'type' => 'Full-time',
-                'location' => 'BSD City, Tangerang (Hybrid)',
-                'description' => '<p>Kami mencari desainer UI/UX kreatif yang memiliki passion kuat dalam menciptakan antarmuka pengguna yang estetik dan alur pengguna yang intuitif untuk website dan aplikasi mobile.</p>',
-                'requirements' => '<ul><li>Pengalaman kerja minimal 2 tahun sebagai UI/UX Designer.</li><li>Mahir menggunakan Figma, Prototyping, dan pembuatan Design System.</li><li>Mampu melakukan riset pengguna dan mengimplementasikan feedback hasil testing.</li></ul>',
-                'is_active' => true
-            ]
-        );
-
-        Career::updateOrCreate(
-            ['slug' => 'devops-cloud-engineer'],
-            [
-                'title' => 'DevOps & Cloud Engineer',
-                'department' => 'Cloud Service Hub',
-                'type' => 'Full-time',
-                'location' => 'BSD City, Tangerang (Hybrid)',
-                'description' => '<p>Kami mencari DevOps Engineer untuk mengelola infrastruktur cloud server, menjaga otomatisasi deployment CI/CD, serta mengoptimalkan sistem keamanan server.</p>',
-                'requirements' => '<ul><li>Pengalaman minimal 2 tahun di bidang DevOps / Cloud Engineering.</li><li>Menguasai AWS / Google Cloud, Linux Administration, Docker, dan Kubernetes.</li><li>Mengerti pipeline CI/CD (GitHub Actions / GitLab CI) dan penataan keamanan Cloudflare.</li></ul>',
-                'is_active' => true
+                'name' => 'Rian Hidayat',
+                'phone' => '628999888777',
+                'type' => 'individual',
+                'skills' => ['DevOps', 'AWS', 'Docker', 'Kubernetes', 'CI/CD'],
+                'portfolio_links' => ['https://github.com/rianhidayat', 'https://linkedin.com/in/rianhidayat'],
+                'resume_path' => 'resumes/rian-resume.pdf',
+                'experience_years' => 4,
+                'description' => 'Professional DevOps engineer specializing in high-availability AWS infrastructures and Docker orchestration.',
+                'status' => 'reviewed'
             ]
         );
     }

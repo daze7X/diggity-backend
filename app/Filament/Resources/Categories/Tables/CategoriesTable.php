@@ -24,6 +24,19 @@ class CategoriesTable
                     ->label('Slug')
                     ->color('gray'),
 
+                TextColumn::make('type')
+                    ->label('Tipe')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'blog' => 'info',
+                        'service' => 'success',
+                        'product' => 'warning',
+                        'academy' => 'primary',
+                        'job_connect' => 'danger',
+                        default => 'gray',
+                    })
+                    ->sortable(),
+
                 TextColumn::make('created_at')
                     ->label('Dibuat Pada')
                     ->dateTime('d M Y')

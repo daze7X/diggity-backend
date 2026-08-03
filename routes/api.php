@@ -16,6 +16,9 @@ use App\Models\Lead;
 use App\Models\Career;
 use App\Models\JobApplication;
 use App\Models\Subscriber;
+use App\Models\Product;
+use App\Models\Course;
+use App\Models\TalentProfile;
 use App\Mail\LeadSubmittedMail;
 use App\Mail\JobApplicationSubmittedMail;
 use Illuminate\Support\Facades\Http;
@@ -340,5 +343,74 @@ Route::post('/job-applications', function (Request $request) {
         'success' => true,
         'message' => 'Application submitted successfully',
         'data' => $application
+    ], 201);
+});
+
+// ==========================================
+// NEW V1.1 API ROUTE ENDPOINTS
+// ==========================================
+
+// SOLUTIONS (Services)
+Route::get('/solutions', function () {
+    return response()->json(Service::with('category')->get());
+});
+
+Route::get('/solutions/{slug}', function ($slug) {
+    return response()->json(Service::with('category')->where('slug', $slug)->firstOrFail());
+});
+
+// PRODUCTS
+Route::get('/products', function () {
+    return response()->json(Product::with('category')->where('is_active', 'true')->get());
+});
+
+Route::get('/products/{slug}', function ($slug) {
+    return response()->json(Product::with('category')->where('slug', $slug)->firstOrFail());
+});
+
+// ACADEMY (LMS)
+Route::get('/academy', function () {
+    return response()->json(Course::with('category')->where('is_active', 'true')->get());
+});
+
+Route::get('/academy/{slug}', function ($slug) {
+    return response()->json(Course::with(['category', 'modules.lessons'])->where('slug', $slug)->firstOrFail());
+});
+
+// INSIGHTS (Blogs)
+Route::get('/insights', function () {
+    return response()->json(Blog::with('category')->latest()->get());
+});
+
+Route::get('/insights/{slug}', function ($slug) {
+    return response()->json(Blog::with('category')->where('slug', $slug)->firstOrFail());
+});
+
+// JOB CONNECT
+Route::get('/job-connect', function () {
+    return response()->json(Career::where('is_active', 'true')->latest()->get());
+});
+
+Route::get('/job-connect/{slug}', function ($slug) {
+    return response()->json(Career::where('slug', $slug)->firstOrFail());
+});
+
+Route::post('/talent-profiles', function (Request $request) {
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'phone' => 'nullable|string|max:50',
+        'type' => 'required|string|in:individual,dedicated_team',
+        'skills' => 'nullable|array',
+        'portfolio_links' => 'nullable|array',
+        'description' => 'nullable|string',
+    ]);
+
+    $profile = TalentProfile::create($validated);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Talent profile submitted successfully',
+        'data' => $profile
     ], 201);
 });

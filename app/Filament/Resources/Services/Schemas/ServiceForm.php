@@ -14,7 +14,7 @@ class ServiceForm
         return $schema
             ->components([
                 Select::make('category_id')
-                    ->relationship('category', 'name')
+                    ->relationship('category', 'name', fn ($query) => $query->where('type', 'service'))
                     ->label('Kategori')
                     ->required()
                     ->native(false), // Dropdown UI Filament yang premium

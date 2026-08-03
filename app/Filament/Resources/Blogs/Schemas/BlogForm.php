@@ -17,7 +17,7 @@ class BlogForm
         return $schema
             ->components([
                 Select::make('category_id')
-                    ->relationship('category', 'name')
+                    ->relationship('category', 'name', fn ($query) => $query->where('type', 'blog'))
                     ->label('Kategori Artikel')
                     ->searchable()
                     ->preload()
