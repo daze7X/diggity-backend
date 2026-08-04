@@ -29,7 +29,7 @@ class DiggitySeeder extends Seeder
             [
                 'name' => 'Super Admin',
                 'password' => bcrypt('password'),
-                'role' => 'admin',
+                'role' => 'super_admin',
             ]
         );
 
