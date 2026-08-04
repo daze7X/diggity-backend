@@ -772,6 +772,112 @@ Route::middleware('auth:sanctum')->group(function () {
             'certificates' => $certificates
         ]);
     });
+
+    // ==========================================
+    // SUPPORT TICKET SYSTEM ENDPOINTS (USR-6.1)
+    // ==========================================
+    
+    // GET /api/user/tickets - Get user's tickets list
+    Route::get('/user/tickets', function (Request $request) {
+        $user = $request->user();
+        $tickets = \App\Models\SupportTicket::where('user_id', $user->id)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+        return response()->json([
+            'success' => true,
+            'tickets' => $tickets
+        ]);
+    });
+
+    // POST /api/user/tickets - Create a new ticket
+    Route::post('/user/tickets', function (Request $request) {
+        $user = $request->user();
+        
+        $validated = $request->validate([
+            'subject' => 'required|string|max:255',
+            'category' => 'required|string|in:billing,technical,general',
+            'message' => 'required|string',
+        ]);
+
+        // Generate ticket number: TCK-YYYYMM-RANDOM
+        $ticketNumber = 'TCK-' . now()->format('Ym') . '-' . strtoupper(\Illuminate\Support\Str::random(5));
+
+        $ticket = \App\Models\SupportTicket::create([
+            'user_id' => $user->id,
+            'ticket_number' => $ticketNumber,
+            'subject' => $validated['subject'],
+            'category' => $validated['category'],
+            'status' => 'open',
+            'priority' => 'medium',
+        ]);
+
+        // Create the first message
+        \App\Models\SupportMessage::create([
+            'support_ticket_id' => $ticket->id,
+            'user_id' => $user->id,
+            'message' => $validated['message'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tiket bantuan berhasil dibuat.',
+            'ticket' => $ticket
+        ], 201);
+    });
+
+    // GET /api/user/tickets/{id} - Get ticket details & messages thread
+    Route::get('/user/tickets/{id}', function (Request $request, $id) {
+        $user = $request->user();
+        $ticket = \App\Models\SupportTicket::where('id', $id)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        $messages = \App\Models\SupportMessage::with('user:id,name,role')
+            ->where('support_ticket_id', $ticket->id)
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'ticket' => $ticket,
+            'messages' => $messages
+        ]);
+    });
+
+    // POST /api/user/tickets/{id}/reply - Reply to a ticket thread
+    Route::post('/user/tickets/{id}/reply', function (Request $request, $id) {
+        $user = $request->user();
+        
+        $ticket = \App\Models\SupportTicket::where('id', $id)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        $validated = $request->validate([
+            'message' => 'required|string',
+        ]);
+
+        $message = \App\Models\SupportMessage::create([
+            'support_ticket_id' => $ticket->id,
+            'user_id' => $user->id,
+            'message' => $validated['message'],
+        ]);
+
+        // Reopen ticket if resolved/closed
+        if (in_array($ticket->status, ['resolved', 'closed'])) {
+            $ticket->status = 'open';
+        }
+        $ticket->touch(); // Update updated_at
+        $ticket->save();
+
+        $message->load('user:id,name,role');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesan berhasil dikirim.',
+            'sent_message' => $message,
+            'ticket' => $ticket
+        ], 201);
+    });
 });
 
 // GET /api/certificates/verify/{hash} (Public)
