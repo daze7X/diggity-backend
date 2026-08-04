@@ -21,21 +21,25 @@ class CoursesTable
                 TextColumn::make('title')
                     ->searchable(),
                 TextColumn::make('slug')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('instructor_name')
                     ->searchable(),
                 TextColumn::make('instructor_title')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('price')
-                    ->money()
+                    ->money('IDR', locale: 'id') // Format Rp sesuai rupiah Indonesia
                     ->sortable(),
                 IconColumn::make('is_active')
                     ->boolean(),
                 IconColumn::make('is_featured')
                     ->boolean(),
-                ImageColumn::make('image'),
+                ImageColumn::make('image')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('meta_title')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

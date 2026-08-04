@@ -20,25 +20,28 @@ class ProductsTable
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('slug')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('sku')
                     ->label('SKU')
                     ->searchable(),
                 TextColumn::make('price')
-                    ->money()
+                    ->money('IDR', locale: 'id')
                     ->sortable(),
                 TextColumn::make('billing_period')
                     ->searchable(),
                 TextColumn::make('version')
                     ->searchable(),
                 TextColumn::make('file_path')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 IconColumn::make('is_active')
                     ->boolean(),
                 IconColumn::make('is_popular')
                     ->boolean(),
                 TextColumn::make('meta_title')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
