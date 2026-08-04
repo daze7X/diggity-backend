@@ -5,24 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Enrollment extends Model
+class Certificate extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'enrollment_id',
         'user_id',
         'course_id',
-        'enrolled_at',
-        'completed_at',
-        'status',
+        'certificate_number',
+        'verification_hash',
+        'issued_at',
     ];
 
     protected $casts = [
-        'enrolled_at' => 'datetime',
-        'completed_at' => 'datetime',
+        'issued_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
@@ -35,13 +33,8 @@ class Enrollment extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function progressTrackings(): HasMany
+    public function enrollment(): BelongsTo
     {
-        return $this->hasMany(ProgressTracking::class);
-    }
-
-    public function certificate(): HasOne
-    {
-        return $this->hasOne(Certificate::class);
+        return $this->belongsTo(Enrollment::class);
     }
 }

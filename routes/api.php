@@ -532,7 +532,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         $enrollment = \App\Models\Enrollment::where('user_id', $user->id)
             ->where('course_id', $course->id)
-            ->where('status', 'active')
+            ->whereIn('status', ['active', 'completed'])
             ->first();
 
         if (!$enrollment) {
@@ -561,7 +561,7 @@ Route::middleware('auth:sanctum')->group(function () {
         
         $enrollment = \App\Models\Enrollment::where('user_id', $user->id)
             ->where('course_id', $course->id)
-            ->where('status', 'active')
+            ->whereIn('status', ['active', 'completed'])
             ->first();
 
         if (!$enrollment) {
@@ -601,6 +601,34 @@ Route::middleware('auth:sanctum')->group(function () {
             $enrollment->status = 'completed';
             $enrollment->completed_at = now();
             $enrollment->save();
+
+            // Generate Certificate if not exists
+            $certificate = \App\Models\Certificate::where('enrollment_id', $enrollment->id)->first();
+            if (!$certificate) {
+                // Generate a unique verification hash (sha256 of enrollment_id, user_id, and time)
+                $verificationHash = hash('sha256', $enrollment->id . '-' . $user->id . '-' . time());
+
+                // Generate certificate number: CERT/DGTY/YYYYMM/RANDOM(4 chars)
+                $yearMonth = now()->format('Ym');
+                $randomStr = strtoupper(\Illuminate\Support\Str::random(4));
+                // Ensure unique certificate number
+                do {
+                    $certificateNumber = "CERT/DGTY/{$yearMonth}/{$randomStr}";
+                    $exists = \App\Models\Certificate::where('certificate_number', $certificateNumber)->exists();
+                    if ($exists) {
+                        $randomStr = strtoupper(\Illuminate\Support\Str::random(4));
+                    }
+                } while ($exists);
+
+                \App\Models\Certificate::create([
+                    'enrollment_id' => $enrollment->id,
+                    'user_id' => $user->id,
+                    'course_id' => $course->id,
+                    'certificate_number' => $certificateNumber,
+                    'verification_hash' => $verificationHash,
+                    'issued_at' => now(),
+                ]);
+            }
         }
 
         $completedLessonIds = \App\Models\ProgressTracking::where('enrollment_id', $enrollment->id)
@@ -731,6 +759,47 @@ Route::middleware('auth:sanctum')->group(function () {
             'redirect_url' => $redirectUrl
         ]);
     });
+
+    // GET /api/user/certificates
+    Route::get('/user/certificates', function (Request $request) {
+        $user = $request->user();
+        $certificates = \App\Models\Certificate::with('course')
+            ->where('user_id', $user->id)
+            ->orderBy('issued_at', 'desc')
+            ->get();
+        return response()->json([
+            'success' => true,
+            'certificates' => $certificates
+        ]);
+    });
+});
+
+// GET /api/certificates/verify/{hash} (Public)
+Route::get('/certificates/verify/{hash}', function ($hash) {
+    $certificate = \App\Models\Certificate::with(['user', 'course'])
+        ->where('verification_hash', $hash)
+        ->first();
+
+    if (!$certificate) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Sertifikat tidak ditemukan atau tidak valid.'
+        ], 404);
+    }
+
+    return response()->json([
+        'success' => true,
+        'certificate' => [
+            'number' => $certificate->certificate_number,
+            'hash' => $certificate->verification_hash,
+            'issued_at' => $certificate->issued_at->toIso8601String(),
+            'recipient_name' => $certificate->user->name,
+            'course_title' => $certificate->course->title,
+            'course_slug' => $certificate->course->slug,
+            'instructor_name' => $certificate->course->instructor_name,
+            'instructor_title' => $certificate->course->instructor_title,
+        ]
+    ]);
 });
 
 // ==========================================

@@ -63,4 +63,9 @@ class Course extends Model
     {
         return $this->morphMany(OrderItem::class, 'purchasable');
     }
+
+    public function certificates(): HasMany
+    {
+        return $this->hasMany(Certificate::class);
+    }
 }
