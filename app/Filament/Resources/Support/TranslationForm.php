@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Support;
 
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\MarkdownEditor;
