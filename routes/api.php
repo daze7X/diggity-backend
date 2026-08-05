@@ -1056,7 +1056,7 @@ Route::get('/seo/sitemap', function () {
     });
 
     // Products
-    \App\Models\Product::where('is_active', true)->select('slug', 'updated_at')->get()->each(function ($product) use (&$urls) {
+    \App\Models\Product::whereRaw('is_active = true')->select('slug', 'updated_at')->get()->each(function ($product) use (&$urls) {
         $urls[] = [
             'loc' => "/products/{$product->slug}",
             'lastmod' => $product->updated_at->toIso8601String(),
@@ -1066,7 +1066,7 @@ Route::get('/seo/sitemap', function () {
     });
 
     // Courses
-    \App\Models\Course::where('is_active', true)->select('slug', 'updated_at')->get()->each(function ($course) use (&$urls) {
+    \App\Models\Course::whereRaw('is_active = true')->select('slug', 'updated_at')->get()->each(function ($course) use (&$urls) {
         $urls[] = [
             'loc' => "/academy/{$course->slug}",
             'lastmod' => $course->updated_at->toIso8601String(),
@@ -1096,7 +1096,7 @@ Route::get('/seo/sitemap', function () {
     });
 
     // Careers
-    \App\Models\Career::where('is_active', true)->select('slug', 'updated_at')->get()->each(function ($career) use (&$urls) {
+    \App\Models\Career::whereRaw('is_active = true')->select('slug', 'updated_at')->get()->each(function ($career) use (&$urls) {
         $urls[] = [
             'loc' => "/job-connect/{$career->slug}",
             'lastmod' => $career->updated_at->toIso8601String(),

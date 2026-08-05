@@ -95,6 +95,14 @@ class PortfolioForm
                             ->columnSpanFull(),
                     ]),
                 \App\Filament\Resources\Support\SeoForm::make(),
+                \App\Filament\Resources\Support\TranslationForm::make([
+                    'title' => 'text',
+                    'problem' => 'markdown',
+                    'solution' => 'markdown',
+                    'strategy' => 'markdown',
+                    'execution' => 'markdown',
+                    'result' => 'markdown',
+                ]),
             ]);
     }
 }

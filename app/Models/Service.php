@@ -5,10 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Traits\HasSeo;
+use App\Traits\HasTranslations;
+use App\Traits\LogsActivity;
 
 class Service extends Model
 {
-    use HasSeo;
+    use HasSeo, HasTranslations, LogsActivity;
+
+    protected $translatable = ['name', 'description'];
     protected $fillable = [
         'category_id',
         'name',

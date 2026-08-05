@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Traits\HasSeo;
+use App\Traits\HasTranslations;
+use App\Traits\LogsActivity;
 
 class Blog extends Model
 {
-    use HasFactory, HasSeo;
+    use HasFactory, HasSeo, HasTranslations, LogsActivity;
+
+    protected $translatable = ['title', 'content'];
 
     protected $fillable = [
         'category_id',

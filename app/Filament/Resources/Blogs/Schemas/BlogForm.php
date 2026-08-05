@@ -47,6 +47,10 @@ class BlogForm
                     ->nullable(),
 
                 \App\Filament\Resources\Support\SeoForm::make(),
+                \App\Filament\Resources\Support\TranslationForm::make([
+                    'title' => 'text',
+                    'content' => 'markdown',
+                ]),
             ]);
     }
 }

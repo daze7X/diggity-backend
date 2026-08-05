@@ -39,6 +39,12 @@ class CourseForm
                 FileUpload::make('image')
                     ->image(),
                 \App\Filament\Resources\Support\SeoForm::make(),
+                \App\Filament\Resources\Support\TranslationForm::make([
+                    'title' => 'text',
+                    'description' => 'textarea',
+                    'syllabus' => 'textarea',
+                    'instructor_title' => 'text',
+                ]),
             ]);
     }
 }

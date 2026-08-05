@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasSeo;
+use App\Traits\HasTranslations;
+use App\Traits\LogsActivity;
 
 class Portfolio extends Model
 {
-    use HasSeo;
+    use HasSeo, HasTranslations, LogsActivity;
+
+    protected $translatable = ['title', 'problem', 'solution', 'strategy', 'execution', 'result'];
     protected $fillable = [
         'category_id',
         'title',

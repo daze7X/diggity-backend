@@ -44,6 +44,10 @@ class ServiceForm
                     ->nullable(),
 
                 \App\Filament\Resources\Support\SeoForm::make(),
+                \App\Filament\Resources\Support\TranslationForm::make([
+                    'name' => 'text',
+                    'description' => 'textarea',
+                ]),
             ]);
     }
 }

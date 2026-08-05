@@ -9,10 +9,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 use App\Traits\HasSeo;
+use App\Traits\HasTranslations;
+use App\Traits\LogsActivity;
 
 class Course extends Model
 {
-    use HasFactory, HasSeo;
+    use HasFactory, HasSeo, HasTranslations, LogsActivity;
+
+    protected $translatable = ['title', 'description', 'syllabus', 'instructor_title'];
 
     protected $fillable = [
         'category_id',

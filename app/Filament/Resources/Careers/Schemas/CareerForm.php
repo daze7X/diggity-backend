@@ -68,6 +68,12 @@ class CareerForm
                     ->columnSpanFull(),
 
                 \App\Filament\Resources\Support\SeoForm::make(),
+                \App\Filament\Resources\Support\TranslationForm::make([
+                    'title' => 'text',
+                    'department' => 'text',
+                    'description' => 'markdown',
+                    'requirements' => 'markdown',
+                ]),
             ]);
     }
 }

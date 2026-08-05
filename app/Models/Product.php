@@ -8,10 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 use App\Traits\HasSeo;
+use App\Traits\HasTranslations;
+use App\Traits\LogsActivity;
 
 class Product extends Model
 {
-    use HasFactory, HasSeo;
+    use HasFactory, HasSeo, HasTranslations, LogsActivity;
+
+    protected $translatable = ['name', 'description', 'license_info'];
 
     protected $fillable = [
         'category_id',

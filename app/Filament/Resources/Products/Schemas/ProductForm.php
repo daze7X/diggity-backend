@@ -44,6 +44,11 @@ class ProductForm
                 Toggle::make('is_popular')
                     ->required(),
                 \App\Filament\Resources\Support\SeoForm::make(),
+                \App\Filament\Resources\Support\TranslationForm::make([
+                    'name' => 'text',
+                    'description' => 'textarea',
+                    'license_info' => 'textarea',
+                ]),
             ]);
     }
 }
