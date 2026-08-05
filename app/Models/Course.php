@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+use App\Traits\HasSeo;
+
 class Course extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSeo;
 
     protected $fillable = [
         'category_id',

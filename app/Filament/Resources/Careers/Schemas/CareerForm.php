@@ -66,6 +66,8 @@ class CareerForm
                 MarkdownEditor::make('requirements')
                     ->label('Persyaratan / Kualifikasi')
                     ->columnSpanFull(),
+
+                \App\Filament\Resources\Support\SeoForm::make(),
             ]);
     }
 }

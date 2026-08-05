@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+use App\Traits\HasSeo;
+
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSeo;
 
     protected $fillable = [
         'category_id',

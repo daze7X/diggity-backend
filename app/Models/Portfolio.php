@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSeo;
 
 class Portfolio extends Model
 {
+    use HasSeo;
     protected $fillable = [
         'category_id',
         'title',

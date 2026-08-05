@@ -38,9 +38,7 @@ class CourseForm
                     ->required(),
                 FileUpload::make('image')
                     ->image(),
-                TextInput::make('meta_title'),
-                Textarea::make('meta_description')
-                    ->columnSpanFull(),
+                \App\Filament\Resources\Support\SeoForm::make(),
             ]);
     }
 }

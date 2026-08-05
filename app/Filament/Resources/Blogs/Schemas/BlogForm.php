@@ -46,15 +46,7 @@ class BlogForm
                     ->directory('blogs')
                     ->nullable(),
 
-                TextInput::make('meta_title')
-                    ->label('Meta Title (SEO)')
-                    ->maxLength(255),
-
-                Textarea::make('meta_description')
-                    ->label('Meta Description (SEO)')
-                    ->maxLength(160)
-                    ->rows(3)
-                    ->columnSpanFull(),
+                \App\Filament\Resources\Support\SeoForm::make(),
             ]);
     }
 }

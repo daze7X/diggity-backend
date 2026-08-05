@@ -94,6 +94,7 @@ class PortfolioForm
                             ->nullable()
                             ->columnSpanFull(),
                     ]),
+                \App\Filament\Resources\Support\SeoForm::make(),
             ]);
     }
 }

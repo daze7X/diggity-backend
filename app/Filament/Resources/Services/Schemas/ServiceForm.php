@@ -42,6 +42,8 @@ class ServiceForm
                     ->rows(5)
                     ->columnSpanFull()
                     ->nullable(),
+
+                \App\Filament\Resources\Support\SeoForm::make(),
             ]);
     }
 }

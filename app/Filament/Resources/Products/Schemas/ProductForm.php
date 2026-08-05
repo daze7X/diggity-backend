@@ -43,9 +43,7 @@ class ProductForm
                     ->required(),
                 Toggle::make('is_popular')
                     ->required(),
-                TextInput::make('meta_title'),
-                Textarea::make('meta_description')
-                    ->columnSpanFull(),
+                \App\Filament\Resources\Support\SeoForm::make(),
             ]);
     }
 }

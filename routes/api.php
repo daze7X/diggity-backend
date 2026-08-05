@@ -356,7 +356,7 @@ Route::get('/solutions', function () {
 });
 
 Route::get('/solutions/{slug}', function ($slug) {
-    return response()->json(Service::with('category')->where('slug', $slug)->firstOrFail());
+    return response()->json(Service::with(['category', 'seoMeta'])->where('slug', $slug)->firstOrFail());
 });
 
 // PRODUCTS
@@ -365,7 +365,7 @@ Route::get('/products', function () {
 });
 
 Route::get('/products/{slug}', function ($slug) {
-    return response()->json(Product::with('category')->where('slug', $slug)->firstOrFail());
+    return response()->json(Product::with(['category', 'seoMeta'])->where('slug', $slug)->firstOrFail());
 });
 
 // ACADEMY (LMS)
@@ -374,7 +374,7 @@ Route::get('/academy', function () {
 });
 
 Route::get('/academy/{slug}', function ($slug) {
-    return response()->json(Course::with(['category', 'modules.lessons'])->where('slug', $slug)->firstOrFail());
+    return response()->json(Course::with(['category', 'modules.lessons', 'seoMeta'])->where('slug', $slug)->firstOrFail());
 });
 
 // INSIGHTS (Blogs)
@@ -383,7 +383,7 @@ Route::get('/insights', function () {
 });
 
 Route::get('/insights/{slug}', function ($slug) {
-    return response()->json(Blog::with('category')->where('slug', $slug)->firstOrFail());
+    return response()->json(Blog::with(['category', 'seoMeta'])->where('slug', $slug)->firstOrFail());
 });
 
 // JOB CONNECT
@@ -392,7 +392,7 @@ Route::get('/job-connect', function () {
 });
 
 Route::get('/job-connect/{slug}', function ($slug) {
-    return response()->json(Career::where('slug', $slug)->firstOrFail());
+    return response()->json(Career::with(['seoMeta'])->where('slug', $slug)->firstOrFail());
 });
 
 Route::post('/talent-profiles', function (Request $request) {
@@ -1024,4 +1024,105 @@ Route::get('/payment/mock-payment', function (Request $request) {
     // Redirect user back to frontend dashboard
     $frontendUrl = env('NEXT_PUBLIC_SITE_URL', 'http://localhost:3000');
     return redirect()->away($frontendUrl . '/dashboard/orders?payment=success');
+});
+
+// ==========================================
+// DYNAMIC SEO & REDIRECT ENDPOINTS (CMS-5.1)
+// ==========================================
+
+Route::get('/seo/sitemap', function () {
+    $urls = [];
+
+    // Static pages
+    $staticPages = ['home', 'about', 'contact', 'solutions', 'insights', 'job-connect', 'products', 'academy'];
+    foreach ($staticPages as $page) {
+        $path = $page === 'home' ? '/' : "/{$page}";
+        $urls[] = [
+            'loc' => $path,
+            'lastmod' => now()->startOfDay()->toIso8601String(),
+            'changefreq' => 'weekly',
+            'priority' => $page === 'home' ? '1.0' : '0.8',
+        ];
+    }
+
+    // Blogs
+    \App\Models\Blog::select('slug', 'updated_at')->get()->each(function ($blog) use (&$urls) {
+        $urls[] = [
+            'loc' => "/insights/{$blog->slug}",
+            'lastmod' => $blog->updated_at->toIso8601String(),
+            'changefreq' => 'weekly',
+            'priority' => '0.7',
+        ];
+    });
+
+    // Products
+    \App\Models\Product::where('is_active', true)->select('slug', 'updated_at')->get()->each(function ($product) use (&$urls) {
+        $urls[] = [
+            'loc' => "/products/{$product->slug}",
+            'lastmod' => $product->updated_at->toIso8601String(),
+            'changefreq' => 'weekly',
+            'priority' => '0.7',
+        ];
+    });
+
+    // Courses
+    \App\Models\Course::where('is_active', true)->select('slug', 'updated_at')->get()->each(function ($course) use (&$urls) {
+        $urls[] = [
+            'loc' => "/academy/{$course->slug}",
+            'lastmod' => $course->updated_at->toIso8601String(),
+            'changefreq' => 'weekly',
+            'priority' => '0.7',
+        ];
+    });
+
+    // Portfolios
+    \App\Models\Portfolio::select('slug', 'updated_at')->get()->each(function ($portfolio) use (&$urls) {
+        $urls[] = [
+            'loc' => "/portfolio/{$portfolio->slug}",
+            'lastmod' => $portfolio->updated_at->toIso8601String(),
+            'changefreq' => 'weekly',
+            'priority' => '0.6',
+        ];
+    });
+
+    // Services
+    \App\Models\Service::select('slug', 'updated_at')->get()->each(function ($service) use (&$urls) {
+        $urls[] = [
+            'loc' => "/solutions/{$service->slug}",
+            'lastmod' => $service->updated_at->toIso8601String(),
+            'changefreq' => 'weekly',
+            'priority' => '0.7',
+        ];
+    });
+
+    // Careers
+    \App\Models\Career::where('is_active', true)->select('slug', 'updated_at')->get()->each(function ($career) use (&$urls) {
+        $urls[] = [
+            'loc' => "/job-connect/{$career->slug}",
+            'lastmod' => $career->updated_at->toIso8601String(),
+            'changefreq' => 'weekly',
+            'priority' => '0.5',
+        ];
+    });
+
+    return response()->json([
+        'success' => true,
+        'urls' => $urls
+    ]);
+});
+
+Route::get('/seo/redirects', function () {
+    $redirects = \App\Models\Redirect::select('from_path', 'to_path', 'status_code')->get();
+    return response()->json([
+        'success' => true,
+        'redirects' => $redirects
+    ]);
+});
+
+Route::get('/seo/page/{slug}', function ($slug) {
+    $seo = \App\Models\StaticPageSeo::where('page_slug', $slug)->first();
+    return response()->json([
+        'success' => true,
+        'seo' => $seo
+    ]);
 });
