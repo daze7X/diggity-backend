@@ -40,6 +40,7 @@ class JobApplicationForm
                 FileUpload::make('cv_path')
                     ->label('Unggah CV (PDF)')
                     ->acceptedFileTypes(['application/pdf'])
+                    ->disk('local')
                     ->directory('cvs')
                     ->required(),
 

@@ -313,8 +313,8 @@ Route::post('/job-applications', function (Request $request) {
         'cover_letter' => 'nullable|string',
     ]);
 
-    // Store CV PDF in 'public/cvs'
-    $cvPath = $request->file('cv')->store('cvs', 'public');
+    // Store CV PDF in private 'local' disk
+    $cvPath = $request->file('cv')->store('cvs', 'local');
 
     $application = JobApplication::create([
         'career_id' => $validated['career_id'],

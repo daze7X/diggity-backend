@@ -50,7 +50,7 @@ class JobApplicationSubmittedMail extends Mailable
     {
         if ($this->application->cv_path) {
             return [
-                Attachment::fromStorageDisk('public', $this->application->cv_path)
+                Attachment::fromStorageDisk('local', $this->application->cv_path)
                     ->as('CV_' . str_replace(' ', '_', $this->application->name) . '.pdf')
                     ->withMime('application/pdf'),
             ];
