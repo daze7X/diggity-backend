@@ -739,7 +739,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         try {
             \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY', 'SB-Mid-server-your-key');
-            \Midtrans\Config::$isProduction = false;
+            \Midtrans\Config::$isProduction = filter_var(env('MIDTRANS_IS_PRODUCTION', false), FILTER_VALIDATE_BOOLEAN);
             \Midtrans\Config::$isSanitized = true;
             \Midtrans\Config::$is3ds = true;
 
