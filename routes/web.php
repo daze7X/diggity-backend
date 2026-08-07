@@ -9,7 +9,7 @@ Route::get('/', function () {
 
 Route::get('/seed-db', function () {
     try {
-        Artisan::call('db:seed', ['--class' => 'DiggitySeeder']);
+        Artisan::call('db:seed', ['--class' => 'DiggitySeeder', '--force' => true]);
         return response()->json([
             'status' => 'success',
             'message' => 'Database seeded successfully!',
