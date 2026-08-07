@@ -59,7 +59,8 @@ class TopLandingPagesWidget extends TableWidget
                     ->numeric()
                     ->alignEnd(),
             ])
-            ->paginated(false);
+            ->paginated(false)
+            ->defaultKeySort(false);
     }
 }
 
