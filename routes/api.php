@@ -1126,3 +1126,30 @@ Route::get('/seo/page/{slug}', function ($slug) {
         'seo' => $seo
     ]);
 });
+
+Route::post('/analytics/pageview', function (Request $request) {
+    $validated = $request->validate([
+        'path' => 'required|string|max:255',
+        'url' => 'nullable|string|max:2048',
+        'referrer' => 'nullable|string|max:2048',
+        'userAgent' => 'nullable|string|max:2048',
+    ]);
+
+    // Hashing IP for privacy compliance
+    $ip = $request->ip();
+    $hashedIp = $ip ? hash('sha256', $ip . config('app.key')) : null;
+
+    $pageView = \App\Models\PageView::create([
+        'path' => $validated['path'],
+        'url' => $validated['url'] ?? null,
+        'referrer' => $validated['referrer'] ?? null,
+        'ip_address' => $hashedIp,
+        'user_agent' => $validated['userAgent'] ?? $request->userAgent(),
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'PageView tracked successfully',
+        'data' => $pageView
+    ], 201);
+});

@@ -13,8 +13,8 @@ class AgencyStatsOverview extends BaseWidget
     protected function getStats(): array
     {
         $leadsCount = Lead::count();
-        // Simulasi jumlah pengunjung yang realistis
-        $totalVisitors = 12840 + ($leadsCount * 15);
+        // Hitung unique visitors asli dari database
+        $totalVisitors = \App\Models\PageView::distinct('ip_address')->count();
         $conversionRate = $totalVisitors > 0 ? number_format(($leadsCount / $totalVisitors) * 100, 2) : 0;
 
         return [

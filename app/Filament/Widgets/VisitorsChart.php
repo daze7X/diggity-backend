@@ -14,13 +14,24 @@ class VisitorsChart extends ChartWidget
     protected function getData(): array
     {
         $labels = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $labels[] = now()->subDays($i)->format('d M');
-        }
+        $visitorsData = [];
+        $pageviewsData = [];
 
-        $leadFactor = Lead::count() * 5;
-        $visitorsData = [450 + $leadFactor, 520 + $leadFactor * 2, 490 + $leadFactor, 620 + $leadFactor * 3, 580 + $leadFactor * 2, 710 + $leadFactor * 4, 800 + $leadFactor * 5];
-        $pageviewsData = [1200 + $leadFactor * 12, 1350 + $leadFactor * 15, 1290 + $leadFactor * 10, 1680 + $leadFactor * 20, 1510 + $leadFactor * 18, 1900 + $leadFactor * 25, 2100 + $leadFactor * 30];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $labels[] = $date->format('d M');
+
+            // Hitung total pageviews di hari tersebut
+            $pageviews = \App\Models\PageView::whereDate('created_at', $date->toDateString())->count();
+
+            // Hitung unique visitors di hari tersebut
+            $visitors = \App\Models\PageView::whereDate('created_at', $date->toDateString())
+                ->distinct('ip_address')
+                ->count();
+
+            $pageviewsData[] = $pageviews;
+            $visitorsData[] = $visitors;
+        }
 
         return [
             'datasets' => [

@@ -20,27 +20,32 @@ class TopLandingPagesWidget extends TableWidget
     {
         return $table
             ->query(function (): Builder {
-                $leadCount = \App\Models\Lead::count();
-                $factor = $leadCount * 25;
-                
-                return \App\Models\User::query()->from(DB::raw("(
-                    SELECT 1 AS id, 'Halaman Utama (Home)' AS page_name, '/' AS url, " . (5420 + $factor * 5) . " AS pageviews, " . (3120 + $factor * 3) . " AS visitors
-                    UNION ALL
-                    SELECT 2, 'Layanan (Services)', '/services', " . (2840 + $factor * 3) . ", " . (1850 + $factor * 2) . "
-                    UNION ALL
-                    SELECT 3, 'Portofolio (Portfolio)', '/portfolios', " . (1980 + $factor * 2) . ", " . (1240 + $factor) . "
-                    UNION ALL
-                    SELECT 4, 'Kontak (Contact)', '/contact', " . (1240 + $factor) . ", " . (940 + $factor) . "
-                    UNION ALL
-                    SELECT 5 AS id, 'Karir (Career)', '/careers', " . (850 + $factor) . ", " . (620 + $factor) . "
-                ) as users"));
+                return \App\Models\PageView::query()
+                    ->select(DB::raw('MIN(id) as id'), 'path', DB::raw('COUNT(*) as pageviews'), DB::raw('COUNT(DISTINCT ip_address) as visitors'))
+                    ->groupBy('path')
+                    ->orderBy('pageviews', 'desc');
             })
             ->columns([
-                TextColumn::make('page_name')
-                    ->label('Nama Halaman'),
+                TextColumn::make('path')
+                    ->label('Nama Halaman')
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        '/' => 'Halaman Utama (Home)',
+                        '/about' => 'Tentang Kami (About)',
+                        '/services' => 'Solusi & Layanan (Solutions)',
+                        '/products' => 'Produk Digital (Products)',
+                        '/portfolio' => 'Portofolio (Portfolio)',
+                        '/academy' => 'Akademi Digital (Academy)',
+                        '/insights' => 'Artikel & Blog (Insights)',
+                        '/contact' => 'Kontak Kami (Contact)',
+                        '/job-connect' => 'Karir & Lowongan (Job Connect)',
+                        '/login' => 'Halaman Masuk (Login)',
+                        '/register' => 'Halaman Daftar (Register)',
+                        default => $state
+                    }),
 
                 TextColumn::make('url')
                     ->label('URL Halaman')
+                    ->state(fn ($record) => $record->path)
                     ->badge()
                     ->color('gray'),
 
