@@ -24,12 +24,21 @@ class DiggitySeeder extends Seeder
     public function run(): void
     {
         // 0. Super Admin & Demo Users
-        $admin = User::updateOrCreate(
-            ['email' => 'admin@diggity.com'],
+        User::updateOrCreate(
+            ['email' => 'superadmin@diggity.com'],
             [
                 'name' => 'Super Admin',
-                'password' => bcrypt('password'),
+                'password' => bcrypt('admin1234'),
                 'role' => 'super_admin',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'admin@diggity.com'],
+            [
+                'name' => 'Admin Biasa',
+                'password' => bcrypt('admin1234'),
+                'role' => 'admin',
             ]
         );
 
