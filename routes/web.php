@@ -23,6 +23,22 @@ Route::get('/seed-db', function () {
     }
 });
 
+Route::get('/migrate-db', function () {
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Database migrated successfully!',
+            'output' => Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
+
 Route::get('/storage/{path}', function ($path) {
     $filePath = '/tmp/public/' . $path;
     if (file_exists($filePath)) {
