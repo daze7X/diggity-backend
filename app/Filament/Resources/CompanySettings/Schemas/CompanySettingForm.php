@@ -6,6 +6,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
@@ -84,9 +85,12 @@ class CompanySettingForm
                                     ->rows(2)
                                     ->placeholder('Memberdayakan tim Anda melalui pelatihan dan transfer keahlian digital.'),
 
-                                TagsInput::make('partner_logos')
-                                    ->label('Trusted By (Nama Partner)')
-                                    ->placeholder('Tambahkan nama partner (tekan Enter)')
+                                FileUpload::make('partner_logos')
+                                    ->label('Trusted By (Logo Partner)')
+                                    ->directory('partner_logos')
+                                    ->multiple()
+                                    ->image()
+                                    ->reorderable()
                                     ->columnSpanFull(),
                             ]),
 
