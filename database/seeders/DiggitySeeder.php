@@ -73,6 +73,7 @@ class DiggitySeeder extends Seeder
         $catTechBlog = Category::updateOrCreate(['name' => 'Technology Insights'], ['slug' => 'technology-insights', 'type' => 'blog']);
         $catMarketingBlog = Category::updateOrCreate(['name' => 'Marketing Trends'], ['slug' => 'marketing-trends', 'type' => 'blog']);
         $catCloudBlog = Category::updateOrCreate(['name' => 'Cloud & Security'], ['slug' => 'cloud-security', 'type' => 'blog']);
+        $catNews = Category::updateOrCreate(['name' => 'Berita & Pengumuman'], ['slug' => 'news-announcements', 'type' => 'blog']);
 
         // 2.2 Categories for Products (type: product)
         $catSoftware = Category::updateOrCreate(['name' => 'Business Software'], ['slug' => 'business-software', 'type' => 'product']);
@@ -360,6 +361,18 @@ class DiggitySeeder extends Seeder
                 'meta_title' => 'Cara Migrasi Server ke VPS Cloud Tanpa Downtime | Diggity Blog',
                 'meta_description' => 'Panduan langkah demi langkah memigrasikan database dan file server Anda ke cloud VPS hosting secara aman tanpa mengalami offline.',
                 'image' => 'blogs/server-migration.jpg'
+            ]
+        );
+
+        Blog::updateOrCreate(
+            ['slug' => 'diggity-ekspansi-layanan-rekayasa-kecerdasan-buatan-lokal'],
+            [
+                'category_id' => $catNews->id,
+                'title' => 'Diggity Resmi Meluncurkan Unit Layanan Rekayasa Kecerdasan Buatan (AI) B2B',
+                'content' => '<p>Sebagai bagian dari komitmen mendukung transformasi teknologi korporasi, Diggity secara resmi memperkenalkan unit layanan AI &amp; Emerging Tech untuk membantu integrasi asisten cerdas bagi operasional perusahaan.</p>',
+                'meta_title' => 'Diggity Luncurkan Unit AI &amp; Emerging Tech | Diggity News',
+                'meta_description' => 'Rilis resmi pengumuman ekspansi unit layanan AI &amp; Emerging Tech terintegrasi Diggity untuk solusi B2B.',
+                'image' => 'blogs/web-tech-2026.jpg'
             ]
         );
 
