@@ -86,74 +86,58 @@ class DiggitySeeder extends Seeder
         $catWebinar = Category::updateOrCreate(['name' => 'Webinar & Workshop'], ['slug' => 'webinar-workshop', 'type' => 'academy']);
 
         // 3. Services (Solutions)
-        // App Builder Squad
         Service::updateOrCreate(
-            ['slug' => 'website-development'],
+            ['slug' => 'technology-solutions'],
             [
                 'category_id' => $catApp->id,
-                'name' => 'Website Development',
-                'description' => 'Membangun website modern berkecepatan tinggi menggunakan teknologi Next.js, Laravel, dan Tailwind CSS.',
+                'name' => 'Technology Solutions',
+                'description' => 'Membangun website modern, aplikasi mobile native, dan kustomisasi sistem ERP terintegrasi berkecepatan tinggi.',
                 'icon' => 'code'
             ]
         );
         Service::updateOrCreate(
-            ['slug' => 'mobile-apps-development'],
+            ['slug' => 'ai-emerging-technology'],
             [
                 'category_id' => $catApp->id,
-                'name' => 'Mobile Apps Development',
-                'description' => 'Aplikasi mobile Android dan iOS yang responsif dan berkinerja tinggi menggunakan Flutter dan React Native.',
-                'icon' => 'smartphone'
+                'name' => 'AI & Emerging Technology',
+                'description' => 'Integrasi asisten kecerdasan buatan, chatbot otomatisasi bisnis, machine learning, dan rekayasa data analitik.',
+                'icon' => 'cpu'
             ]
         );
         Service::updateOrCreate(
-            ['slug' => 'ui-ux-design'],
+            ['slug' => 'creative-brand-experience'],
             [
-                'category_id' => $catApp->id,
-                'name' => 'UI/UX Design',
-                'description' => 'Perancangan antarmuka pengguna (UI) dan pengalaman pengguna (UX) yang estetik, intuitif, dan ramah pengguna.',
+                'category_id' => $catBrand->id,
+                'name' => 'Creative & Brand Experience',
+                'description' => 'Perancangan antarmuka pengguna (UI/UX), perancangan identitas visual brand, kampanye kreatif, dan aset multimedia.',
                 'icon' => 'palette'
             ]
         );
-
-        // Brand Growth Division
         Service::updateOrCreate(
-            ['slug' => 'search-engine-optimization'],
+            ['slug' => 'growth-marketing'],
             [
                 'category_id' => $catBrand->id,
-                'name' => 'Search Engine Optimization (SEO)',
-                'description' => 'Optimasi mesin pencari organik untuk meningkatkan peringkat website Anda di Google secara berkelanjutan.',
-                'icon' => 'search'
-            ]
-        );
-        Service::updateOrCreate(
-            ['slug' => 'digital-advertising'],
-            [
-                'category_id' => $catBrand->id,
-                'name' => 'Digital Advertising (Ads)',
-                'description' => 'Kampanye iklan berbayar bertarget melalui Google Ads dan Meta Ads (Facebook & Instagram) untuk instan leads.',
+                'name' => 'Growth Marketing',
+                'description' => 'Optimasi SEO secara menyeluruh, kampanye iklan digital (Google/Meta Ads), dan optimasi tingkat konversi.',
                 'icon' => 'trending-up'
             ]
         );
-
-        // Cloud Service Hub
         Service::updateOrCreate(
-            ['slug' => 'cloud-server-hosting'],
+            ['slug' => 'cloud-cyber-security'],
             [
                 'category_id' => $catCloud->id,
-                'name' => 'Cloud Server & VPS Hosting',
-                'description' => 'Penyediaan server cloud performa tinggi, setup VPS, manajemen domain, serta email bisnis berkapasitas besar.',
+                'name' => 'Cloud & Cyber Security',
+                'description' => 'Penyediaan hosting server, konfigurasi VPS cloud server, pemeliharaan DevOps, dan audit perlindungan keamanan siber.',
                 'icon' => 'server'
             ]
         );
-
-        // Digital Skill Lab (Service)
         Service::updateOrCreate(
-            ['slug' => 'corporate-training-bootcamp'],
+            ['slug' => 'consulting'],
             [
-                'category_id' => $catLab->id,
-                'name' => 'Corporate Training & Bootcamp',
-                'description' => 'Pelatihan keahlian digital intensif untuk tim korporat dalam bidang IT, UI/UX, dan Digital Marketing.',
-                'icon' => 'graduation-cap'
+                'category_id' => $catCloud->id,
+                'name' => 'Consulting',
+                'description' => 'Layanan penasihat teknologi (Advisory), IT Consulting, audit digital, dan perumusan strategi transformasi bisnis.',
+                'icon' => 'help-circle'
             ]
         );
 
