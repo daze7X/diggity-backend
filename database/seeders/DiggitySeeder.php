@@ -68,6 +68,7 @@ class DiggitySeeder extends Seeder
         $catBrand = Category::updateOrCreate(['name' => 'Brand Growth Division'], ['slug' => 'brand-growth-division', 'type' => 'service']);
         $catCloud = Category::updateOrCreate(['name' => 'Cloud Service Hub'], ['slug' => 'cloud-service-hub', 'type' => 'service']);
         $catLab = Category::updateOrCreate(['name' => 'Digital Skill Lab'], ['slug' => 'digital-skill-lab', 'type' => 'service']);
+        $catTalent = Category::updateOrCreate(['name' => 'Tech Talent Solutions'], ['slug' => 'tech-talent-solutions', 'type' => 'service']);
 
         // 2.1 Categories for Blogs/Insights (type: blog)
         $catTechBlog = Category::updateOrCreate(['name' => 'Technology Insights'], ['slug' => 'technology-insights', 'type' => 'blog']);
@@ -138,6 +139,36 @@ class DiggitySeeder extends Seeder
                 'name' => 'Consulting',
                 'description' => 'Layanan penasihat teknologi (Advisory), IT Consulting, audit digital, dan perumusan strategi transformasi bisnis.',
                 'icon' => 'help-circle'
+            ]
+        );
+
+        Service::updateOrCreate(
+            ['slug' => 'headhunting'],
+            [
+                'category_id' => $catTalent->id,
+                'name' => 'IT Headhunting',
+                'description' => 'Hire the best tech talent quickly based on your needs.',
+                'icon' => 'user-check'
+            ]
+        );
+
+        Service::updateOrCreate(
+            ['slug' => 'outsourcing'],
+            [
+                'category_id' => $catTalent->id,
+                'name' => 'IT Outsourcing',
+                'description' => 'Build a remote developer team in 7 days.',
+                'icon' => 'users'
+            ]
+        );
+
+        Service::updateOrCreate(
+            ['slug' => 'job-connect'],
+            [
+                'category_id' => $catTalent->id,
+                'name' => 'Job Connect',
+                'description' => 'Connecting certified digital talents with companies.',
+                'icon' => 'briefcase'
             ]
         );
 
