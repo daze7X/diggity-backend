@@ -88,6 +88,119 @@ Route::get('/services/{slug}', function ($slug) {
     return response()->json($service);
 });
 
+// GET /api/run-migrations
+Route::get('/run-migrations', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Migrations executed successfully!',
+            'output' => \Illuminate\Support\Facades\Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
+
+// GET /api/talent-services/{slug}
+Route::get('/talent-services/{slug}', function ($slug) {
+    $defaultHeadhunting = [
+        'title' => 'IT Headhunting',
+        'sub_title' => 'Pemetaan Kebutuhan Teknis',
+        'description' => 'Kami membantu perusahaan menjaring, menyaring, dan merekrut talenta digital teratas—mulai dari Software Engineers hingga CTO—dengan kualifikasi teknis presisi serta budaya kerja yang selaras.',
+        'process_tabs' => [
+            [
+                'title' => '1. Analisis Profil',
+                'subtitle' => 'Pemetaan Kebutuhan Teknis',
+                'content' => 'Kami duduk bersama dengan tim Anda untuk merumuskan deskripsi pekerjaan secara detail, menentukan kualifikasi teknis (tech stack) yang dibutuhkan, serta menyelaraskan kriteria soft skill dan kepribadian (cultural fit) agar kandidat dapat langsung menyatu dengan tim internal Anda.'
+            ],
+            [
+                'title' => '2. Sourcing & Screening',
+                'subtitle' => 'Pencarian & Penjaringan Kandidat',
+                'content' => 'Tim perekrut ahli kami menyaring kandidat potensial dari basis data internal bersertifikat Diggity dan jaringan global kami. Kami melakukan pre-screening teknis, review portfolio koding, dan wawancara awal sebelum merekomendasikan mereka.'
+            ],
+            [
+                'title' => '3. Wawancara Klien',
+                'subtitle' => 'Presentasi & Seleksi Final',
+                'content' => 'Kami menyajikan CV beserta hasil penilaian teknis (technical test) dari 2-3 kandidat terbaik untuk Anda wawancarai langsung. Kami membantu menjadwalkan wawancara dan menjadi penengah proses feedback demi kesepakatan terbaik.'
+            ],
+            [
+                'title' => '4. Onboarding & Garansi',
+                'subtitle' => 'Penempatan & Jaminan Kinerja',
+                'content' => 'Setelah penawaran diterima, kami mendampingi masa transisi kandidat hingga resmi onboarding di perusahaan Anda. Untuk menjamin kenyamanan Anda, kami memberikan garansi penggantian kandidat gratis hingga 90 hari jika terjadi ketidakcocokan.'
+            ]
+        ],
+        'faqs' => [
+            [
+                'q' => 'Berapa biaya jasa IT Headhunting di Diggity?',
+                'a' => 'Biaya headhunting didasarkan pada persentase remunerasi tahunan kandidat yang disetujui (Annual Package), atau melalui skema harga flat terjangkau yang disesuaikan dengan tingkat kesulitan posisi. Kami mengadopsi model "Success Fee", yang berarti Anda hanya membayar setelah kandidat resmi menandatangani kontrak kerja.'
+            ],
+            [
+                'q' => 'Bagaimana jika kandidat mengundurkan diri dalam masa percobaan?',
+                'a' => 'Diggity memberikan jaminan garansi penggantian talenta (replacement guarantee) secara gratis selama 90 hari terhitung sejak tanggal onboarding kandidat. Kami akan segera mencarikan kandidat pengganti baru tanpa mengenakan biaya tambahan apa pun.'
+            ],
+            [
+                'q' => 'Berapa lama waktu yang dibutuhkan untuk mendapatkan kandidat?',
+                'a' => 'Untuk posisi junior hingga mid-level, kami biasanya menyajikan kandidat terpilih pertama dalam waktu 7–10 hari kerja. Untuk posisi senior, manajerial, atau tech stack yang sangat langka, proses penyaringan dapat memakan waktu 14–21 hari kerja.'
+            ],
+            [
+                'q' => 'Apakah seluruh kandidat sudah melalui tes kompetensi?',
+                'a' => 'Tentu kawan. Seluruh kandidat yang kami teruskan ke klien telah melalui tes penyaringan awal secara internal yang mencakup penilaian algoritma, live coding review, pemecahan masalah (case study), serta asesmen komunikasi profesional.'
+            ]
+        ]
+    ];
+
+    $defaultOutsourcing = [
+        'title' => 'IT Outsourcing',
+        'sub_title' => 'Managed IT Squads',
+        'description' => 'Beban operasional nol, fokus hasil maksimal. Kami menyediakan tim pengembang lengkap (Full Squad) yang dikelola penuh oleh Diggity untuk merancang dan meluncurkan produk digital Anda tanpa kendala rekrutmen.',
+        'process_tabs' => [
+            [
+                'title' => '1. Analisis Kebutuhan',
+                'subtitle' => 'Identifikasi Peran & Skill',
+                'content' => 'Kami menganalisis kebutuhan produk digital Anda untuk merumuskan struktur tim terbaik (seperti Frontend, Backend, UI/UX, QA, dan Project Manager) beserta kualifikasi keahlian teknis yang diperlukan.'
+            ],
+            [
+                'title' => '2. Sourcing & Penyusunan',
+                'subtitle' => 'Pemilihan Anggota Tim',
+                'content' => 'Kami menyusun tim IT handal dari jaringan developer berpengalaman kami yang telah teruji dalam berbagai proyek berskala besar.'
+            ],
+            [
+                'title' => '3. Uji Coba Kinerja',
+                'subtitle' => 'Adaptasi & Penyelarasan Alur',
+                'content' => 'Sebelum resmi dideploy penuh, tim kami melakukan sinkronisasi alur kerja menggunakan metodologi Agile/Scrum untuk menjamin kolaborasi yang mulus dengan tim internal Anda.'
+            ],
+            [
+                'title' => '4. Delivery & Manajemen',
+                'subtitle' => 'Pengawasan Kontinu',
+                'content' => 'Tim kami bekerja secara mandiri di bawah pengawasan Project Manager kami untuk merancang produk Anda, sementara Anda menerima update berkala dan memegang kendali atas prioritas fitur.'
+            ]
+        ],
+        'faqs' => [
+            [
+                'q' => 'Apakah kami bisa menyewa satu orang developer saja?',
+                'a' => 'Tentu kawan. Kami menyediakan skema sewa talenta individu (Dedicated Talent) maupun satu tim pengembang lengkap (Full Squad) sesuai dengan skala dan kompleksitas proyek kawan.'
+            ],
+            [
+                'q' => 'Bagaimana skema pembayaran jasa outsourcing ini?',
+                'a' => 'Skema pembayaran dilakukan setiap bulan (Monthly Retainer) berdasarkan jumlah anggota tim dan kualifikasi keahlian developer yang kawan sewa. Semua urusan asuransi, THR, pajak, dan perangkat kerja dikelola penuh oleh Diggity.'
+            ],
+            [
+                'q' => 'Apakah tim pengembang bisa bekerja langsung di kantor kami?',
+                'a' => 'Tim outsourcing kami umumnya bekerja secara jarak jauh (Remote), namun kami mendukung opsi pengerjaan di kantor klien (On-site) di wilayah Jabodetabek untuk koordinasi tertentu.'
+            ]
+        ]
+    ];
+
+    $default = $slug === 'outsourcing' ? $defaultOutsourcing : $defaultHeadhunting;
+
+    $service = \App\Models\TalentService::firstOrCreate(['slug' => $slug], $default);
+    return response()->json($service);
+});
+
 // GET /api/portfolios
 Route::get('/portfolios', function () {
     $portfolios = Portfolio::with('category')->latest()->get();
