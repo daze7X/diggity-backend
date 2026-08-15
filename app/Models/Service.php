@@ -19,6 +19,13 @@ class Service extends Model
         'slug',
         'icon',
         'description',
+        'sub_services',
+        'plans',
+    ];
+
+    protected $casts = [
+        'sub_services' => 'array',
+        'plans' => 'array',
     ];
 
     // Relasi: Setiap service pasti dimiliki oleh 1 kategori

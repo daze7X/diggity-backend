@@ -5,7 +5,11 @@ namespace App\Filament\Resources\Services\Schemas;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 
 class ServiceForm
 {
@@ -42,6 +46,40 @@ class ServiceForm
                     ->rows(5)
                     ->columnSpanFull()
                     ->nullable(),
+
+                Section::make('Cakupan & Paket Layanan (Dinamis)')
+                    ->components([
+                        TagsInput::make('sub_services')
+                            ->label('Cakupan Layanan / Fitur Utama')
+                            ->placeholder('Tambah cakupan...')
+                            ->columnSpanFull(),
+
+                        Repeater::make('plans')
+                            ->label('Paket Estimasi Harga & Investasi')
+                            ->schema([
+                                TextInput::make('name')
+                                    ->label('Nama Paket')
+                                    ->required(),
+                                TextInput::make('price')
+                                    ->label('Estimasi Investasi / Harga')
+                                    ->placeholder('Misal: Mulai Rp 5.000.000')
+                                    ->required(),
+                                Toggle::make('isPopular')
+                                    ->label('Tandai sebagai Populer / Rekomendasi')
+                                    ->default(false),
+                                Textarea::make('description')
+                                    ->label('Deskripsi Paket')
+                                    ->rows(2)
+                                    ->columnSpanFull(),
+                                TagsInput::make('features')
+                                    ->label('Fitur / Detail Cakupan Paket')
+                                    ->placeholder('Tambah fitur...')
+                                    ->columnSpanFull()
+                                    ->required(),
+                            ])
+                            ->columns(3)
+                            ->columnSpanFull(),
+                    ]),
 
                 \App\Filament\Resources\Support\SeoForm::make(),
                 \App\Filament\Resources\Support\TranslationForm::make([
