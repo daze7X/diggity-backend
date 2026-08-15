@@ -440,6 +440,63 @@ class DiggitySeeder extends Seeder
         );
 
         Service::updateOrCreate(
+            ['slug' => 'digital-skill-lab'],
+            [
+                'category_id' => $catLab->id,
+                'name' => 'Digital Skill Lab',
+                'description' => 'Meningkatkan kompetensi teknis tim internal perusahaan Anda agar siap bersaing di tengah pesatnya perkembangan transformasi teknologi digital.',
+                'icon' => 'graduation-cap',
+                'sub_services' => [
+                    'Corporate IT Training & Bootcamps',
+                    'Figma UI/UX & Design Workshops',
+                    'Custom Software Development Workshop',
+                    'Digital Marketing Masterclass & Analytics'
+                ],
+                'plans' => [
+                    [
+                        'name' => 'Introductory Session',
+                        'price' => 'Mulai Rp 1.500.000',
+                        'description' => 'Sesi pengenalan singkat 1 hari untuk membekali tim Anda dengan pemahaman dasar tool/teknologi spesifik.',
+                        'features' => [
+                            'Durasi 3-4 Jam Sesi Intensif',
+                            'Sertifikat Keikutsertaan Resmi',
+                            'Materi & Modul Pelatihan PDF',
+                            'Q&A Langsung dengan Praktisi Ahli',
+                            'Maksimal 15 Peserta per Sesi'
+                        ],
+                        'isPopular' => false
+                    ],
+                    [
+                        'name' => 'Intensive Bootcamp',
+                        'price' => 'Mulai Rp 10.000.000',
+                        'description' => 'Program pelatihan mendalam selama 2 minggu untuk integrasi keahlian pemrograman, desain, atau marketing modern.',
+                        'features' => [
+                            'Kurikulum Kustom Sesuai Kebutuhan Bisnis',
+                            'Sesi Praktik Kerja Nyata / Hands-on Lab',
+                            'Evaluasi Kompetensi Individu Peserta',
+                            'Sertifikat Kelulusan Resmi Digital Specialist',
+                            'Maksimal 30 Peserta per Kelas'
+                        ],
+                        'isPopular' => true
+                    ],
+                    [
+                        'name' => 'Custom Enterprise Syllabus',
+                        'price' => 'Hubungi Kami',
+                        'description' => 'Program pelatihan kustom jangka panjang dengan kurikulum berskala besar yang dirancang khusus untuk divisi IT enterprise.',
+                        'features' => [
+                            'Penyusunan Silabus Khusus oleh Tech Lead',
+                            'Pelatihan Skala Divisi & Uji Kompetensi Lanjut',
+                            'Studi Kasus Arsitektur Software Perusahaan',
+                            'Pendampingan Pasca-Pelatihan Selama 30 Hari',
+                            'Kuota Peserta Tidak Terbatas'
+                        ],
+                        'isPopular' => false
+                    ]
+                ]
+            ]
+        );
+
+        Service::updateOrCreate(
             ['slug' => 'headhunting'],
             [
                 'category_id' => $catTalent->id,
