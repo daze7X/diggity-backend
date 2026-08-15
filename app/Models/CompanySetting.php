@@ -22,11 +22,17 @@ class CompanySetting extends Model
         'philosophy_scale',
         'philosophy_empower',
         'partner_logos',
-        'history_timeline'
+        'history_timeline',
+        'vision_id',
+        'vision_en',
+        'mission_id',
+        'mission_en'
     ];
 
     protected $casts = [
         'partner_logos' => 'array',
         'history_timeline' => 'array',
+        'mission_id' => 'array',
+        'mission_en' => 'array',
     ];
 }

@@ -94,6 +94,39 @@ class CompanySettingForm
                                     ->columnSpanFull(),
                             ]),
 
+                        Tab::make('Visi & Misi')
+                            ->components([
+                                Textarea::make('vision_id')
+                                    ->label('Visi (Bahasa Indonesia)')
+                                    ->rows(3)
+                                    ->placeholder('Menjadi mitra transformasi digital terdepan...')
+                                    ->required(),
+
+                                Textarea::make('vision_en')
+                                    ->label('Vision (English)')
+                                    ->rows(3)
+                                    ->placeholder('To be the leading digital transformation partner...')
+                                    ->required(),
+
+                                Repeater::make('mission_id')
+                                    ->label('Misi (Bahasa Indonesia)')
+                                    ->schema([
+                                        TextInput::make('text')
+                                            ->label('Poin Misi')
+                                            ->required()
+                                    ])
+                                    ->columnSpanFull(),
+
+                                Repeater::make('mission_en')
+                                    ->label('Mission (English)')
+                                    ->schema([
+                                        TextInput::make('text')
+                                            ->label('Mission Point')
+                                            ->required()
+                                    ])
+                                    ->columnSpanFull(),
+                            ]),
+
                         Tab::make('Milestones Sejarah')
                             ->components([
                                 Repeater::make('history_timeline')

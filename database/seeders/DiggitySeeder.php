@@ -59,7 +59,19 @@ class DiggitySeeder extends Seeder
                 'whatsapp' => '628123456789',
                 'address' => 'Gedung Digital Hub, Lt. 5, Jl. Technopark No. 12, BSD City, Tangerang',
                 'instagram_url' => 'https://instagram.com/diggity.agency',
-                'linkedin_url' => 'https://linkedin.com/company/diggity-agency'
+                'linkedin_url' => 'https://linkedin.com/company/diggity-agency',
+                'vision_id' => 'Menjadi mitra transformasi digital terdepan di Asia Tenggara yang memberdayakan bisnis untuk bertumbuh secara terstruktur dan berkelanjutan melalui teknologi, kreativitas, dan edukasi terintegrasi.',
+                'vision_en' => 'To be the leading digital transformation partner in Southeast Asia, empowering businesses to grow in a structured and sustainable manner through integrated technology, creativity, and education.',
+                'mission_id' => [
+                    ['text' => 'Rekayasa Software Berkualitas: Membangun infrastruktur dan produk digital berkinerja tinggi, aman, dan mudah diskalakan.'],
+                    ['text' => 'Pertumbuhan Bisnis Terarah: Membantu mitra bisnis mendominasi pasar digital secara sistematis melalui pemasaran berbasis performa dan data.'],
+                    ['text' => 'Transfer Pengetahuan Berkelanjutan: Melatih talenta internal mitra bisnis untuk menguasai keterampilan digital yang relevan dengan kebutuhan industri.']
+                ],
+                'mission_en' => [
+                    ['text' => 'Quality Software Engineering: Building high-performance, secure, and scalable digital products and infrastructure.'],
+                    ['text' => 'Targeted Business Growth: Helping business partners dominate the digital market systematically through performance- and data-driven marketing.'],
+                    ['text' => 'Sustainable Knowledge Transfer: Training partners\' internal talents to master relevant digital skills that align with industry needs.']
+                ]
             ]
         );
 
