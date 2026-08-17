@@ -240,22 +240,30 @@ Route::get('/search', function (Request $request) {
         ]);
     }
 
+    $lowerQuery = mb_strtolower($query, 'UTF-8');
+
     $services = Service::with('category')
-        ->where('name', 'like', "%{$query}%")
-        ->orWhere('description', 'like', "%{$query}%")
+        ->where(function($q) use ($lowerQuery) {
+            $q->whereRaw('LOWER(name) LIKE ?', ["%{$lowerQuery}%"])
+              ->orWhereRaw('LOWER(description) LIKE ?', ["%{$lowerQuery}%"]);
+        })
         ->limit(5)
         ->get();
 
     $portfolios = Portfolio::with('category')
-        ->where('title', 'like', "%{$query}%")
-        ->orWhere('problem', 'like', "%{$query}%")
-        ->orWhere('solution', 'like', "%{$query}%")
+        ->where(function($q) use ($lowerQuery) {
+            $q->whereRaw('LOWER(title) LIKE ?', ["%{$lowerQuery}%"])
+              ->orWhereRaw('LOWER(problem) LIKE ?', ["%{$lowerQuery}%"])
+              ->orWhereRaw('LOWER(solution) LIKE ?', ["%{$lowerQuery}%"]);
+        })
         ->limit(5)
         ->get();
 
     $blogs = Blog::with('category')
-        ->where('title', 'like', "%{$query}%")
-        ->orWhere('content', 'like', "%{$query}%")
+        ->where(function($q) use ($lowerQuery) {
+            $q->whereRaw('LOWER(title) LIKE ?', ["%{$lowerQuery}%"])
+              ->orWhereRaw('LOWER(content) LIKE ?', ["%{$lowerQuery}%"]);
+        })
         ->limit(5)
         ->get();
 
