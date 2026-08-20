@@ -490,8 +490,17 @@ Route::get('/products/{slug}', function ($slug) {
 });
 
 // ACADEMY (LMS)
-Route::get('/academy', function () {
-    return response()->json(Course::with('category')->where('is_active', 'true')->get());
+Route::get('/academy', function (\Illuminate\Http\Request $request) {
+    $query = Course::with('category')->where('is_active', true);
+    
+    if ($request->has('category')) {
+        $categorySlug = $request->query('category');
+        $query->whereHas('category', function ($q) use ($categorySlug) {
+            $q->where('slug', $categorySlug);
+        });
+    }
+    
+    return response()->json($query->get());
 });
 
 Route::get('/academy/{slug}', function ($slug) {
