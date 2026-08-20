@@ -481,8 +481,17 @@ Route::get('/solutions/{slug}', function ($slug) {
 });
 
 // PRODUCTS
-Route::get('/products', function () {
-    return response()->json(Product::with('category')->where('is_active', 'true')->get());
+Route::get('/products', function (\Illuminate\Http\Request $request) {
+    $query = Product::with('category')->where('is_active', 'true');
+    
+    if ($request->has('category')) {
+        $categorySlug = $request->query('category');
+        $query->whereHas('category', function ($q) use ($categorySlug) {
+            $q->where('slug', $categorySlug);
+        });
+    }
+    
+    return response()->json($query->get());
 });
 
 Route::get('/products/{slug}', function ($slug) {
