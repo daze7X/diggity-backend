@@ -42,6 +42,14 @@ class CompanySettingForm
                                     ->label('URL LinkedIn')
                                     ->url(),
 
+                                TextInput::make('discord_url')
+                                    ->label('URL Discord')
+                                    ->url(),
+
+                                TextInput::make('telegram_url')
+                                    ->label('URL Telegram')
+                                    ->url(),
+
                                 Textarea::make('address')
                                     ->label('Alamat Kantor')
                                     ->rows(3)

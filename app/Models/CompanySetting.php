@@ -13,6 +13,8 @@ class CompanySetting extends Model
         'address',
         'instagram_url',
         'linkedin_url',
+        'discord_url',
+        'telegram_url',
         // New columns
         'company_pt_name',
         'company_nib',

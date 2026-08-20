@@ -24,7 +24,7 @@ class DiggitySeeder extends Seeder
     public function run(): void
     {
         // 0. Super Admin & Demo Users
-        User::updateOrCreate(
+        User::firstOrCreate(
             ['email' => 'superadmin@diggity.com'],
             [
                 'name' => 'Super Admin',
@@ -33,7 +33,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        User::updateOrCreate(
+        User::firstOrCreate(
             ['email' => 'admin@diggity.com'],
             [
                 'name' => 'Admin Biasa',
@@ -42,7 +42,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        $user = User::updateOrCreate(
+        $user = User::firstOrCreate(
             ['email' => 'customer@example.com'],
             [
                 'name' => 'Budi Setiawan',
@@ -52,14 +52,17 @@ class DiggitySeeder extends Seeder
         );
 
         // 1. Company Settings
-        CompanySetting::updateOrCreate(
+        CompanySetting::firstOrCreate(
             ['email' => 'hello@diggity.com'],
             [
                 'name' => 'Diggity Agency',
-                'whatsapp' => '628123456789',
-                'address' => 'Gedung Digital Hub, Lt. 5, Jl. Technopark No. 12, BSD City, Tangerang',
-                'instagram_url' => 'https://instagram.com/diggity.agency',
-                'linkedin_url' => 'https://linkedin.com/company/diggity-agency',
+                'whatsapp' => '6281234567890',
+                'address' => 'Gedung Cyber 2, Lt. 17, Jl. H. R. Rasuna Said Blok X-5, Jakarta Selatan',
+                'instagram_url' => 'https://instagram.com/diggity',
+                'linkedin_url' => 'https://linkedin.com/company/diggity',
+                'discord_url' => 'https://discord.gg/diggity',
+                'telegram_url' => 'https://t.me/diggity_channel',
+                'company_pt_name' => 'PT Diggity Teknologi Indonesia',
                 'vision_id' => 'Menjadi mitra transformasi digital terdepan di Asia Tenggara yang memberdayakan bisnis untuk bertumbuh secara terstruktur dan berkelanjutan melalui teknologi, kreativitas, dan edukasi terintegrasi.',
                 'vision_en' => 'To be the leading digital transformation partner in Southeast Asia, empowering businesses to grow in a structured and sustainable manner through integrated technology, creativity, and education.',
                 'mission_id' => [
@@ -76,30 +79,30 @@ class DiggitySeeder extends Seeder
         );
 
         // 2. Categories for Services (type: service)
-        $catApp = Category::updateOrCreate(['name' => 'App Builder Squad'], ['slug' => 'app-builder-squad', 'type' => 'service']);
-        $catBrand = Category::updateOrCreate(['name' => 'Brand Growth Division'], ['slug' => 'brand-growth-division', 'type' => 'service']);
-        $catCloud = Category::updateOrCreate(['name' => 'Cloud Service Hub'], ['slug' => 'cloud-service-hub', 'type' => 'service']);
-        $catLab = Category::updateOrCreate(['name' => 'Digital Skill Lab'], ['slug' => 'digital-skill-lab', 'type' => 'service']);
-        $catTalent = Category::updateOrCreate(['name' => 'Tech Talent Solutions'], ['slug' => 'tech-talent-solutions', 'type' => 'service']);
+        $catApp = Category::firstOrCreate(['name' => 'App Builder Squad'], ['slug' => 'app-builder-squad', 'type' => 'service']);
+        $catBrand = Category::firstOrCreate(['name' => 'Brand Growth Division'], ['slug' => 'brand-growth-division', 'type' => 'service']);
+        $catCloud = Category::firstOrCreate(['name' => 'Cloud Service Hub'], ['slug' => 'cloud-service-hub', 'type' => 'service']);
+        $catLab = Category::firstOrCreate(['name' => 'Digital Skill Lab'], ['slug' => 'digital-skill-lab', 'type' => 'service']);
+        $catTalent = Category::firstOrCreate(['name' => 'Tech Talent Solutions'], ['slug' => 'tech-talent-solutions', 'type' => 'service']);
 
         // 2.1 Categories for Blogs/Insights (type: blog)
-        $catTechBlog = Category::updateOrCreate(['name' => 'Technology Insights'], ['slug' => 'technology-insights', 'type' => 'blog']);
-        $catMarketingBlog = Category::updateOrCreate(['name' => 'Marketing Trends'], ['slug' => 'marketing-trends', 'type' => 'blog']);
-        $catCloudBlog = Category::updateOrCreate(['name' => 'Cloud & Security'], ['slug' => 'cloud-security', 'type' => 'blog']);
-        $catNews = Category::updateOrCreate(['name' => 'Berita & Pengumuman'], ['slug' => 'news-announcements', 'type' => 'blog']);
+        $catTechBlog = Category::firstOrCreate(['name' => 'Technology Insights'], ['slug' => 'technology-insights', 'type' => 'blog']);
+        $catMarketingBlog = Category::firstOrCreate(['name' => 'Marketing Trends'], ['slug' => 'marketing-trends', 'type' => 'blog']);
+        $catCloudBlog = Category::firstOrCreate(['name' => 'Cloud & Security'], ['slug' => 'cloud-security', 'type' => 'blog']);
+        $catNews = Category::firstOrCreate(['name' => 'Berita & Pengumuman'], ['slug' => 'news-announcements', 'type' => 'blog']);
 
         // 2.2 Categories for Products (type: product)
-        $catSoftware = Category::updateOrCreate(['name' => 'Business Software'], ['slug' => 'business-software', 'type' => 'product']);
-        $catAIProducts = Category::updateOrCreate(['name' => 'AI Products'], ['slug' => 'ai-products', 'type' => 'product']);
-        $catCloudProducts = Category::updateOrCreate(['name' => 'Cloud Products'], ['slug' => 'cloud-products', 'type' => 'product']);
-        $catMarketplace = Category::updateOrCreate(['name' => 'Digital Marketplace'], ['slug' => 'digital-marketplace', 'type' => 'product']);
+        $catSoftware = Category::firstOrCreate(['name' => 'Business Software'], ['slug' => 'business-software', 'type' => 'product']);
+        $catAIProducts = Category::firstOrCreate(['name' => 'AI Products'], ['slug' => 'ai-products', 'type' => 'product']);
+        $catCloudProducts = Category::firstOrCreate(['name' => 'Cloud Products'], ['slug' => 'cloud-products', 'type' => 'product']);
+        $catMarketplace = Category::firstOrCreate(['name' => 'Digital Marketplace'], ['slug' => 'digital-marketplace', 'type' => 'product']);
 
         // 2.3 Categories for Academy (type: academy)
-        $catBootcamp = Category::updateOrCreate(['name' => 'Bootcamp'], ['slug' => 'bootcamp', 'type' => 'academy']);
-        $catWebinar = Category::updateOrCreate(['name' => 'Webinar & Workshop'], ['slug' => 'webinar-workshop', 'type' => 'academy']);
+        $catBootcamp = Category::firstOrCreate(['name' => 'Bootcamp'], ['slug' => 'bootcamp', 'type' => 'academy']);
+        $catWebinar = Category::firstOrCreate(['name' => 'Webinar & Workshop'], ['slug' => 'webinar-workshop', 'type' => 'academy']);
 
         // 3. Services (Solutions)
-        Service::updateOrCreate(
+        Service::firstOrCreate(
             ['slug' => 'technology-solutions'],
             [
                 'category_id' => $catApp->id,
@@ -158,7 +161,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Service::updateOrCreate(
+        Service::firstOrCreate(
             ['slug' => 'ai-emerging-technology'],
             [
                 'category_id' => $catApp->id,
@@ -217,7 +220,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Service::updateOrCreate(
+        Service::firstOrCreate(
             ['slug' => 'creative-brand-experience'],
             [
                 'category_id' => $catBrand->id,
@@ -276,7 +279,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Service::updateOrCreate(
+        Service::firstOrCreate(
             ['slug' => 'growth-marketing'],
             [
                 'category_id' => $catBrand->id,
@@ -335,7 +338,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Service::updateOrCreate(
+        Service::firstOrCreate(
             ['slug' => 'cloud-cyber-security'],
             [
                 'category_id' => $catCloud->id,
@@ -394,7 +397,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Service::updateOrCreate(
+        Service::firstOrCreate(
             ['slug' => 'consulting'],
             [
                 'category_id' => $catCloud->id,
@@ -451,7 +454,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Service::updateOrCreate(
+        Service::firstOrCreate(
             ['slug' => 'digital-skill-lab'],
             [
                 'category_id' => $catLab->id,
@@ -508,7 +511,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Service::updateOrCreate(
+        Service::firstOrCreate(
             ['slug' => 'headhunting'],
             [
                 'category_id' => $catTalent->id,
@@ -518,7 +521,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Service::updateOrCreate(
+        Service::firstOrCreate(
             ['slug' => 'outsourcing'],
             [
                 'category_id' => $catTalent->id,
@@ -528,7 +531,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Service::updateOrCreate(
+        Service::firstOrCreate(
             ['slug' => 'job-connect'],
             [
                 'category_id' => $catTalent->id,
@@ -539,7 +542,7 @@ class DiggitySeeder extends Seeder
         );
 
         // 4. Products (Ready-to-use digital products)
-        Product::updateOrCreate(
+        Product::firstOrCreate(
             ['slug' => 'diggity-erp'],
             [
                 'category_id' => $catSoftware->id,
@@ -557,7 +560,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Product::updateOrCreate(
+        Product::firstOrCreate(
             ['slug' => 'diggity-ai-agent'],
             [
                 'category_id' => $catAIProducts->id,
@@ -575,7 +578,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Product::updateOrCreate(
+        Product::firstOrCreate(
             ['slug' => 'sleek-dashboard-ui-kit'],
             [
                 'category_id' => $catMarketplace->id,
@@ -595,7 +598,7 @@ class DiggitySeeder extends Seeder
         );
 
         // 5. Courses (Academy)
-        $course1 = Course::updateOrCreate(
+        $course1 = Course::firstOrCreate(
             ['slug' => 'fullstack-laravel-nextjs-bootcamp'],
             [
                 'category_id' => $catBootcamp->id,
@@ -612,17 +615,17 @@ class DiggitySeeder extends Seeder
         );
 
         // Seed Course Modules
-        $module1 = Module::updateOrCreate(
+        $module1 = Module::firstOrCreate(
             ['course_id' => $course1->id, 'title' => 'Introduction to Laravel API'],
             ['description' => 'Belajar dasar rekayasa API, routing, controller, dan migrations di Laravel.', 'sort_order' => 1]
         );
-        $module2 = Module::updateOrCreate(
+        $module2 = Module::firstOrCreate(
             ['course_id' => $course1->id, 'title' => 'Next.js Frontend Integration'],
             ['description' => 'Menghubungkan aplikasi frontend Next.js dengan API Laravel.', 'sort_order' => 2]
         );
 
         // Seed Lessons
-        Lesson::updateOrCreate(
+        Lesson::firstOrCreate(
             ['module_id' => $module1->id, 'slug' => 'routing-dan-controller-api'],
             [
                 'title' => 'Routing dan Controller API di Laravel',
@@ -633,7 +636,7 @@ class DiggitySeeder extends Seeder
                 'sort_order' => 1
             ]
         );
-        Lesson::updateOrCreate(
+        Lesson::firstOrCreate(
             ['module_id' => $module1->id, 'slug' => 'eloquent-orm-dan-database-seeding'],
             [
                 'title' => 'Eloquent ORM dan Database Seeding',
@@ -644,7 +647,7 @@ class DiggitySeeder extends Seeder
                 'sort_order' => 2
             ]
         );
-        Lesson::updateOrCreate(
+        Lesson::firstOrCreate(
             ['module_id' => $module2->id, 'slug' => 'fetching-data-pada-nextjs'],
             [
                 'title' => 'Fetching Data pada Next.js (SSR & ISR)',
@@ -657,7 +660,7 @@ class DiggitySeeder extends Seeder
         );
 
         // 6. Portfolios
-        Portfolio::updateOrCreate(
+        Portfolio::firstOrCreate(
             ['slug' => 'sistem-informasi-logistik-nasional'],
             [
                 'category_id' => $catApp->id,
@@ -674,7 +677,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Portfolio::updateOrCreate(
+        Portfolio::firstOrCreate(
             ['slug' => 'kampanye-growth-marketing-e-commerce'],
             [
                 'category_id' => $catBrand->id,
@@ -691,7 +694,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Portfolio::updateOrCreate(
+        Portfolio::firstOrCreate(
             ['slug' => 'migrasi-cloud-infrastruktur-keamanan-tinggi'],
             [
                 'category_id' => $catCloud->id,
@@ -709,7 +712,7 @@ class DiggitySeeder extends Seeder
         );
 
         // 7. Blogs (Insights)
-        Blog::updateOrCreate(
+        Blog::firstOrCreate(
             ['slug' => '5-teknologi-web-modern-terbaik-2026'],
             [
                 'category_id' => $catTechBlog->id,
@@ -721,7 +724,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Blog::updateOrCreate(
+        Blog::firstOrCreate(
             ['slug' => 'panduan-seo-pemula-ranking-satu-google'],
             [
                 'category_id' => $catMarketingBlog->id,
@@ -733,7 +736,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Blog::updateOrCreate(
+        Blog::firstOrCreate(
             ['slug' => 'cara-migrasi-server-ke-vps-tanpa-downtime'],
             [
                 'category_id' => $catCloudBlog->id,
@@ -745,7 +748,7 @@ class DiggitySeeder extends Seeder
             ]
         );
 
-        Blog::updateOrCreate(
+        Blog::firstOrCreate(
             ['slug' => 'diggity-ekspansi-layanan-rekayasa-kecerdasan-buatan-lokal'],
             [
                 'category_id' => $catNews->id,
@@ -758,21 +761,21 @@ class DiggitySeeder extends Seeder
         );
 
         // 8. Teams
-        Team::updateOrCreate(
+        Team::firstOrCreate(
             ['name' => 'Ahmad Fauzi'],
             [
                 'position' => 'Chief Executive Officer',
                 'photo' => null
             ]
         );
-        Team::updateOrCreate(
+        Team::firstOrCreate(
             ['name' => 'Sarah Wijaya'],
             [
                 'position' => 'Lead UI/UX Designer',
                 'photo' => null
             ]
         );
-        Team::updateOrCreate(
+        Team::firstOrCreate(
             ['name' => 'Budi Pratama'],
             [
                 'position' => 'Senior Fullstack Engineer',
@@ -781,7 +784,7 @@ class DiggitySeeder extends Seeder
         );
 
         // 9. Testimonials
-        Testimonial::updateOrCreate(
+        Testimonial::firstOrCreate(
             ['client_name' => 'Hendra Wijaya'],
             [
                 'company' => 'PT Transindo Logistik',
@@ -790,7 +793,7 @@ class DiggitySeeder extends Seeder
                 'avatar' => null
             ]
         );
-        Testimonial::updateOrCreate(
+        Testimonial::firstOrCreate(
             ['client_name' => 'Rina Amalia'],
             [
                 'company' => 'Luxura Wear',
@@ -801,7 +804,7 @@ class DiggitySeeder extends Seeder
         );
 
         // 10. FAQs
-        Faq::updateOrCreate(
+        Faq::firstOrCreate(
             ['question' => 'Teknologi apa saja yang digunakan oleh Diggity?'],
             [
                 'answer' => 'Kami menggunakan stack teknologi modern terbaik seperti Next.js, React, TypeScript, Tailwind CSS untuk frontend, serta Laravel, Node.js, dan PostgreSQL/MySQL untuk backend.'
@@ -809,7 +812,7 @@ class DiggitySeeder extends Seeder
         );
 
         // 11. Careers (Job Connect Vacancies)
-        Career::updateOrCreate(
+        Career::firstOrCreate(
             ['slug' => 'senior-fullstack-developer-laravel-nextjs'],
             [
                 'title' => 'Senior Fullstack Developer (Laravel & Next.js)',
@@ -823,7 +826,7 @@ class DiggitySeeder extends Seeder
         );
 
         // 12. Talent Profiles (Job Connect Submissions)
-        TalentProfile::updateOrCreate(
+        TalentProfile::firstOrCreate(
             ['email' => 'rian.hidayat@example.com'],
             [
                 'name' => 'Rian Hidayat',
