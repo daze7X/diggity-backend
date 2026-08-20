@@ -40,6 +40,22 @@ Route::get('/migrate-db', function () {
     }
 });
 
+Route::get('/translate-all', function () {
+    try {
+        Artisan::call('diggity:translate-all');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Semua data bahasa Inggris berhasil diterjemahkan!',
+            'output' => Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
+
 Route::get('/seed-services', function () {
     try {
         $catApp = \App\Models\Category::updateOrCreate(['name' => 'App Builder Squad'], ['slug' => 'app-builder-squad', 'type' => 'service']);
