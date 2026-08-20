@@ -124,6 +124,20 @@ trait HasTranslations
         if (is_string($key) && str_starts_with($key, 'en_')) {
             $field = substr($key, 3);
             if (in_array($field, $this->getTranslatableFields())) {
+                
+                // Jika input bahasa Inggris kosong, terjemahkan otomatis dari bahasa Indonesia
+                if (is_null($value) || trim($value) === '') {
+                    $originalValue = $this->getAttribute($field);
+                    if (!is_null($originalValue) && trim($originalValue) !== '') {
+                        try {
+                            $value = \Stichoza\GoogleTranslate\GoogleTranslate::trans($originalValue, 'en', 'id');
+                        } catch (\Exception $e) {
+                            // Biarkan kosong jika gagal
+                            $value = null;
+                        }
+                    }
+                }
+
                 if (!$this->exists) {
                     $this->tempTranslations[$field] = $value;
                 } else {
