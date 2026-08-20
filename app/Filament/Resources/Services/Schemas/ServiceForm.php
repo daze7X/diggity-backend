@@ -81,6 +81,34 @@ class ServiceForm
                             ->columnSpanFull(),
                     ]),
 
+                Section::make('Statistik & Teknologi (Dinamis)')
+                    ->description('Isi bagian ini untuk menampilkan statistik dan stack teknologi yang relevan dengan layanan ini di halaman publik.')
+                    ->components([
+                        Repeater::make('stats')
+                            ->label('Statistik Layanan')
+                            ->helperText('Contoh: Label = "Proyek Selesai", Nilai = "200+"')
+                            ->schema([
+                                TextInput::make('label')
+                                    ->label('Label Statistik')
+                                    ->placeholder('Contoh: Proyek Selesai')
+                                    ->required(),
+                                TextInput::make('value')
+                                    ->label('Nilai Statistik')
+                                    ->placeholder('Contoh: 200+')
+                                    ->required(),
+                            ])
+                            ->columns(2)
+                            ->maxItems(4)
+                            ->defaultItems(0)
+                            ->columnSpanFull(),
+
+                        TagsInput::make('tech_stack')
+                            ->label('Teknologi / Tools yang Digunakan')
+                            ->placeholder('Contoh: Next.js, React, Laravel...')
+                            ->helperText('Tambahkan tag teknologi yang relevan dengan layanan ini.')
+                            ->columnSpanFull(),
+                    ]),
+
                 \App\Filament\Resources\Support\SeoForm::make(),
                 \App\Filament\Resources\Support\TranslationForm::make([
                     'name' => 'text',

@@ -21,11 +21,15 @@ class Service extends Model
         'description',
         'sub_services',
         'plans',
+        'stats',
+        'tech_stack',
     ];
 
     protected $casts = [
         'sub_services' => 'array',
-        'plans' => 'array',
+        'plans'        => 'array',
+        'stats'        => 'array',
+        'tech_stack'   => 'array',
     ];
 
     // Relasi: Setiap service pasti dimiliki oleh 1 kategori
