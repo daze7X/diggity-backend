@@ -491,7 +491,7 @@ Route::get('/products/{slug}', function ($slug) {
 
 // ACADEMY (LMS)
 Route::get('/academy', function (\Illuminate\Http\Request $request) {
-    $query = Course::with('category')->where('is_active', true);
+    $query = Course::with('category')->where('is_active', 'true');
     
     if ($request->has('category')) {
         $categorySlug = $request->query('category');
