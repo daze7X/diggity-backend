@@ -150,6 +150,33 @@ trait HasTranslations
     }
 
     /**
+     * Override toArray to ensure translated fields are serialized in JSON responses.
+     */
+    public function toArray()
+    {
+        $attributes = parent::toArray();
+        $translatableFields = $this->getTranslatableFields();
+        $currentLocale = App::getLocale();
+
+        if ($currentLocale !== 'id') {
+            if (!$this->relationLoaded('translations')) {
+                $this->load('translations');
+            }
+
+            foreach ($translatableFields as $field) {
+                if (array_key_exists($field, $attributes)) {
+                    $translated = $this->getTranslation($field, $currentLocale);
+                    if (!is_null($translated) && trim($translated) !== '') {
+                        $attributes[$field] = $translated;
+                    }
+                }
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
      * Define which attributes are translatable in the model.
      * Fallback to a default set or override in model.
      */
