@@ -187,4 +187,16 @@ trait HasTranslations
             'problem', 'solution', 'strategy', 'execution', 'result'
         ];
     }
+
+    /**
+     * Override getFillable to dynamically allow en_ prefixed fields.
+     */
+    public function getFillable()
+    {
+        $fillable = parent::getFillable();
+        foreach ($this->getTranslatableFields() as $field) {
+            $fillable[] = 'en_' . $field;
+        }
+        return $fillable;
+    }
 }
