@@ -117,9 +117,9 @@ trait HasTranslations
     }
 
     /**
-     * Magic setter to write en_ attributes.
+     * Override setAttribute to write en_ virtual attributes.
      */
-    public function __set($key, $value)
+    public function setAttribute($key, $value)
     {
         if (is_string($key) && str_starts_with($key, 'en_')) {
             $field = substr($key, 3);
@@ -143,10 +143,10 @@ trait HasTranslations
                 } else {
                     $this->saveTranslation('en', $field, $value);
                 }
-                return;
+                return $this;
             }
         }
-        parent::__set($key, $value);
+        return parent::setAttribute($key, $value);
     }
 
     /**
