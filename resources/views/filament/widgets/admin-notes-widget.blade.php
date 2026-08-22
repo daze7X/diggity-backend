@@ -4,7 +4,7 @@
             Panduan Admin Panel
         </x-slot>
 
-        <div class="flex flex-col gap-y-2 text-xs max-h-[250px] overflow-y-auto pr-2">
+        <div class="flex flex-col gap-y-2 text-xs pr-2" style="max-height: 220px; overflow-y: auto;">
             <div class="flex items-start gap-x-2">
                 <x-filament::icon icon="heroicon-o-shopping-bag" class="w-4 h-4 text-primary-500 shrink-0" />
                 <p><strong>Products & Pricings:</strong> Mengelola katalog produk digital, ERP, dan paket harga berlangganan.</p>
