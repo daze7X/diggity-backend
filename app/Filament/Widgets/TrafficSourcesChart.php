@@ -72,12 +72,5 @@ class TrafficSourcesChart extends ChartWidget
     {
         return 'doughnut';
     }
-
-    protected function getOptions(): array
-    {
-        return [
-            'maintainAspectRatio' => false,
-        ];
-    }
 }
 
