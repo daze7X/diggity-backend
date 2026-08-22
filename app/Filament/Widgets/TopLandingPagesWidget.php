@@ -12,7 +12,7 @@ class TopLandingPagesWidget extends TableWidget
 {
     protected static ?string $heading = 'Halaman Terpopuler (Top Landing Pages)';
 
-    protected static ?int $sort = 4;
+    protected static ?int $sort = 5;
 
     protected int | string | array $columnSpan = 'full';
 
