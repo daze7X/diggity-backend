@@ -3,9 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTranslations;
+use App\Traits\LogsActivity;
 
 class Pricing extends Model
 {
+    use HasTranslations, LogsActivity;
+
+    protected $translatable = ['name', 'period', 'description', 'features'];
+
     protected $fillable = ['name', 'price', 'period', 'description', 'features', 'is_popular'];
 
     protected $casts = [

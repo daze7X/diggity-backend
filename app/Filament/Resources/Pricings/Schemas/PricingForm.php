@@ -57,6 +57,13 @@ class PricingForm
                     ->addActionLabel('Tambah Fitur Baru')
                     ->columnSpanFull()
                     ->minItems(1),
+
+                \App\Filament\Resources\Support\TranslationForm::make([
+                    'name' => 'text',
+                    'period' => 'text',
+                    'description' => 'textarea',
+                    'features' => 'tags',
+                ]),
             ]);
     }
 }

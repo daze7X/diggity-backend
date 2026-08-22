@@ -15,7 +15,7 @@ class Product extends Model
 {
     use HasFactory, HasSeo, HasTranslations, LogsActivity;
 
-    protected $translatable = ['name', 'description', 'license_info'];
+    protected $translatable = ['name', 'description', 'license_info', 'features'];
 
     protected $fillable = [
         'category_id',

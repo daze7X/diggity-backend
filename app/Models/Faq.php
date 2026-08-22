@@ -3,9 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTranslations;
+use App\Traits\LogsActivity;
 
 class Faq extends Model
 {
+    use HasTranslations, LogsActivity;
+
+    protected $translatable = ['question', 'answer'];
+
     protected $fillable = ['question', 'answer', 'is_published', 'order'];
 
     protected $casts = [

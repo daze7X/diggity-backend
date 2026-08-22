@@ -62,6 +62,7 @@ class ProductForm
                     'name' => 'text',
                     'description' => 'textarea',
                     'license_info' => 'textarea',
+                    'features' => 'tags',
                 ]),
             ]);
     }

@@ -33,6 +33,11 @@ class TranslationForm
                 $schema[] = RichEditor::make($name)
                     ->label($label)
                     ->columnSpanFull();
+            } else if ($type === 'tags') {
+                $schema[] = \Filament\Forms\Components\TagsInput::make($name)
+                    ->label($label)
+                    ->placeholder('Ketik fitur dalam bahasa inggris lalu Enter...')
+                    ->columnSpanFull();
             }
         }
 

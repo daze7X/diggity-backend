@@ -34,6 +34,11 @@ class FaqForm
                     ->label('Terbitkan')
                     ->default(true)
                     ->inline(false),
+
+                \App\Filament\Resources\Support\TranslationForm::make([
+                    'question' => 'text',
+                    'answer' => 'textarea',
+                ]),
             ]);
     }
 }
