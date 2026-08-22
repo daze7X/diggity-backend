@@ -8,5 +8,5 @@ class AdminNotesWidget extends Widget
 {
     protected static ?int $sort = 4;
 
-    protected static string $view = 'filament.widgets.admin-notes-widget';
+    protected string $view = 'filament.widgets.admin-notes-widget';
 }
