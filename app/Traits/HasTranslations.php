@@ -118,13 +118,22 @@ trait HasTranslations
                     if (!empty($originalValue)) {
                         try {
                             if (is_array($originalValue)) {
-                                $translatedArray = [];
-                                foreach ($originalValue as $item) {
-                                    $translatedArray[] = \Stichoza\GoogleTranslate\GoogleTranslate::trans($item, 'en', 'id');
-                                }
-                                $value = $translatedArray;
+                                $translateRecursive = function($data) use (&$translateRecursive) {
+                                    if (is_string($data)) {
+                                        return \Stichoza\GoogleTranslate\GoogleTranslate::trans($data, 'en', 'id');
+                                    }
+                                    if (is_array($data)) {
+                                        $translated = [];
+                                        foreach ($data as $k => $v) {
+                                            $translated[$k] = $translateRecursive($v);
+                                        }
+                                        return $translated;
+                                    }
+                                    return $data;
+                                };
+                                $value = $translateRecursive($originalValue);
                             } else {
-                                $value = \Stichoza\GoogleTranslate\GoogleTranslate::trans($originalValue, 'en', 'id');
+                                $value = is_string($originalValue) ? \Stichoza\GoogleTranslate\GoogleTranslate::trans($originalValue, 'en', 'id') : $originalValue;
                             }
                         } catch (\Exception $e) {
                             $value = null;
