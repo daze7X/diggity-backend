@@ -105,6 +105,27 @@ Route::get('/run-migrations', function () {
     }
 });
 
+// GET /api/run-solutions-seeder
+// Runs SolutionsRestructureSeeder to add 7 new categories + 56 services
+Route::get('/run-solutions-seeder', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('db:seed', [
+            '--class' => 'SolutionsRestructureSeeder',
+            '--force' => true,
+        ]);
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'SolutionsRestructureSeeder ran successfully!',
+            'output'  => \Illuminate\Support\Facades\Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status'  => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
+
 // GET /api/talent-services/{slug}
 Route::get('/talent-services/{slug}', function ($slug) {
     $defaultHeadhunting = [
