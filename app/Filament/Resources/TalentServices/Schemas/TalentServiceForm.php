@@ -73,7 +73,7 @@ class TalentServiceForm
                     'description' => 'markdown',
                 ]),
 
-                \Filament\Forms\Components\Section::make('English Translations - Arrays (Lokalisasi EN)')
+                \Filament\Schemas\Components\Section::make('English Translations - Arrays (Lokalisasi EN)')
                     ->description('Tambahkan terjemahan untuk Alur Proses dan FAQ dalam bahasa Inggris.')
                     ->collapsible()
                     ->collapsed()
