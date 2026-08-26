@@ -66,6 +66,51 @@ class TalentServiceForm
                     ->columnSpanFull()
                     ->collapsible()
                     ->itemLabel(fn (array $state): ?string => $state['q'] ?? null),
+
+                \App\Filament\Resources\Support\TranslationForm::make([
+                    'title' => 'text',
+                    'sub_title' => 'text',
+                    'description' => 'markdown',
+                ]),
+
+                \Filament\Forms\Components\Section::make('English Translations - Arrays (Lokalisasi EN)')
+                    ->description('Tambahkan terjemahan untuk Alur Proses dan FAQ dalam bahasa Inggris.')
+                    ->collapsible()
+                    ->collapsed()
+                    ->schema([
+                        Repeater::make('en_process_tabs')
+                            ->label('Alur Proses Layanan (English)')
+                            ->schema([
+                                TextInput::make('title')
+                                    ->label('Tab Title (English)')
+                                    ->required(),
+                                TextInput::make('subtitle')
+                                    ->label('Step Subtitle (English)')
+                                    ->required(),
+                                Textarea::make('content')
+                                    ->label('Step Description (English)')
+                                    ->required()
+                                    ->rows(3),
+                            ])
+                            ->columnSpanFull()
+                            ->collapsible()
+                            ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
+
+                        Repeater::make('en_faqs')
+                            ->label('FAQ (English)')
+                            ->schema([
+                                TextInput::make('q')
+                                    ->label('Question (English)')
+                                    ->required(),
+                                Textarea::make('a')
+                                    ->label('Answer (English)')
+                                    ->required()
+                                    ->rows(3),
+                            ])
+                            ->columnSpanFull()
+                            ->collapsible()
+                            ->itemLabel(fn (array $state): ?string => $state['q'] ?? null),
+                    ]),
             ]);
     }
 }
