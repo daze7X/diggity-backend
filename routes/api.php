@@ -1346,3 +1346,23 @@ Route::post('/analytics/pageview', function (Request $request) {
         'data' => $pageView
     ], 201);
 });
+
+// GET /api/run-products-seeder
+Route::get('/run-products-seeder', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('db:seed', [
+            '--class' => 'ProductsRestructureSeeder',
+            '--force' => true,
+        ]);
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'ProductsRestructureSeeder ran successfully!',
+            'output'  => \Illuminate\Support\Facades\Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status'  => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
