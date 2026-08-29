@@ -1366,3 +1366,11 @@ Route::get('/run-products-seeder', function () {
         ], 500);
     }
 });
+
+Route::get('/clear-cache', function () {
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+    if (function_exists('opcache_reset')) {
+        opcache_reset();
+    }
+    return response()->json(['status' => 'success', 'message' => 'Cache and OPcache cleared!']);
+});
