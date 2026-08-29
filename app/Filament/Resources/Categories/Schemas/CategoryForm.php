@@ -37,6 +37,14 @@ class CategoryForm
                     ])
                     ->default('blog'),
 
+                Select::make('parent_id')
+                    ->label('Kategori Induk (Opsional)')
+                    ->relationship('parent', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->nullable()
+                    ->hint('Pilih kategori induk jika ini adalah subkategori.'),
+
                 Textarea::make('description')
                     ->label('Deskripsi')
                     ->columnSpanFull(),

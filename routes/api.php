@@ -502,6 +502,39 @@ Route::get('/solutions/{slug}', function ($slug) {
 });
 
 // PRODUCTS
+
+// Get hierarchical categories for Products Mega Menu and Hub
+Route::get('/products/hierarchy', function () {
+    $mainCategories = \App\Models\Category::whereNull('parent_id')
+        ->where('type', 'product')
+        ->with(['children' => function($q) {
+            $q->withCount(['products' => function($q2) {
+                $q2->where('is_active', 'true');
+            }]);
+        }])
+        ->get();
+        
+    return response()->json($mainCategories);
+});
+
+// Get products by subcategory
+Route::get('/products/subcategory/{slug}', function ($slug) {
+    $subCategory = \App\Models\Category::where('slug', $slug)
+        ->whereNotNull('parent_id')
+        ->where('type', 'product')
+        ->with(['parent'])
+        ->firstOrFail();
+        
+    $products = \App\Models\Product::where('category_id', $subCategory->id)
+        ->where('is_active', 'true')
+        ->get();
+        
+    return response()->json([
+        'subcategory' => $subCategory,
+        'products' => $products
+    ]);
+});
+
 Route::get('/products', function (\Illuminate\Http\Request $request) {
     $query = Product::with('category')->where('is_active', 'true');
     
