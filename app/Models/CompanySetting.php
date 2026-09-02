@@ -28,7 +28,8 @@ class CompanySetting extends Model
         'vision_id',
         'vision_en',
         'mission_id',
-        'mission_en'
+        'mission_en',
+        'company_profile_pdf'
     ];
 
     protected $casts = [
@@ -38,3 +39,4 @@ class CompanySetting extends Model
         'mission_en' => 'array',
     ];
 }
+

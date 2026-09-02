@@ -69,6 +69,12 @@ class CompanySettingForm
                                 TextInput::make('company_kbli')
                                     ->label('Klasifikasi KBLI')
                                     ->placeholder('Contoh: KBLI 62019 (Aktivitas Pemrograman Komputer Lainnya)'),
+
+                                FileUpload::make('company_profile_pdf')
+                                    ->label('Dokumen Company Profile (PDF)')
+                                    ->directory('company_profiles')
+                                    ->acceptedFileTypes(['application/pdf'])
+                                    ->columnSpanFull(),
                             ]),
 
                         Tab::make('Filosofi & Partner')
@@ -159,3 +165,4 @@ class CompanySettingForm
             ]);
     }
 }
+
