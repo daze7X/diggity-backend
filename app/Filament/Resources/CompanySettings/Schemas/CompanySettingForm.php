@@ -198,7 +198,7 @@ class CompanySettingForm
                             ->grid(2)
                             ->columnSpanFull()
                             ->helperText('Kosongkan baris di sini jika ingin menggunakan Auto-Translate dari Milestones Sejarah di atas.'),
-                    ]),
+                    ])
                     ->columnSpanFull(),
             ]);
     }
