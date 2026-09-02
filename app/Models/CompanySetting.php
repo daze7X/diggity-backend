@@ -31,7 +31,11 @@ class CompanySetting extends Model
         'mission_en',
         'company_profile_pdf',
         'history_text_id',
-        'history_text_en'
+        'history_text_en',
+        'philosophy_build_en',
+        'philosophy_grow_en',
+        'philosophy_scale_en',
+        'philosophy_empower_en'
     ];
 
     protected $casts = [

@@ -88,24 +88,40 @@ class CompanySettingForm
                                     ->rows(4),
 
                                 Textarea::make('philosophy_build')
-                                    ->label('Filosofi - Build')
+                                    ->label('Filosofi - Build (ID)')
                                     ->rows(2)
                                     ->placeholder('Merancang produk software (web/mobile) berkinerja tinggi.'),
 
+                                Textarea::make('philosophy_build_en')
+                                    ->label('Filosofi - Build (EN)')
+                                    ->rows(2),
+
                                 Textarea::make('philosophy_grow')
-                                    ->label('Filosofi - Grow')
+                                    ->label('Filosofi - Grow (ID)')
                                     ->rows(2)
                                     ->placeholder('Mendorong pertumbuhan pasar melalui SEO, periklanan, dan marketing media sosial.'),
 
+                                Textarea::make('philosophy_grow_en')
+                                    ->label('Filosofi - Grow (EN)')
+                                    ->rows(2),
+
                                 Textarea::make('philosophy_scale')
-                                    ->label('Filosofi - Scale')
+                                    ->label('Filosofi - Scale (ID)')
                                     ->rows(2)
                                     ->placeholder('Menjamin keandalan infrastruktur cloud server dan kapasitas sistem yang stabil.'),
 
+                                Textarea::make('philosophy_scale_en')
+                                    ->label('Filosofi - Scale (EN)')
+                                    ->rows(2),
+
                                 Textarea::make('philosophy_empower')
-                                    ->label('Filosofi - Empower')
+                                    ->label('Filosofi - Empower (ID)')
                                     ->rows(2)
                                     ->placeholder('Memberdayakan tim Anda melalui pelatihan dan transfer keahlian digital.'),
+
+                                Textarea::make('philosophy_empower_en')
+                                    ->label('Filosofi - Empower (EN)')
+                                    ->rows(2),
 
                                 FileUpload::make('partner_logos')
                                     ->label('Trusted By (Logo Partner)')
