@@ -942,8 +942,9 @@ Route::middleware('auth:sanctum')->group(function () {
             \Illuminate\Support\Facades\Log::info("MIDTRANS DEBUG - Key being used: {$maskedKey} | Is Prod: " . ($rawIsProd ? 'true' : 'false'));
             \Midtrans\Config::$is3ds = true;
 
-            $snapToken = \Midtrans\Snap::getSnapToken($params);
-            $redirectUrl = \Midtrans\Snap::createTransaction($params)->redirect_url;
+            $transaction = \Midtrans\Snap::createTransaction($params);
+            $snapToken = $transaction->token;
+            $redirectUrl = $transaction->redirect_url;
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Midtrans Exception: ' . $e->getMessage());
             // Fallback mock payment simulator
