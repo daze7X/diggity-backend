@@ -176,7 +176,7 @@ class CompanySettingForm
                             ]),
                     ]),
 
-                \Filament\Forms\Components\Section::make('English Translations (Lokalisasi EN)')
+                \Filament\Schemas\Components\Section::make('English Translations (Lokalisasi EN)')
                     ->collapsed()
                     ->schema([
                         Textarea::make('en_history_text_id')->label('Sejarah Singkat (EN)')->rows(4),
