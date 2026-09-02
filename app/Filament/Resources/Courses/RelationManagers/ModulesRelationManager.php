@@ -36,10 +36,11 @@ class ModulesRelationManager extends RelationManager
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
+                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $set('slug', Str::slug($state) ?: uniqid('lesson-'))),
                         Forms\Components\TextInput::make('slug')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->default(fn () => uniqid('lesson-')),
                         Forms\Components\Select::make('content_type')
                             ->options([
                                 'video' => 'Video',
@@ -62,7 +63,6 @@ class ModulesRelationManager extends RelationManager
                     ])
                     ->orderColumn('sort_order')
                     ->collapsible()
-                    ->collapsed()
                     ->itemLabel(fn (array $state): ?string => $state['title'] ?? null)
                     ->columnSpanFull()
             ]);
@@ -83,7 +83,11 @@ class ModulesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                \Filament\Actions\CreateAction::make(),
+                \Filament\Actions\CreateAction::make()
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['course_id'] = $this->getOwnerRecord()->id;
+                        return $data;
+                    }),
             ])
             ->recordActions([
                 \Filament\Actions\EditAction::make(),
