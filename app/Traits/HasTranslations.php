@@ -196,3 +196,4 @@ trait HasTranslations
         return $fillable;
     }
 }
+
