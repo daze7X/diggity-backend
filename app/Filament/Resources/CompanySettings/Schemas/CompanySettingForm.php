@@ -83,9 +83,7 @@ class CompanySettingForm
                                     ->label('Teks Sejarah Singkat (Bahasa Indonesia)')
                                     ->rows(4),
 
-                                Textarea::make('en_history_text_id')
-                                    ->label('Brief History Text (English)')
-                                    ->rows(4),
+                                
 
                                 Textarea::make('philosophy_build')
                                     ->label('Filosofi - Build (ID)')
@@ -176,7 +174,31 @@ class CompanySettingForm
                                     ->grid(2)
                                     ->columnSpanFull(),
                             ]),
-                    ])
+                    ]),
+
+                \Filament\Forms\Components\Section::make('English Translations (Lokalisasi EN)')
+                    ->collapsed()
+                    ->schema([
+                        Textarea::make('en_history_text_id')->label('Sejarah Singkat (EN)')->rows(4),
+                        Textarea::make('en_philosophy_build')->label('Filosofi - Build (EN)')->rows(2),
+                        Textarea::make('en_philosophy_grow')->label('Filosofi - Grow (EN)')->rows(2),
+                        Textarea::make('en_philosophy_scale')->label('Filosofi - Scale (EN)')->rows(2),
+                        Textarea::make('en_philosophy_empower')->label('Filosofi - Empower (EN)')->rows(2),
+                        Repeater::make('en_history_timeline')
+                            ->label('Timeline Sejarah Perusahaan (EN)')
+                            ->schema([
+                                TextInput::make('year')
+                                    ->label('Tahun'),
+                                TextInput::make('title')
+                                    ->label('Judul Milestone (EN)'),
+                                Textarea::make('desc')
+                                    ->label('Deskripsi (EN)')
+                                    ->rows(2),
+                            ])
+                            ->grid(2)
+                            ->columnSpanFull()
+                            ->helperText('Kosongkan baris di sini jika ingin menggunakan Auto-Translate dari Milestones Sejarah di atas.'),
+                    ]),
                     ->columnSpanFull(),
             ]);
     }
