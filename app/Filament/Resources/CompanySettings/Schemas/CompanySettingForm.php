@@ -83,7 +83,7 @@ class CompanySettingForm
                                     ->label('Teks Sejarah Singkat (Bahasa Indonesia)')
                                     ->rows(4),
 
-                                Textarea::make('history_text_en')
+                                Textarea::make('en_history_text_id')
                                     ->label('Brief History Text (English)')
                                     ->rows(4),
 
@@ -92,7 +92,7 @@ class CompanySettingForm
                                     ->rows(2)
                                     ->placeholder('Merancang produk software (web/mobile) berkinerja tinggi.'),
 
-                                Textarea::make('philosophy_build_en')
+                                Textarea::make('en_philosophy_build')
                                     ->label('Filosofi - Build (EN)')
                                     ->rows(2),
 
@@ -101,7 +101,7 @@ class CompanySettingForm
                                     ->rows(2)
                                     ->placeholder('Mendorong pertumbuhan pasar melalui SEO, periklanan, dan marketing media sosial.'),
 
-                                Textarea::make('philosophy_grow_en')
+                                Textarea::make('en_philosophy_grow')
                                     ->label('Filosofi - Grow (EN)')
                                     ->rows(2),
 
@@ -110,7 +110,7 @@ class CompanySettingForm
                                     ->rows(2)
                                     ->placeholder('Menjamin keandalan infrastruktur cloud server dan kapasitas sistem yang stabil.'),
 
-                                Textarea::make('philosophy_scale_en')
+                                Textarea::make('en_philosophy_scale')
                                     ->label('Filosofi - Scale (EN)')
                                     ->rows(2),
 
@@ -119,7 +119,7 @@ class CompanySettingForm
                                     ->rows(2)
                                     ->placeholder('Memberdayakan tim Anda melalui pelatihan dan transfer keahlian digital.'),
 
-                                Textarea::make('philosophy_empower_en')
+                                Textarea::make('en_philosophy_empower')
                                     ->label('Filosofi - Empower (EN)')
                                     ->rows(2),
 

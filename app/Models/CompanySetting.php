@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTranslations;
 
 class CompanySetting extends Model
 {
+    use HasTranslations;
+
+    protected $translatable = ['philosophy_build', 'philosophy_grow', 'philosophy_scale', 'philosophy_empower', 'history_text_id', 'history_timeline'];
+
     protected $fillable = [
         'name',
         'email',
