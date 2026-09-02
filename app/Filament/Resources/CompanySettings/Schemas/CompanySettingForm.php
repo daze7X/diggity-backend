@@ -79,6 +79,14 @@ class CompanySettingForm
 
                         Tab::make('Filosofi & Partner')
                             ->components([
+                                Textarea::make('history_text_id')
+                                    ->label('Teks Sejarah Singkat (Bahasa Indonesia)')
+                                    ->rows(4),
+
+                                Textarea::make('history_text_en')
+                                    ->label('Brief History Text (English)')
+                                    ->rows(4),
+
                                 Textarea::make('philosophy_build')
                                     ->label('Filosofi - Build')
                                     ->rows(2)

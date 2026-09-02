@@ -29,7 +29,9 @@ class CompanySetting extends Model
         'vision_en',
         'mission_id',
         'mission_en',
-        'company_profile_pdf'
+        'company_profile_pdf',
+        'history_text_id',
+        'history_text_en'
     ];
 
     protected $casts = [
