@@ -174,7 +174,8 @@ class CompanySettingForm
                                     ->grid(2)
                                     ->columnSpanFull(),
                             ]),
-                    ]),
+                    ])
+                    ->columnSpanFull(),
 
                 \Filament\Schemas\Components\Section::make('English Translations (Lokalisasi EN)')
                     ->collapsed()
