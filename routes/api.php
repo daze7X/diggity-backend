@@ -67,7 +67,7 @@ function verifyRecaptcha(?string $token, string $action): bool
 
 // GET /api/company-settings
 Route::get('/company-settings', function () {
-    return response()->json(CompanySetting::first() ?? [
+    return response()->json(CompanySetting::latest('updated_at')->first() ?? [
         'name' => 'Diggity Agency',
         'email' => 'hello@diggity.com',
         'whatsapp' => '628123456789',
@@ -347,7 +347,7 @@ Route::post('/leads', function (Request $request) {
     $lead = Lead::create($validated);
 
     // Fetch dynamic recipient email from Company Settings
-    $settings = CompanySetting::first();
+    $settings = CompanySetting::latest('updated_at')->first();
     $recipientEmail = $settings?->email ?? 'sales@diggity.com';
 
     try {
@@ -472,7 +472,7 @@ Route::post('/job-applications', function (Request $request) {
     $application->load('career');
 
     // Fetch dynamic recipient email from Company Settings
-    $settings = CompanySetting::first();
+    $settings = CompanySetting::latest('updated_at')->first();
     $recipientEmail = $settings?->email ?? 'hrd@diggity.com';
 
     try {
@@ -1452,3 +1452,4 @@ Route::get('/update-product-features', function () {
         ], 500);
     }
 });
+
