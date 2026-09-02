@@ -907,6 +907,35 @@ Route::middleware('auth:sanctum')->group(function () {
             'quantity' => 1,
         ]);
 
+        if ($price <= 0) {
+            $order->payment_status = 'paid';
+            $order->status = 'completed';
+            $order->save();
+
+            if ($purchasableModel instanceof \App\Models\Product) {
+                \App\Models\UserLicense::create([
+                    'user_id' => $order->user_id,
+                    'product_id' => $purchasableModel->id,
+                    'license_key' => 'DGTY-LIC-' . strtoupper(\Illuminate\Support\Str::random(16)),
+                    'status' => 'active',
+                    'activated_at' => now(),
+                ]);
+            } else if ($purchasableModel instanceof \App\Models\Course) {
+                \App\Models\Enrollment::create([
+                    'user_id' => $order->user_id,
+                    'course_id' => $purchasableModel->id,
+                    'enrolled_at' => now(),
+                    'status' => 'active',
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'is_free' => true,
+                'order' => $order
+            ]);
+        }
+
         // Midtrans Parameters
         $params = [
             'transaction_details' => [
