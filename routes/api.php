@@ -931,8 +931,8 @@ Route::middleware('auth:sanctum')->group(function () {
         $redirectUrl = '';
 
         try {
-            \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY', 'SB-Mid-server-your-key');
-            \Midtrans\Config::$isProduction = filter_var(env('MIDTRANS_IS_PRODUCTION', false), FILTER_VALIDATE_BOOLEAN);
+            \Midtrans\Config::$serverKey = config('services.midtrans.server_key', 'SB-Mid-server-your-key');
+            \Midtrans\Config::$isProduction = filter_var(config('services.midtrans.is_production', false), FILTER_VALIDATE_BOOLEAN);
             \Midtrans\Config::$isSanitized = true;
             \Midtrans\Config::$is3ds = true;
 
