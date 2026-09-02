@@ -931,9 +931,15 @@ Route::middleware('auth:sanctum')->group(function () {
         $redirectUrl = '';
 
         try {
-            \Midtrans\Config::$serverKey = config('services.midtrans.server_key', 'SB-Mid-server-your-key');
-            \Midtrans\Config::$isProduction = filter_var(config('services.midtrans.is_production', false), FILTER_VALIDATE_BOOLEAN);
+            $rawKey = $_ENV['MIDTRANS_SERVER_KEY'] ?? getenv('MIDTRANS_SERVER_KEY') ?? config('services.midtrans.server_key') ?? 'SB-Mid-server-your-key';
+            $rawIsProd = $_ENV['MIDTRANS_IS_PRODUCTION'] ?? getenv('MIDTRANS_IS_PRODUCTION') ?? config('services.midtrans.is_production') ?? false;
+            
+            \Midtrans\Config::$serverKey = $rawKey;
+            \Midtrans\Config::$isProduction = filter_var($rawIsProd, FILTER_VALIDATE_BOOLEAN);
             \Midtrans\Config::$isSanitized = true;
+            
+            $maskedKey = substr($rawKey, 0, 5) . '***' . substr($rawKey, -4);
+            \Illuminate\Support\Facades\Log::info("MIDTRANS DEBUG - Key being used: {$maskedKey} | Is Prod: " . ($rawIsProd ? 'true' : 'false'));
             \Midtrans\Config::$is3ds = true;
 
             $snapToken = \Midtrans\Snap::getSnapToken($params);
