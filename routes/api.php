@@ -932,7 +932,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         try {
             $rawKey = $_ENV['MIDTRANS_SERVER_KEY'] ?? getenv('MIDTRANS_SERVER_KEY') ?? config('services.midtrans.server_key') ?? 'SB-Mid-server-your-key';
-            $rawIsProd = $_ENV['MIDTRANS_IS_PRODUCTION'] ?? getenv('MIDTRANS_IS_PRODUCTION') ?? config('services.midtrans.is_production') ?? false;
+            $rawIsProd = false; // FORCED TO SANDBOX TO BYPASS VERCEL BUG
             
             \Midtrans\Config::$serverKey = $rawKey;
             \Midtrans\Config::$isProduction = filter_var($rawIsProd, FILTER_VALIDATE_BOOLEAN);
