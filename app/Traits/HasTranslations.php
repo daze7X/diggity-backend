@@ -156,6 +156,15 @@ trait HasTranslations
     {
         $attributes = parent::toArray();
         $translatableFields = $this->getTranslatableFields();
+        if ($this->relationLoaded('translations') || $this->exists) {
+            foreach ($translatableFields as $field) {
+                $translated = $this->getTranslation($field, 'en');
+                if ($translated !== null) {
+                    $attributes['en_' . $field] = $translated;
+                }
+            }
+        }
+        $translatableFields = $this->getTranslatableFields();
         $currentLocale = App::getLocale();
 
         if ($currentLocale !== 'id') {
