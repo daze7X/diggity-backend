@@ -15,7 +15,7 @@ class Product extends Model
 {
     use HasFactory, HasSeo, HasTranslations, LogsActivity;
 
-    protected $translatable = ['name', 'description', 'license_info', 'features'];
+    protected $translatable = ['name', 'description', 'license_info', 'features', 'benefits', 'use_cases', 'specifications', 'integrations', 'faq'];
 
     protected $fillable = [
         'category_id',
@@ -34,11 +34,21 @@ class Product extends Model
         'is_popular',
         'meta_title',
         'meta_description',
+        'benefits',
+        'use_cases',
+        'specifications',
+        'integrations',
+        'faq',
     ];
 
     protected $casts = [
         'features' => 'array',
         'gallery' => 'array',
+        'benefits' => 'array',
+        'use_cases' => 'array',
+        'specifications' => 'array',
+        'integrations' => 'array',
+        'faq' => 'array',
         'price' => 'decimal:2',
         'is_active' => 'boolean',
         'is_popular' => 'boolean',

@@ -518,20 +518,60 @@ Route::get('/products/hierarchy', function () {
 });
 
 // Get products by subcategory
-Route::get('/products/subcategory/{slug}', function ($slug) {
+Route::get('/products/subcategory/{slug}', function (\Illuminate\Http\Request $request, $slug) {
     $subCategory = \App\Models\Category::where('slug', $slug)
         ->whereNotNull('parent_id')
         ->where('type', 'product')
         ->with(['parent'])
         ->firstOrFail();
         
-    $products = \App\Models\Product::where('category_id', $subCategory->id)
-        ->where('is_active', 'true')
-        ->get();
+    $query = \App\Models\Product::where('category_id', $subCategory->id)
+        ->where('is_active', 'true');
+
+        if ($request->has('search')) {
+        $searchTerm = $request->query('search');
+        $query->where(function($q) use ($searchTerm) {
+            $q->where('name', 'like', "%{$searchTerm}%")
+              ->orWhere('description', 'like', "%{$searchTerm}%");
+        });
+    }
+
+    if ($request->has('filter')) {
+        if ($request->query('filter') === 'free') {
+            $query->where('price', 0);
+        } elseif ($request->query('filter') === 'paid' || $request->query('filter') === 'premium') {
+            $query->where('price', '>', 0);
+        }
+    }
+
+    if ($request->has('sort')) {
+        if ($request->query('sort') === 'latest') {
+            $query->orderBy('created_at', 'desc');
+        } elseif ($request->query('sort') === 'oldest') {
+            $query->orderBy('created_at', 'asc');
+        } elseif ($request->query('sort') === 'price_asc') {
+            $query->orderBy('price', 'asc');
+        } elseif ($request->query('sort') === 'price_desc') {
+            $query->orderBy('price', 'desc');
+        } elseif ($request->query('sort') === 'popular') {
+            $query->orderBy('is_popular', 'desc');
+        }
+    } else {
+        // Default sort latest
+        $query->orderBy('created_at', 'desc');
+    }
         
+    $paginated = $query->paginate(12);
+    
     return response()->json([
         'subcategory' => $subCategory,
-        'products' => $products
+        'products' => $paginated->items(),
+        'pagination' => [
+            'current_page' => $paginated->currentPage(),
+            'last_page' => $paginated->lastPage(),
+            'total' => $paginated->total(),
+            'per_page' => $paginated->perPage()
+        ]
     ]);
 });
 
@@ -544,120 +584,55 @@ Route::get('/products', function (\Illuminate\Http\Request $request) {
             $q->where('slug', $categorySlug);
         });
     }
-    
-    return response()->json($query->get());
-});
 
-Route::get('/products/{slug}', function ($slug) {
-    return response()->json(Product::with(['category', 'seoMeta'])->where('slug', $slug)->firstOrFail());
-});
+    if ($request->has('is_popular')) {
+        $query->where('is_popular', 'true');
+    }
 
-// ACADEMY (LMS)
-Route::get('/academy', function (\Illuminate\Http\Request $request) {
-    $query = Course::with('category')->where('is_active', 'true');
-    
-    if ($request->has('category')) {
-        $categorySlug = $request->query('category');
-        $query->whereHas('category', function ($q) use ($categorySlug) {
-            $q->where('slug', $categorySlug);
+        if ($request->has('search')) {
+        $searchTerm = $request->query('search');
+        $query->where(function($q) use ($searchTerm) {
+            $q->where('name', 'like', "%{$searchTerm}%")
+              ->orWhere('description', 'like', "%{$searchTerm}%");
         });
     }
-    
-    return response()->json($query->get());
-});
 
-Route::get('/academy/{slug}', function ($slug) {
-    return response()->json(Course::with(['category', 'modules.lessons', 'seoMeta'])->where('slug', $slug)->firstOrFail());
-});
-
-// INSIGHTS (Blogs)
-Route::get('/insights', function () {
-    return response()->json(Blog::with('category')->latest()->get());
-});
-
-Route::get('/insights/{slug}', function ($slug) {
-    return response()->json(Blog::with(['category', 'seoMeta'])->where('slug', $slug)->firstOrFail());
-});
-
-// JOB CONNECT
-Route::get('/job-connect', function () {
-    return response()->json(Career::where('is_active', 'true')->latest()->get());
-});
-
-Route::get('/job-connect/{slug}', function ($slug) {
-    return response()->json(Career::with(['seoMeta'])->where('slug', $slug)->firstOrFail());
-});
-
-Route::post('/talent-profiles', function (Request $request) {
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'phone' => 'nullable|string|max:50',
-        'type' => 'required|string|in:individual,dedicated_team',
-        'skills' => 'nullable|array',
-        'portfolio_links' => 'nullable|array',
-        'description' => 'nullable|string',
-    ]);
-
-    $profile = TalentProfile::create($validated);
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Talent profile submitted successfully',
-        'data' => $profile
-    ], 201);
-});
-
-// ==========================================
-// USER AUTHENTICATION & PORTAL API
-// ==========================================
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-
-Route::post('/register', function (Request $request) {
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8|confirmed',
-    ]);
-
-    $user = User::create([
-        'name' => $validated['name'],
-        'email' => $validated['email'],
-        'password' => Hash::make($validated['password']),
-        'role' => 'customer', // default role
-    ]);
-
-    $token = $user->createToken('auth_token')->plainTextToken;
-
-    return response()->json([
-        'success' => true,
-        'user' => $user,
-        'token' => $token,
-    ], 201);
-});
-
-Route::post('/login', function (Request $request) {
-    $validated = $request->validate([
-        'email' => 'required|string|email',
-        'password' => 'required|string',
-    ]);
-
-    $user = User::where('email', $validated['email'])->first();
-
-    if (! $user || ! Hash::check($validated['password'], $user->password)) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Email atau password salah.'
-        ], 401);
+    if ($request->has('filter')) {
+        if ($request->query('filter') === 'free') {
+            $query->where('price', 0);
+        } elseif ($request->query('filter') === 'paid' || $request->query('filter') === 'premium') {
+            $query->where('price', '>', 0);
+        }
     }
 
-    $token = $user->createToken('auth_token')->plainTextToken;
-
+    if ($request->has('sort')) {
+        if ($request->query('sort') === 'latest') {
+            $query->orderBy('created_at', 'desc');
+        } elseif ($request->query('sort') === 'oldest') {
+            $query->orderBy('created_at', 'asc');
+        } elseif ($request->query('sort') === 'price_asc') {
+            $query->orderBy('price', 'asc');
+        } elseif ($request->query('sort') === 'price_desc') {
+            $query->orderBy('price', 'desc');
+        } elseif ($request->query('sort') === 'popular') {
+            $query->orderBy('is_popular', 'desc');
+        }
+    } else {
+        // Default sort latest
+        $query->orderBy('created_at', 'desc');
+    }
+        
+    $paginated = $query->paginate(12);
+    
     return response()->json([
-        'success' => true,
-        'user' => $user,
-        'token' => $token,
+        'subcategory' => $subCategory,
+        'products' => $paginated->items(),
+        'pagination' => [
+            'current_page' => $paginated->currentPage(),
+            'last_page' => $paginated->lastPage(),
+            'total' => $paginated->total(),
+            'per_page' => $paginated->perPage()
+        ]
     ]);
 });
 
@@ -835,6 +810,40 @@ Route::middleware('auth:sanctum')->group(function () {
             'completed_lessons' => $completedLessonIds,
             'enrollment_status' => $enrollment->status
         ]);
+    });
+
+        Route::get('/products/{id}/download', function (Request $request, $id) {
+        $user = $request->user();
+        
+        $product = \App\Models\Product::where('id', $id)->where('is_active', 'true')->first();
+        
+        if (!$product) {
+            return response()->json(['success' => false, 'message' => 'Product not found or inactive.'], 404);
+        }
+
+        if (!$product->file_path) {
+            return response()->json(['success' => false, 'message' => 'No downloadable file available for this product.'], 404);
+        }
+
+        // Authorization Check
+        if ($product->price > 0) {
+            $hasLicense = \App\Models\UserLicense::where('user_id', $user->id)
+                ->where('product_id', $product->id)
+                ->where('status', 'active')
+                ->exists();
+
+            if (!$hasLicense) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized. Active license required to download this product.'], 403);
+            }
+        }
+
+        // Check if file exists in storage
+        if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($product->file_path)) {
+            return response()->json(['success' => false, 'message' => 'File not found on server.'], 404);
+        }
+
+        // Return a secure download stream
+        return \Illuminate\Support\Facades\Storage::disk('public')->download($product->file_path);
     });
 
     Route::post('/checkout', function (Request $request) {

@@ -8,6 +8,8 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\KeyValue;
 use Filament\Schemas\Schema;
 
 class ProductForm
@@ -57,13 +59,67 @@ class ProductForm
                     ->required(),
                 Toggle::make('is_popular')
                     ->required(),
+                
+                TagsInput::make('benefits')
+                    ->label('Benefits')
+                    ->placeholder('Tulis benefit lalu tekan Enter...')
+                    ->columnSpanFull(),
+                TagsInput::make('use_cases')
+                    ->label('Use Cases')
+                    ->placeholder('Tulis use case lalu tekan Enter...')
+                    ->columnSpanFull(),
+                KeyValue::make('specifications')
+                    ->label('Specifications')
+                    ->keyLabel('Specification')
+                    ->valueLabel('Value')
+                    ->columnSpanFull(),
+                TagsInput::make('integrations')
+                    ->label('Integrations')
+                    ->placeholder('Tulis integrasi lalu tekan Enter...')
+                    ->columnSpanFull(),
+                Repeater::make('faq')
+                    ->label('FAQ')
+                    ->schema([
+                        TextInput::make('question')
+                            ->label('Question')
+                            ->required(),
+                        Textarea::make('answer')
+                            ->label('Answer')
+                            ->required()
+                            ->columnSpanFull(),
+                    ])
+                    ->defaultItems(0)
+                    ->columnSpanFull(),
+
                 \App\Filament\Resources\Support\SeoForm::make(),
                 \App\Filament\Resources\Support\TranslationForm::make([
                     'name' => 'text',
                     'description' => 'textarea',
                     'license_info' => 'textarea',
                     'features' => 'tags',
+                    'benefits' => 'tags',
+                    'use_cases' => 'tags',
+                    'integrations' => 'tags',
                 ]),
+
+                KeyValue::make('en_specifications')
+                    ->label('Specifications (English)')
+                    ->keyLabel('Specification')
+                    ->valueLabel('Value')
+                    ->columnSpanFull(),
+                Repeater::make('en_faq')
+                    ->label('FAQ (English)')
+                    ->schema([
+                        TextInput::make('question')
+                            ->label('Question')
+                            ->required(),
+                        Textarea::make('answer')
+                            ->label('Answer')
+                            ->required()
+                            ->columnSpanFull(),
+                    ])
+                    ->defaultItems(0)
+                    ->columnSpanFull(),
             ]);
     }
 }
