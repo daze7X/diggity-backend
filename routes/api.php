@@ -838,12 +838,12 @@ Route::middleware('auth:sanctum')->group(function () {
         }
 
         // Check if file exists in storage
-        if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($product->file_path)) {
+        if (!\Illuminate\Support\Facades\Storage::disk('local')->exists($product->file_path)) {
             return response()->json(['success' => false, 'message' => 'File not found on server.'], 404);
         }
 
         // Return a secure download stream
-        return \Illuminate\Support\Facades\Storage::disk('public')->download($product->file_path);
+        return \Illuminate\Support\Facades\Storage::disk('local')->download($product->file_path);
     });
 
     Route::post('/checkout', function (Request $request) {

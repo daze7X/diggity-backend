@@ -54,7 +54,7 @@ class ProductForm
                     ->default('1.0.0'),
                 FileUpload::make('file_path')
                     ->label('Downloadable File (.zip, .pdf)')
-                    ->directory('product_files'),
+                    ->disk('local')->directory('product_files'),
                 Toggle::make('is_active')
                     ->required(),
                 Toggle::make('is_popular')
