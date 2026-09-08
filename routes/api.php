@@ -576,7 +576,7 @@ Route::get('/products/subcategory/{slug}', function (\Illuminate\Http\Request $r
 });
 
 Route::get('/products', function (\Illuminate\Http\Request $request) {
-    $query = Product::with('category')->where('is_active', 'true');
+    $query = Product::with(['category', 'pricings'])->where('is_active', 'true');
     
     if ($request->has('category')) {
         $categorySlug = $request->query('category');
