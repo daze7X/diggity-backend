@@ -504,7 +504,8 @@ Route::get('/solutions/{slug}', function ($slug) {
 // PRODUCTS
 
 // Get hierarchical categories for Products Mega Menu and Hub
-Route::get('/products/hierarchy', function () {
+Route::get('/products/hierarchy', function (\Illuminate\Http\Request $request) {
+    app()->setLocale(in_array($request->query('locale'), ['id', 'en']) ? $request->query('locale') : 'id');
     $mainCategories = \App\Models\Category::whereNull('parent_id')
         ->where('type', 'product')
         ->with(['children' => function($q) {
@@ -519,6 +520,7 @@ Route::get('/products/hierarchy', function () {
 
 // Get products by subcategory
 Route::get('/products/subcategory/{slug}', function (\Illuminate\Http\Request $request, $slug) {
+    app()->setLocale(in_array($request->query('locale'), ['id', 'en']) ? $request->query('locale') : 'id');
     $subCategory = \App\Models\Category::where('slug', $slug)
         ->whereNotNull('parent_id')
         ->where('type', 'product')
@@ -576,6 +578,7 @@ Route::get('/products/subcategory/{slug}', function (\Illuminate\Http\Request $r
 });
 
 Route::get('/products', function (\Illuminate\Http\Request $request) {
+    app()->setLocale(in_array($request->query('locale'), ['id', 'en']) ? $request->query('locale') : 'id');
     $query = Product::with(['category', 'pricings'])->where('is_active', 'true');
     
     if ($request->has('category')) {
