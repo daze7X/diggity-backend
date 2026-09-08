@@ -17,6 +17,7 @@ class UserLicense extends Model
         'status',
         'activated_at',
         'expires_at',
+        'pricing_id',
     ];
 
     protected $casts = [
@@ -32,5 +33,10 @@ class UserLicense extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function pricing(): BelongsTo
+    {
+        return $this->belongsTo(Pricing::class);
     }
 }

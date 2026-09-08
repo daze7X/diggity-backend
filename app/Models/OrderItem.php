@@ -17,6 +17,7 @@ class OrderItem extends Model
         'purchasable_id',
         'price',
         'quantity',
+        'pricing_id',
     ];
 
     protected $casts = [
@@ -32,5 +33,10 @@ class OrderItem extends Model
     public function purchasable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function pricing(): BelongsTo
+    {
+        return $this->belongsTo(Pricing::class);
     }
 }
