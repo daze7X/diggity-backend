@@ -677,12 +677,12 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/user/orders', function (Request $request) {
-        $orders = $request->user()->orders()->with('items.product')->latest()->get();
+        $orders = $request->user()->orders()->with(['items.purchasable.category.parent', 'items.pricing'])->latest()->get();
         return response()->json($orders);
     });
 
     Route::get('/user/products', function (Request $request) {
-        $licenses = $request->user()->licenses()->with('product')->get();
+        $licenses = $request->user()->licenses()->with(['product.category.parent', 'pricing'])->get();
         return response()->json($licenses);
     });
 
