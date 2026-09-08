@@ -852,6 +852,7 @@ Route::middleware('auth:sanctum')->group(function () {
         $validated = $request->validate([
             'purchasable_type' => 'required|string|in:product,course',
             'purchasable_id' => 'required|integer',
+            'pricing_id' => 'nullable|integer',
         ]);
 
         $type = $validated['purchasable_type'];
@@ -860,11 +861,27 @@ Route::middleware('auth:sanctum')->group(function () {
         $purchasableModel = null;
         $price = 0;
         $itemName = '';
+        $pricingId = $validated['pricing_id'] ?? null;
+        $pricingModel = null;
 
         if ($type === 'product') {
             $purchasableModel = \App\Models\Product::findOrFail($id);
             $price = $purchasableModel->price;
             $itemName = $purchasableModel->name;
+
+            if ($pricingId) {
+                $pricingModel = \App\Models\Pricing::where('id', $pricingId)
+                    ->where('product_id', $id)
+                    ->whereIn('pricing_status', ['active', 'promotional'])
+                    ->firstOrFail();
+                
+                if ($pricingModel->sale_price !== null && $pricingModel->sale_price > 0) {
+                    $price = $pricingModel->sale_price;
+                } else {
+                    $price = $pricingModel->numeric_price;
+                }
+                $itemName = $purchasableModel->name . ' - ' . $pricingModel->name;
+            }
 
             // Check if already has license
             $hasLicense = \App\Models\UserLicense::where('user_id', $user->id)
@@ -912,6 +929,7 @@ Route::middleware('auth:sanctum')->group(function () {
             'order_id' => $order->id,
             'purchasable_type' => get_class($purchasableModel),
             'purchasable_id' => $purchasableModel->id,
+            'pricing_id' => $pricingId ?? null,
             'price' => $price,
             'quantity' => 1,
         ]);
@@ -925,6 +943,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 \App\Models\UserLicense::create([
                     'user_id' => $order->user_id,
                     'product_id' => $purchasableModel->id,
+                    'pricing_id' => $pricingId ?? null,
                     'license_key' => 'DGTY-LIC-' . strtoupper(\Illuminate\Support\Str::random(16)),
                     'status' => 'active',
                     'activated_at' => now(),
@@ -1200,6 +1219,7 @@ Route::post('/payment/callback', function (Request $request) {
                 \App\Models\UserLicense::create([
                     'user_id' => $order->user_id,
                     'product_id' => $item->purchasable_id,
+                    'pricing_id' => $item->pricing_id,
                     'license_key' => 'DGTY-LIC-' . strtoupper(\Illuminate\Support\Str::random(16)),
                     'status' => 'active',
                     'activated_at' => now(),
@@ -1243,6 +1263,7 @@ Route::get('/payment/mock-payment', function (Request $request) {
                 \App\Models\UserLicense::create([
                     'user_id' => $order->user_id,
                     'product_id' => $item->purchasable_id,
+                    'pricing_id' => $item->pricing_id,
                     'license_key' => 'DGTY-LIC-' . strtoupper(\Illuminate\Support\Str::random(16)),
                     'status' => 'active',
                     'activated_at' => now(),
