@@ -1483,3 +1483,16 @@ Route::get('/update-product-features', function () {
     }
 });
 
+
+// GET /api/academy
+Route::get('/academy', function (\Illuminate\Http\Request $request) {
+    $query = \App\Models\Course::with('category')->where('is_active', 'true');
+
+    if ($request->has('category')) {
+        $query->whereHas('category', function ($q) use ($request) {
+            $q->where('slug', $request->query('category'));
+        });
+    }
+
+    return response()->json($query->latest()->get());
+});
