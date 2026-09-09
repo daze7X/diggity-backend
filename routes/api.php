@@ -577,6 +577,17 @@ Route::get('/products/subcategory/{slug}', function (\Illuminate\Http\Request $r
     ]);
 });
 
+// Get single product by slug
+Route::get('/products/{slug}', function (\Illuminate\Http\Request $request, $slug) {
+    app()->setLocale(in_array($request->query('locale'), ['id', 'en']) ? $request->query('locale') : 'id');
+    return response()->json(
+        \App\Models\Product::with(['category', 'pricings'])
+            ->where('slug', $slug)
+            ->where('is_active', 'true')
+            ->firstOrFail()
+    );
+});
+
 Route::get('/products', function (\Illuminate\Http\Request $request) {
     app()->setLocale(in_array($request->query('locale'), ['id', 'en']) ? $request->query('locale') : 'id');
     $query = Product::with(['category', 'pricings'])->where('is_active', 'true');
