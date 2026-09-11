@@ -1498,6 +1498,28 @@ Route::get('/update-product-features', function () {
 });
 
 
+// POST /api/register
+Route::post('/register', function (\Illuminate\Http\Request $request) {
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+    ]);
+
+    $user = \App\Models\User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+    ]);
+
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'token' => $token,
+        'user' => $user
+    ]);
+});
+
 // POST /api/login
 Route::post('/login', function (\Illuminate\Http\Request $request) {
     $request->validate([
