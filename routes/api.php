@@ -1187,6 +1187,20 @@ Route::post('/payment/callback', function (Request $request) {
     $orderNumber = $request->input('order_id');
     $transactionStatus = $request->input('transaction_status');
     $fraudStatus = $request->input('fraud_status');
+    $statusCode = $request->input('status_code');
+    $grossAmount = $request->input('gross_amount');
+    $receivedSignature = $request->input('signature_key');
+
+    // Verify Signature Key
+    $serverKey = $_ENV['MIDTRANS_SERVER_KEY'] ?? getenv('MIDTRANS_SERVER_KEY') ?? config('services.midtrans.server_key') ?? 'SB-Mid-server-your-key';
+    $expectedSignature = hash('sha512', $orderNumber . $statusCode . $grossAmount . $serverKey);
+
+    if ($expectedSignature !== $receivedSignature) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid signature key'
+        ], 403);
+    }
 
     $order = \App\Models\Order::where('order_number', $orderNumber)->first();
 
@@ -1257,6 +1271,10 @@ Route::post('/payment/callback', function (Request $request) {
 });
 
 Route::get('/payment/mock-payment', function (Request $request) {
+    if (app()->environment('production') || env('APP_ENV') === 'production' || env('APP_ENV') === 'prod') {
+        return response()->json(['success' => false, 'message' => 'Mock payment is disabled in production.'], 403);
+    }
+
     $orderNumber = $request->query('order');
     $order = \App\Models\Order::where('order_number', $orderNumber)->first();
 
