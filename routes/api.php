@@ -1498,6 +1498,35 @@ Route::get('/update-product-features', function () {
 });
 
 
+// POST /api/login
+Route::post('/login', function (\Illuminate\Http\Request $request) {
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    $user = \App\Models\User::where('email', $request->email)->first();
+
+    if (!$user || !\Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+        return response()->json([
+            'message' => 'Email atau password salah. Silakan periksa kembali.'
+        ], 401);
+    }
+
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'token' => $token,
+        'user' => $user
+    ]);
+});
+
+// POST /api/logout
+Route::middleware('auth:sanctum')->post('/logout', function (\Illuminate\Http\Request $request) {
+    $request->user()->currentAccessToken()->delete();
+    return response()->json(['message' => 'Logged out successfully']);
+});
+
 // GET /api/academy/{slug}
 Route::get('/academy/{slug}', function ($slug) {
     return response()->json(
