@@ -12,10 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('company_settings', function (Blueprint $table) {
-            $table->text('philosophy_build_en')->nullable();
-            $table->text('philosophy_grow_en')->nullable();
-            $table->text('philosophy_scale_en')->nullable();
-            $table->text('philosophy_empower_en')->nullable();
+            if (!Schema::hasColumn('company_settings', 'philosophy_build_en')) {
+                $table->text('philosophy_build_en')->nullable();
+            }
+            if (!Schema::hasColumn('company_settings', 'philosophy_grow_en')) {
+                $table->text('philosophy_grow_en')->nullable();
+            }
+            if (!Schema::hasColumn('company_settings', 'philosophy_scale_en')) {
+                $table->text('philosophy_scale_en')->nullable();
+            }
+            if (!Schema::hasColumn('company_settings', 'philosophy_empower_en')) {
+                $table->text('philosophy_empower_en')->nullable();
+            }
         });
     }
 

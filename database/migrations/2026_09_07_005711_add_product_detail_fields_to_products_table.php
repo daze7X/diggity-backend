@@ -9,11 +9,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->json('benefits')->nullable();
-            $table->json('use_cases')->nullable();
-            $table->json('specifications')->nullable();
-            $table->json('integrations')->nullable();
-            $table->json('faq')->nullable();
+            if (!Schema::hasColumn('products', 'benefits')) {
+                $table->json('benefits')->nullable();
+            }
+            if (!Schema::hasColumn('products', 'use_cases')) {
+                $table->json('use_cases')->nullable();
+            }
+            if (!Schema::hasColumn('products', 'specifications')) {
+                $table->json('specifications')->nullable();
+            }
+            if (!Schema::hasColumn('products', 'integrations')) {
+                $table->json('integrations')->nullable();
+            }
+            if (!Schema::hasColumn('products', 'faq')) {
+                $table->json('faq')->nullable();
+            }
         });
     }
 

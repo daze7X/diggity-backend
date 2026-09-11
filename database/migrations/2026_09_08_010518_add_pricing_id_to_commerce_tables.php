@@ -9,11 +9,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('order_items', function (Blueprint $table) {
-            $table->unsignedBigInteger('pricing_id')->nullable()->after('purchasable_id');
+            if (!Schema::hasColumn('order_items', 'pricing_id')) {
+                $table->unsignedBigInteger('pricing_id')->nullable()->after('purchasable_id');
+            }
         });
 
         Schema::table('user_licenses', function (Blueprint $table) {
-            $table->unsignedBigInteger('pricing_id')->nullable()->after('product_id');
+            if (!Schema::hasColumn('user_licenses', 'pricing_id')) {
+                $table->unsignedBigInteger('pricing_id')->nullable()->after('product_id');
+            }
         });
     }
 

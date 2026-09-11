@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('company_settings', function (Blueprint $table) {
-            $table->string('company_profile_pdf')->nullable()->after('philosophy_empower');
-        });
+        if (!Schema::hasColumn('company_settings', 'company_profile_pdf')) {
+            Schema::table('company_settings', function (Blueprint $table) {
+                $table->string('company_profile_pdf')->nullable()->after('philosophy_empower');
+            });
+        }
     }
 
     /**
