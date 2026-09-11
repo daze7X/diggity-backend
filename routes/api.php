@@ -22,7 +22,27 @@ use App\Models\TalentProfile;
 use App\Mail\LeadSubmittedMail;
 use App\Mail\JobApplicationSubmittedMail;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 
+// Define custom rate limiters
+RateLimiter::for('auth_endpoints', function (Request $request) {
+    return Limit::perMinute(5)->by($request->ip())->response(function (Request $request, array $headers) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Terlalu banyak percobaan. Silakan coba lagi beberapa saat.'
+        ], 429, $headers);
+    });
+});
+
+RateLimiter::for('checkout_endpoint', function (Request $request) {
+    return Limit::perMinute(10)->by($request->user()?->id ?: $request->ip())->response(function (Request $request, array $headers) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Terlalu banyak percobaan. Silakan coba lagi beberapa saat.'
+        ], 429, $headers);
+    });
+});
 /**
  * Verify Google reCAPTCHA v3 token.
  * Gracefully bypasses if RECAPTCHA_SECRET_KEY is empty in .env.
@@ -860,7 +880,7 @@ Route::middleware('auth:sanctum')->group(function () {
         return \Illuminate\Support\Facades\Storage::disk('local')->download($product->file_path);
     });
 
-    Route::post('/checkout', function (Request $request) {
+    Route::middleware('throttle:checkout_endpoint')->post('/checkout', function (Request $request) {
         $user = $request->user();
 
         $validated = $request->validate([
@@ -1517,7 +1537,7 @@ Route::get('/update-product-features', function () {
 
 
 // POST /api/register
-Route::post('/register', function (\Illuminate\Http\Request $request) {
+Route::middleware('throttle:auth_endpoints')->post('/register', function (\Illuminate\Http\Request $request) {
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users',
@@ -1539,7 +1559,7 @@ Route::post('/register', function (\Illuminate\Http\Request $request) {
 });
 
 // POST /api/login
-Route::post('/login', function (\Illuminate\Http\Request $request) {
+Route::middleware('throttle:auth_endpoints')->post('/login', function (\Illuminate\Http\Request $request) {
     $request->validate([
         'email' => 'required|email',
         'password' => 'required',
