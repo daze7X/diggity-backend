@@ -1498,6 +1498,16 @@ Route::get('/update-product-features', function () {
 });
 
 
+// GET /api/academy/{slug}
+Route::get('/academy/{slug}', function ($slug) {
+    return response()->json(
+        \App\Models\Course::with(['category', 'modules.lessons'])
+            ->where('slug', $slug)
+            ->where('is_active', 'true')
+            ->firstOrFail()
+    );
+});
+
 // GET /api/academy
 Route::get('/academy', function (\Illuminate\Http\Request $request) {
     $query = \App\Models\Course::with('category')->where('is_active', 'true');
