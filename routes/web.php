@@ -533,3 +533,8 @@ Route::get('/storage/{path}', function ($path) {
     
     abort(404);
 })->where('path', '.*');
+
+Route::get('/trigger-translate', function () {
+    \Illuminate\Support\Facades\Artisan::call('translate:auto');
+    return '<pre>'.\Illuminate\Support\Facades\Artisan::output().'</pre>';
+});
