@@ -534,7 +534,100 @@ Route::get('/storage/{path}', function ($path) {
     abort(404);
 })->where('path', '.*');
 
-Route::get('/trigger-translate', function () {
-    \Illuminate\Support\Facades\Artisan::call('translate:auto');
-    return '<pre>'.\Illuminate\Support\Facades\Artisan::output().'</pre>';
+Route::get('/auto-translate-ui', function () {
+    $html = '<!DOCTYPE html><html><head><title>Auto Translator</title><style>body{font-family:sans-serif;padding:20px;background:#111;color:#fff;} button{padding:10px 20px;background:#0070f3;color:#fff;border:none;border-radius:5px;cursor:pointer;} #log{margin-top:20px;background:#222;padding:15px;border-radius:5px;height:400px;overflow-y:auto;font-family:monospace;white-space:pre-wrap;}</style></head><body>';
+    $html .= '<h2>Vercel Safe Auto Translator</h2>';
+    $html .= '<p>Click start to translate records one by one (bypasses Vercel 10s timeout).</p>';
+    $html .= '<button id="startBtn">Start Translation</button>';
+    $html .= '<div id="log">Waiting to start...</div>';
+    
+    // JS
+    $html .= '<script>
+        const models = ["Product", "Service", "Category", "Blog", "Portfolio", "CompanySetting", "Faq", "Pricing"];
+        let logDiv = document.getElementById("log");
+        function log(msg) { logDiv.innerHTML += msg + "\\n"; logDiv.scrollTop = logDiv.scrollHeight; }
+        
+        async function processModel(model) {
+            log("Fetching IDs for " + model + "...");
+            try {
+                let res = await fetch("/api/auto-translate-list?model=" + model);
+                let data = await res.json();
+                if (!data.ids || data.ids.length === 0) {
+                    log("No records found for " + model + ".");
+                    return;
+                }
+                log("Found " + data.ids.length + " records for " + model + ". Processing...");
+                for(let id of data.ids) {
+                    log("Translating " + model + " ID " + id + "...");
+                    let execRes = await fetch("/api/auto-translate-exec?model=" + model + "&id=" + id);
+                    let execData = await execRes.json();
+                    if(execData.success) {
+                        log("✅ Success: " + model + " ID " + id);
+                    } else {
+                        log("❌ Failed: " + model + " ID " + id + " (" + execData.message + ")");
+                    }
+                }
+            } catch(e) {
+                log("Error processing " + model + ": " + e.message);
+            }
+        }
+        
+        document.getElementById("startBtn").addEventListener("click", async function() {
+            this.disabled = true;
+            log("--- STARTED ---");
+            for(let model of models) {
+                await processModel(model);
+            }
+            log("--- ALL DONE ---");
+            this.disabled = false;
+        });
+    </script></body></html>';
+    
+    return $html;
+});
+
+Route::get('/api/auto-translate-list', function (\Illuminate\Http\Request $request) {
+    $modelClass = 'App\\Models\\' . $request->model;
+    if (!class_exists($modelClass)) return response()->json(['ids' => []]);
+    try {
+        $ids = $modelClass::pluck('id')->toArray();
+        return response()->json(['ids' => $ids]);
+    } catch(\Exception $e) {
+        return response()->json(['ids' => []]);
+    }
+});
+
+Route::get('/api/auto-translate-exec', function (\Illuminate\Http\Request $request) {
+    $modelClass = 'App\\Models\\' . $request->model;
+    if (!class_exists($modelClass)) return response()->json(['success' => false, 'message' => 'Model not found']);
+    
+    try {
+        $record = $modelClass::find($request->id);
+        if (!$record) return response()->json(['success' => false, 'message' => 'Record not found']);
+        
+        $traits = class_uses_recursive($modelClass);
+        if (!in_array('App\\Traits\\HasTranslations', $traits)) {
+            return response()->json(['success' => false, 'message' => 'Model does not use HasTranslations']);
+        }
+
+        $fields = $record->getTranslatableFields();
+        $translatedAny = false;
+        foreach ($fields as $field) {
+            $existing = $record->getTranslation($field, 'en');
+            $original = $record->getRawOriginal($field);
+            
+            if (empty($existing) && !empty($original)) {
+                $record->{"en_{$field}"} = null;
+                $translatedAny = true;
+            }
+        }
+        
+        if ($translatedAny) {
+            $record->save();
+        }
+        
+        return response()->json(['success' => true]);
+    } catch(\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()]);
+    }
 });
