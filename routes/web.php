@@ -643,7 +643,7 @@ Route::get('/seed-digital-marketplace', function () {
             'message' => 'DigitalMarketplace seeded successfully!',
             'output'  => \Illuminate\Support\Facades\Artisan::output()
         ]);
-    } catch (\Exception \) {
-        return response()->json(['status' => 'error', 'message' => \->getMessage()], 500);
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
     }
 });
