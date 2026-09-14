@@ -631,3 +631,19 @@ Route::get('/api/auto-translate-exec', function (\Illuminate\Http\Request $reque
         return response()->json(['success' => false, 'message' => $e->getMessage()]);
     }
 });
+
+Route::get('/seed-digital-marketplace', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('db:seed', [
+            '--class' => 'DigitalMarketplaceSeeder',
+            '--force' => true,
+        ]);
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'DigitalMarketplace seeded successfully!',
+            'output'  => \Illuminate\Support\Facades\Artisan::output()
+        ]);
+    } catch (\Exception \) {
+        return response()->json(['status' => 'error', 'message' => \->getMessage()], 500);
+    }
+});
