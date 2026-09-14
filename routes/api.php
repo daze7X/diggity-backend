@@ -615,7 +615,10 @@ Route::get('/products', function (\Illuminate\Http\Request $request) {
     if ($request->has('category')) {
         $categorySlug = $request->query('category');
         $query->whereHas('category', function ($q) use ($categorySlug) {
-            $q->where('slug', $categorySlug);
+            $q->where('slug', $categorySlug)
+              ->orWhereHas('parent', function($q2) use ($categorySlug) {
+                  $q2->where('slug', $categorySlug);
+              });
         });
     }
 
