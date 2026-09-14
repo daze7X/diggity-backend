@@ -11,16 +11,15 @@ class DigitalMarketplaceSeeder extends Seeder
 {
     public function run()
     {
-        \ = Category::firstOrCreate([
+        $hubCategory = Category::firstOrCreate([
             'slug' => 'digital-marketplace',
         ], [
             'name' => 'Digital Marketplace',
             'type' => 'product',
             'description' => 'Katalog aset digital premium siap pakai.',
-            'is_active' => true,
         ]);
 
-        \ = [
+        $structure = [
             'Graphics' => [
                 'Illustrations' => [
                     ['name' => 'Modern Business Illustration Pack', 'desc' => 'Creative illustrations and visual assets.', 'price' => 99000, 'is_popular' => true, 'is_featured' => true],
@@ -73,46 +72,51 @@ class DigitalMarketplaceSeeder extends Seeder
             ]
         ];
 
-        foreach (\ as \ => \) {
-            \ = Category::firstOrCreate([
-                'slug' => Str::slug(\),
+        foreach ($structure as $mainName => $subcategories) {
+            $mainCat = Category::firstOrCreate([
+                'slug' => Str::slug($mainName),
             ], [
-                'name' => \,
-                'parent_id' => \->id,
+                'name' => $mainName,
+                'parent_id' => $hubCategory->id,
                 'type' => 'product',
-                'is_active' => true,
             ]);
 
-            foreach (\ as \ => \) {
-                \ = Category::firstOrCreate([
-                    'slug' => Str::slug(\),
+            foreach ($subcategories as $subName => $products) {
+                $subCat = Category::firstOrCreate([
+                    'slug' => Str::slug($subName),
                 ], [
-                    'name' => \,
-                    'parent_id' => \->id,
+                    'name' => $subName,
+                    'parent_id' => $mainCat->id,
                     'type' => 'product',
-                    'is_active' => true,
                 ]);
 
-                foreach (\ as \) {
+                foreach ($products as $prodData) {
                     Product::firstOrCreate([
-                        'slug' => Str::slug(\['name']),
+                        'slug' => Str::slug($prodData['name']),
                     ], [
-                        'name' => \['name'],
-                        'description' => \['desc'],
-                        'short_description' => \['desc'],
-                        'category_id' => \->id,
+                        'name' => $prodData['name'],
+                        'description' => $prodData['desc'],
+                        'category_id' => $subCat->id,
                         'is_active' => true,
-                        'is_featured' => \['is_featured'],
-                        'is_popular' => \['is_popular'],
+                        'is_popular' => $prodData['is_popular'],
                     ]);
                     
-                    \ = Product::where('slug', Str::slug(\['name']))->first();
-                    if (\ && \->pricings()->count() == 0) {
-                        \->pricings()->create([
-                            'pricing_label' => ['en' => (\['price'] > 0 ? 'Premium' : 'Free'), 'id' => (\['price'] > 0 ? 'Berbayar' : 'Gratis')],
-                            'type' => \['price'] > 0 ? 'paid' : 'free',
-                            'price' => \['price'],
+                    $product = Product::where('slug', Str::slug($prodData['name']))->first();
+                    if ($product && $product->pricings()->count() == 0) {
+                        \Illuminate\Support\Facades\DB::table('pricings')->insert([
+                            'product_id' => $product->id,
+                            'name' => json_encode(['en' => 'Standard License', 'id' => 'Lisensi Standar']),
+                            'pricing_label' => json_encode(['en' => ($prodData['price'] > 0 ? 'Premium' : 'Free'), 'id' => ($prodData['price'] > 0 ? 'Berbayar' : 'Gratis')]),
+                            'pricing_type' => $prodData['price'] > 0 ? 'paid' : 'free',
+                            'numeric_price' => $prodData['price'],
+                            'price' => 'Rp' . number_format($prodData['price'], 0, ',', '.'),
                             'currency' => 'IDR',
+                            'pricing_status' => 'active',
+                            'period' => json_encode(['en' => 'Lifetime', 'id' => 'Selamanya']),
+                            'description' => json_encode(['en' => 'Standard features', 'id' => 'Fitur standar']),
+                            'features' => json_encode(['en' => ['Lifetime Access', 'Updates Included', 'Premium Support'], 'id' => ['Akses Selamanya', 'Termasuk Update', 'Dukungan Premium']]),
+                            'created_at' => now(),
+                            'updated_at' => now(),
                         ]);
                     }
                 }

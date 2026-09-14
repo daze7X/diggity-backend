@@ -1625,10 +1625,10 @@ Route::get('/seed-digital-marketplace', function () {
             'message' => 'DigitalMarketplaceSeeder ran successfully!',
             'output'  => \Illuminate\Support\Facades\Artisan::output()
         ]);
-    } catch (\Exception \) {
+    } catch (\Exception $e) {
         return response()->json([
             'status'  => 'error',
-            'message' => \->getMessage()
+            'message' => $e->getMessage()
         ], 500);
     }
 });
