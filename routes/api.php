@@ -1612,3 +1612,23 @@ Route::get('/academy', function (\Illuminate\Http\Request $request) {
 
     return response()->json($query->latest()->get());
 });
+
+// GET /api/seed-digital-marketplace
+Route::get('/seed-digital-marketplace', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('db:seed', [
+            '--class' => 'DigitalMarketplaceSeeder',
+            '--force' => true,
+        ]);
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'DigitalMarketplaceSeeder ran successfully!',
+            'output'  => \Illuminate\Support\Facades\Artisan::output()
+        ]);
+    } catch (\Exception \) {
+        return response()->json([
+            'status'  => 'error',
+            'message' => \->getMessage()
+        ], 500);
+    }
+});
