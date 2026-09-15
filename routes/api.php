@@ -662,7 +662,6 @@ Route::get('/products', function (\Illuminate\Http\Request $request) {
     $paginated = $query->paginate(12);
     
     return response()->json([
-        'subcategory' => $subCategory,
         'products' => $paginated->items(),
         'pagination' => [
             'current_page' => $paginated->currentPage(),
