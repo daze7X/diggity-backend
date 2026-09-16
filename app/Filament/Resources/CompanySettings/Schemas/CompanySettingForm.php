@@ -122,6 +122,32 @@ class CompanySettingForm
                                     ->columnSpanFull(),
                             ]),
 
+                        Tab::make('Nilai Perusahaan')
+                            ->components([
+                                Repeater::make('company_values')
+                                    ->label('Nilai-Nilai Perusahaan')
+                                    ->schema([
+                                        TextInput::make('icon')
+                                            ->label('Icon (contoh: Compass, ShieldCheck, Award, Users, dll)')
+                                            ->placeholder('Nama icon dari Lucide')
+                                            ->required(),
+                                        TextInput::make('title')
+                                            ->label('Judul Nilai (ID)')
+                                            ->required(),
+                                        TextInput::make('title_en')
+                                            ->label('Judul Nilai (EN)'),
+                                        Textarea::make('desc')
+                                            ->label('Deskripsi (ID)')
+                                            ->rows(2)
+                                            ->required(),
+                                        Textarea::make('desc_en')
+                                            ->label('Deskripsi (EN)')
+                                            ->rows(2),
+                                    ])
+                                    ->grid(2)
+                                    ->columnSpanFull(),
+                            ]),
+
                         Tab::make('Visi & Misi')
                             ->components([
                                 Textarea::make('vision_id')
@@ -164,12 +190,17 @@ class CompanySettingForm
                                             ->label('Tahun')
                                             ->required(),
                                         TextInput::make('title')
-                                            ->label('Judul Milestone')
+                                            ->label('Judul Milestone (ID)')
                                             ->required(),
+                                        TextInput::make('title_en')
+                                            ->label('Judul Milestone (EN)'),
                                         Textarea::make('desc')
-                                            ->label('Deskripsi')
+                                            ->label('Deskripsi (ID)')
                                             ->rows(2)
                                             ->required(),
+                                        Textarea::make('desc_en')
+                                            ->label('Deskripsi (EN)')
+                                            ->rows(2),
                                     ])
                                     ->grid(2)
                                     ->columnSpanFull(),
@@ -180,25 +211,11 @@ class CompanySettingForm
                 \Filament\Schemas\Components\Section::make('English Translations (Lokalisasi EN)')
                     ->collapsed()
                     ->schema([
-                        Textarea::make('en_history_text_id')->label('Sejarah Singkat (EN)')->rows(4),
-                        Textarea::make('en_philosophy_build')->label('Filosofi - Build (EN)')->rows(2),
-                        Textarea::make('en_philosophy_grow')->label('Filosofi - Grow (EN)')->rows(2),
-                        Textarea::make('en_philosophy_scale')->label('Filosofi - Scale (EN)')->rows(2),
-                        Textarea::make('en_philosophy_empower')->label('Filosofi - Empower (EN)')->rows(2),
-                        Repeater::make('en_history_timeline')
-                            ->label('Timeline Sejarah Perusahaan (EN)')
-                            ->schema([
-                                TextInput::make('year')
-                                    ->label('Tahun'),
-                                TextInput::make('title')
-                                    ->label('Judul Milestone (EN)'),
-                                Textarea::make('desc')
-                                    ->label('Deskripsi (EN)')
-                                    ->rows(2),
-                            ])
-                            ->grid(2)
-                            ->columnSpanFull()
-                            ->helperText('Kosongkan baris di sini jika ingin menggunakan Auto-Translate dari Milestones Sejarah di atas.'),
+                        Textarea::make('history_text_en')->label('Sejarah Singkat (EN)')->rows(4),
+                        Textarea::make('philosophy_build_en')->label('Filosofi - Build (EN)')->rows(2),
+                        Textarea::make('philosophy_grow_en')->label('Filosofi - Grow (EN)')->rows(2),
+                        Textarea::make('philosophy_scale_en')->label('Filosofi - Scale (EN)')->rows(2),
+                        Textarea::make('philosophy_empower_en')->label('Filosofi - Empower (EN)')->rows(2),
                     ])
                     ->columnSpanFull(),
             ]);

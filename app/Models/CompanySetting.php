@@ -9,7 +9,7 @@ class CompanySetting extends Model
 {
     use HasTranslations;
 
-    protected $translatable = ['philosophy_build', 'philosophy_grow', 'philosophy_scale', 'philosophy_empower', 'history_text_id', 'history_timeline'];
+    protected $translatable = [];
 
     protected $fillable = [
         'name',
@@ -40,7 +40,8 @@ class CompanySetting extends Model
         'philosophy_build_en',
         'philosophy_grow_en',
         'philosophy_scale_en',
-        'philosophy_empower_en'
+        'philosophy_empower_en',
+        'company_values'
     ];
 
     protected $casts = [
@@ -48,6 +49,7 @@ class CompanySetting extends Model
         'history_timeline' => 'array',
         'mission_id' => 'array',
         'mission_en' => 'array',
+        'company_values' => 'array',
     ];
 }
 
