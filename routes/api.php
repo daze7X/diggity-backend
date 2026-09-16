@@ -544,11 +544,23 @@ Route::get('/products/subcategory/{slug}', function (\Illuminate\Http\Request $r
     $subCategory = \App\Models\Category::where('slug', $slug)
         ->whereNotNull('parent_id')
         ->where('type', 'product')
-        ->with(['parent'])
+        ->with(['parent', 'children'])
         ->firstOrFail();
         
-    $query = \App\Models\Product::where('category_id', $subCategory->id)
+    // Fetch children IDs to include sub-subcategory products
+    $subCategoryIds = \App\Models\Category::where('parent_id', $subCategory->id)->pluck('id')->toArray();
+    $subCategoryIds[] = $subCategory->id;
+
+    $query = \App\Models\Product::whereIn('category_id', $subCategoryIds)
         ->where('is_active', 'true');
+
+    if ($request->has('types')) {
+        $types = explode(',', $request->query('types'));
+        $typeCategoryIds = \App\Models\Category::whereIn('slug', $types)->pluck('id')->toArray();
+        if (!empty($typeCategoryIds)) {
+            $query->whereIn('category_id', $typeCategoryIds);
+        }
+    }
 
         if ($request->has('search')) {
         $searchTerm = $request->query('search');
