@@ -1722,3 +1722,4 @@ Route::get("/fill-dummy", function () {
     }
     return "Dummy data and English translations injected successfully!";
 });
+Route::get("/fix-marketplace-billing", function() { $products = App\Models\Product::whereHas("category.parent", function($q) { $q->where("slug", "digital-marketplace"); })->get(); foreach($products as $p) { $p->billing_period = "one_time"; $p->file_path = "dummy.zip"; $p->save(); } return "Marketplace products billing fixed!"; });
