@@ -1723,3 +1723,38 @@ Route::get("/fill-dummy", function () {
     return "Dummy data and English translations injected successfully!";
 });
 Route::get("/fix-marketplace-billing", function() { $products = App\Models\Product::whereHas("category.parent", function($q) { $q->where("slug", "digital-marketplace"); })->get(); foreach($products as $p) { $p->billing_period = "one_time"; $p->file_path = "dummy.zip"; $p->save(); } return "Marketplace products billing fixed!"; });
+Route::get('/fill-dummy-en-software', function() {
+    $products = App\Models\Product::whereHas('category.parent', function($q) {
+        $q->where('slug', 'business-software');
+    })->get();
+
+    foreach($products as $product) {
+        $product->saveTranslation('en', 'description', 'Professional and scalable software solution designed to streamline your business operations. Built with cutting-edge technology for maximum security and performance.');
+        
+        $product->saveTranslation('en', 'benefits', [
+            'Increase Productivity',
+            'Advanced Security',
+            '24/7 Dedicated Support',
+            'Seamless Integration'
+        ]);
+
+        $product->saveTranslation('en', 'faq', [
+            [
+                'question' => 'Is this scalable for enterprise?',
+                'answer' => 'Yes, our architecture is designed to handle high traffic and scale according to your business needs.'
+            ],
+            [
+                'question' => 'Do you provide technical support?',
+                'answer' => 'Absolutely. We provide 24/7 dedicated technical support for all our enterprise clients.'
+            ]
+        ]);
+
+        $product->saveTranslation('en', 'features', [
+            'Cloud-based Architecture',
+            'Real-time Analytics Dashboard',
+            'Automated Workflows',
+            'Role-based Access Control'
+        ]);
+    }
+    return 'Business Software English translations injected successfully!';
+});
