@@ -532,8 +532,33 @@ Route::get('/products/hierarchy', function (\Illuminate\Http\Request $request) {
             $q->withCount(['products' => function($q2) {
                 $q2->where('is_active', 'true');
             }]);
+            // Also load sub-subcategories to aggregate their counts
+            $q->with(['children' => function($q3) {
+                $q3->withCount(['products' => function($q4) {
+                    $q4->where('is_active', 'true');
+                }]);
+            }]);
+        }])
+        ->withCount(['products' => function($q) {
+            $q->where('is_active', 'true');
         }])
         ->get();
+        
+    // Recursively sum product counts for accurate display
+    $mainCategories->each(function ($main) {
+        $main->children->each(function ($child) {
+            $recursiveCount = $child->products_count;
+            if ($child->children) {
+                foreach ($child->children as $subChild) {
+                    $recursiveCount += $subChild->products_count;
+                }
+            }
+            // Overwrite the count with the total aggregated count
+            $child->products_count = $recursiveCount;
+            // Clean up the response payload
+            unset($child->children);
+        });
+    });
         
     return response()->json($mainCategories);
 });
