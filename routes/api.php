@@ -1702,7 +1702,23 @@ Route::get("/fill-dummy", function () {
         if ($changed) {
             $product->save();
         }
+        
+        // Also ensure English translations are saved for this dummy data
+        if (str_starts_with($product->description, "Aset digital berkualitas tinggi")) {
+            $product->saveTranslation("en", "description", "High quality digital asset professionally designed to help accelerate your creative process. Built with industry standards, easily customizable, and compatible with modern software. Perfect for your commercial or personal projects requiring a premium touch.");
+            $product->saveTranslation("en", "benefits", ["Save 10x Time", "Industry Standard Quality", "Full Support", "Lifetime Access"]);
+            $product->saveTranslation("en", "faq", [
+                ["question" => "Is this file easy to edit?", "answer" => "Absolutely! All files are neatly organized with properly named layers to make it easy for you to edit as needed."],
+                ["question" => "Can I use this for clients?", "answer" => "Definitely! With our standard license, you are free to use it for various commercial projects."]
+            ]);
+            $product->saveTranslation("en", "specifications", [
+                ["key" => "File Format", "value" => ".ZIP, .PSD, .FIG"],
+                ["key" => "File Size", "value" => "124 MB"],
+                ["key" => "License", "value" => "Commercial Use"],
+                ["key" => "Resolution", "value" => "4K Ultra HD"],
+                ["key" => "Layered", "value" => "Yes, well organized"]
+            ]);
+        }
     }
-    return "Dummy data injected successfully!";
+    return "Dummy data and English translations injected successfully!";
 });
-
