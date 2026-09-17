@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -1668,7 +1669,7 @@ Route::get('/seed-digital-marketplace', function () {
         ], 500);
     }
 });
-use Illuminate\Support\Facades\Route;
+
 Route::get("/fill-dummy", function () {
     $products = \App\Models\Product::all();
     foreach ($products as $product) {
