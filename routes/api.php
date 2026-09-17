@@ -1668,3 +1668,40 @@ Route::get('/seed-digital-marketplace', function () {
         ], 500);
     }
 });
+use Illuminate\Support\Facades\Route;
+Route::get("/fill-dummy", function () {
+    $products = \App\Models\Product::all();
+    foreach ($products as $product) {
+        $changed = false;
+        if (empty($product->description) || strlen($product->description) < 50) {
+            $product->description = "Aset digital berkualitas tinggi ini dirancang secara profesional untuk membantu mempercepat proses kreatif Anda. Dibuat dengan standar industri terbaik, mudah disesuaikan, dan kompatibel dengan berbagai software modern. Sangat cocok digunakan untuk proyek komersial maupun personal Anda yang membutuhkan sentuhan premium.";
+            $changed = true;
+        }
+        if (empty($product->specifications)) {
+            $product->specifications = [
+                ["key" => "Format File", "value" => ".ZIP, .PSD, .FIG"],
+                ["key" => "Ukuran File", "value" => "124 MB"],
+                ["key" => "Lisensi", "value" => "Commercial Use"],
+                ["key" => "Resolusi", "value" => "4K Ultra HD"],
+                ["key" => "Layered", "value" => "Yes, well organized"]
+            ];
+            $changed = true;
+        }
+        if (empty($product->benefits)) {
+            $product->benefits = ["Hemat Waktu 10x Lipat", "Kualitas Standar Industri", "Support Penuh", "Akses Seumur Hidup"];
+            $changed = true;
+        }
+        if (empty($product->faq)) {
+            $product->faq = [
+                ["question" => "Apakah file ini mudah diedit?", "answer" => "Tentu saja! Semua file sudah tersusun rapi dengan layer yang dinamai dengan benar agar memudahkan Anda mengedit sesuai kebutuhan."],
+                ["question" => "Bolehkah saya menggunakan ini untuk klien?", "answer" => "Sangat boleh! Dengan lisensi standar kami, Anda bebas menggunakannya untuk berbagai proyek komersial."]
+            ];
+            $changed = true;
+        }
+        if ($changed) {
+            $product->save();
+        }
+    }
+    return "Dummy data injected successfully!";
+});
+
