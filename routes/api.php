@@ -1758,3 +1758,34 @@ Route::get('/fill-dummy-en-software', function() {
     }
     return 'Business Software English translations injected successfully!';
 });
+Route::get('/inject-missing-blocks', function() {
+    $products = App\Models\Product::whereHas('category.parent', function($q) {
+        $q->where('slug', 'business-software');
+    })->get();
+
+    foreach($products as $product) {
+        // Inject Base (Indonesian) if empty
+        if (empty($product->use_cases)) {
+            $product->use_cases = ['Bisnis Skala Menengah', 'Perusahaan Enterprise', 'Startup Digital'];
+        }
+        if (empty($product->integrations)) {
+            $product->integrations = ['Google Workspace', 'Stripe', 'WhatsApp Business', 'AWS Cloud'];
+        }
+        $product->save();
+
+        // Inject English Translations
+        $product->saveTranslation('en', 'use_cases', [
+            'Medium Businesses',
+            'Enterprise Companies',
+            'Digital Startups'
+        ]);
+
+        $product->saveTranslation('en', 'integrations', [
+            'Google Workspace',
+            'Stripe',
+            'WhatsApp Business',
+            'AWS Cloud'
+        ]);
+    }
+    return 'Missing Use Cases and Integrations injected successfully!';
+});
