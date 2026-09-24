@@ -647,3 +647,19 @@ Route::get('/seed-digital-marketplace', function () {
         return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
     }
 });
+
+Route::get('/seed-academy', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('db:seed', [
+            '--class' => 'AcademySeeder',
+            '--force' => true,
+        ]);
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Academy seeded successfully!',
+            'output'  => \Illuminate\Support\Facades\Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+    }
+});

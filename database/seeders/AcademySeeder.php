@@ -16,22 +16,11 @@ class AcademySeeder extends Seeder
     {
         // 1. Buat Kategori Academy sesuai dengan UI frontend
         $categories = [
-            [
-                'name' => 'Coding Bootcamps',
-                'description' => 'Intensive coding bootcamps with industry-standard certification.',
-            ],
-            [
-                'name' => 'Corporate IT Training',
-                'description' => 'In-house customized tech training and upskilling for companies.',
-            ],
-            [
-                'name' => 'Self-Paced E-Courses',
-                'description' => 'Self-paced coding courses with quizzes and assessments.',
-            ],
-            [
-                'name' => 'Digital E-Books',
-                'description' => 'Download free programming guides and software engineering ebooks.',
-            ],
+            ['name' => 'Programming', 'description' => 'Learn coding and software engineering.'],
+            ['name' => 'UI/UX Design', 'description' => 'Master user interface and user experience design.'],
+            ['name' => 'Digital Marketing', 'description' => 'Learn SEO, SEM, and social media marketing.'],
+            ['name' => 'Data Science', 'description' => 'Data analysis, machine learning, and AI.'],
+            ['name' => 'Business', 'description' => 'Product management and business strategies.'],
         ];
 
         $categoryMap = [];
@@ -49,60 +38,88 @@ class AcademySeeder extends Seeder
         // 2. Buat Dummy Courses untuk masing-masing kategori
         $courses = [
             [
-                'category_id' => $categoryMap['Coding Bootcamps'],
-                'title' => 'Fullstack Web Development (MERN Stack)',
-                'slug' => 'fullstack-web-development-mern',
-                'description' => 'Bootcamp intensif selama 12 minggu. Pelajari React, Node.js, Express, dan MongoDB dari nol hingga siap kerja. Termasuk penyaluran kerja dan sertifikasi industri.',
-                'syllabus' => 'Minggu 1: HTML/CSS Lanjut, Minggu 2: JavaScript Modern, Minggu 3-5: React JS, Minggu 6-8: Node & Express, Minggu 9-10: MongoDB, Minggu 11-12: Final Project & Career Prep.',
+                'category_id' => $categoryMap['Programming'],
+                'title' => 'Mastering React & Next.js 14',
+                'slug' => 'mastering-react-nextjs-14',
+                'type' => 'online_course',
+                'description' => 'Pelajari web development modern menggunakan React, Next.js App Router, Tailwind CSS, dan Server Actions untuk membangun aplikasi production-ready.',
+                'syllabus' => "Module 1: Introduction to Modern React\nModule 2: Hooks & State Management\nModule 3: Next.js 14 App Router Basics",
                 'instructor_name' => 'Budi Santoso',
-                'instructor_title' => 'Senior Frontend Engineer',
-                'price' => 5000000.00,
+                'instructor_title' => 'Senior Frontend Engineer @ TechCorp',
+                'instructor_bio' => 'Budi memiliki lebih dari 8 tahun pengalaman membangun aplikasi web skala besar. Ia sangat menyukai mengajar dan telah membantu ribuan siswa beralih ke industri teknologi.',
+                'price' => 499000,
+                'original_price' => 899000,
+                'duration' => '24.5 Hours',
+                'rating' => 4.9,
+                'reviews_count' => 1250,
+                'total_students' => 2100,
+                'badge' => 'Best Seller',
+                'benefits' => [
+                    ['feature' => '24.5 Hours on-demand video'],
+                    ['feature' => 'Downloadable resources & slides'],
+                    ['feature' => 'Access on mobile and desktop'],
+                    ['feature' => 'Official Certificate of completion'],
+                    ['feature' => 'Access to community forum'],
+                ],
                 'is_active' => true,
                 'is_featured' => true,
             ],
             [
-                'category_id' => $categoryMap['Corporate IT Training'],
-                'title' => 'Cybersecurity Essentials for Enterprise',
-                'slug' => 'cybersecurity-essentials-enterprise',
-                'description' => 'Pelatihan in-house untuk staf IT perusahaan Anda. Fokus pada keamanan jaringan, mitigasi risiko, dan standar keamanan ISO 27001.',
-                'syllabus' => 'Modul 1: Network Security, Modul 2: Threat Modeling, Modul 3: Penetration Testing Basics, Modul 4: ISO 27001 Compliance.',
-                'instructor_name' => 'Rina Wijaya',
-                'instructor_title' => 'Security Consultant',
-                'price' => 15000000.00, // Harga korporat
+                'category_id' => $categoryMap['UI/UX Design'],
+                'title' => 'UI/UX Design for Beginners',
+                'slug' => 'ui-ux-design-for-beginners',
+                'type' => 'online_course',
+                'description' => 'Mulai karir UI/UX design kamu dari nol. Belajar Figma, wireframing, dan dasar-dasar riset pengguna.',
+                'syllabus' => "Module 1: Design Fundamentals\nModule 2: Mastering Figma\nModule 3: User Research",
+                'instructor_name' => 'Sarah Wijaya',
+                'instructor_title' => 'Lead Product Designer',
+                'instructor_bio' => 'Sarah adalah desainer produk dengan pengalaman di berbagai startup unicorn.',
+                'price' => 399000,
+                'original_price' => null,
+                'duration' => '15 Hours',
+                'rating' => 4.8,
+                'reviews_count' => 890,
+                'total_students' => 1800,
+                'badge' => 'New',
+                'benefits' => [
+                    ['feature' => '15 Hours on-demand video'],
+                    ['feature' => 'Figma UI Kits included'],
+                    ['feature' => 'Official Certificate of completion'],
+                ],
                 'is_active' => true,
                 'is_featured' => false,
             ],
             [
-                'category_id' => $categoryMap['Self-Paced E-Courses'],
-                'title' => 'Mastering Next.js 14 (App Router)',
-                'slug' => 'mastering-nextjs-14',
-                'description' => 'Kursus mandiri (self-paced) untuk menguasai Next.js terbaru dengan App Router, Server Actions, dan Tailwind CSS. Tonton video kapan saja.',
-                'syllabus' => '1. Pengenalan App Router, 2. Server vs Client Components, 3. Data Fetching, 4. Server Actions, 5. Deployment.',
-                'instructor_name' => 'Diggity Team',
-                'instructor_title' => 'Official Instructor',
-                'price' => 450000.00,
+                'category_id' => $categoryMap['Programming'],
+                'title' => 'Fullstack Web Development Bootcamp',
+                'slug' => 'fullstack-web-development-bootcamp',
+                'type' => 'bootcamp',
+                'description' => 'Bootcamp intensif selama 12 minggu. Pelajari React, Node.js, Express, dan MongoDB dari nol hingga siap kerja.',
+                'syllabus' => "Minggu 1: HTML/CSS Lanjut\nMinggu 2: JavaScript Modern\nMinggu 3-5: React JS",
+                'instructor_name' => 'Ahmad Rizki',
+                'instructor_title' => 'Engineering Manager',
+                'instructor_bio' => 'Ahmad adalah Engineering Manager yang sering menguji kandidat developer baru.',
+                'price' => 5000000,
+                'original_price' => 7500000,
+                'duration' => '3 Months',
+                'rating' => 5.0,
+                'reviews_count' => 120,
+                'total_students' => 350,
+                'badge' => 'Intensive',
+                'benefits' => [
+                    ['feature' => 'Live mentoring 3x seminggu'],
+                    ['feature' => 'Jaminan penyaluran kerja'],
+                    ['feature' => 'Review CV & Portfolio'],
+                ],
                 'is_active' => true,
                 'is_featured' => true,
-            ],
-            [
-                'category_id' => $categoryMap['Digital E-Books'],
-                'title' => 'Buku Panduan Clean Architecture',
-                'slug' => 'ebook-clean-architecture',
-                'description' => 'E-book gratis setebal 100+ halaman yang membahas implementasi Clean Architecture pada project Node.js dan Laravel.',
-                'syllabus' => 'Bab 1: Pendahuluan, Bab 2: Domain Layer, Bab 3: Application Layer, Bab 4: Infrastructure Layer, Bab 5: Presentation Layer.',
-                'instructor_name' => 'Diggity Team',
-                'instructor_title' => 'Authors',
-                'price' => 0.00, // Gratis
-                'is_active' => true,
-                'is_featured' => false,
             ]
         ];
 
         foreach ($courses as $courseData) {
-            Course::firstOrCreate(
-                ['slug' => $courseData['slug']],
-                $courseData
-            );
+            $course = Course::firstOrNew(['slug' => $courseData['slug']]);
+            $course->fill($courseData);
+            $course->save();
         }
     }
 }
