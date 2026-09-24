@@ -16,19 +16,29 @@ class Course extends Model
 {
     use HasFactory, HasSeo, HasTranslations, LogsActivity;
 
-    protected $translatable = ['title', 'description', 'syllabus', 'instructor_title'];
+    protected $translatable = ['title', 'description', 'syllabus', 'instructor_title', 'instructor_bio'];
 
     protected $fillable = [
         'category_id',
         'title',
         'slug',
+        'type',
         'description',
         'syllabus',
         'instructor_name',
         'instructor_title',
+        'instructor_bio',
+        'instructor_avatar',
         'price',
+        'original_price',
+        'duration',
+        'total_students',
+        'rating',
+        'reviews_count',
         'is_active',
         'is_featured',
+        'badge',
+        'benefits',
         'image',
         'meta_title',
         'meta_description',
@@ -36,8 +46,11 @@ class Course extends Model
 
     protected $casts = [
         'price' => 'decimal:2',
+        'original_price' => 'decimal:2',
+        'rating' => 'decimal:1',
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
+        'benefits' => 'array',
     ];
 
     public function setIsActiveAttribute($value)

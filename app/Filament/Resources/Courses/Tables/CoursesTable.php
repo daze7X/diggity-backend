@@ -20,6 +20,24 @@ class CoursesTable
                     ->searchable(),
                 TextColumn::make('title')
                     ->searchable(),
+                TextColumn::make('type')
+                    ->badge()
+                    ->colors([
+                        'primary' => 'online_course',
+                        'success' => 'bootcamp',
+                        'warning' => 'learning_path',
+                    ])
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'online_course' => 'Online Course',
+                        'bootcamp' => 'Bootcamp',
+                        'learning_path' => 'Learning Path',
+                        default => $state,
+                    })
+                    ->sortable(),
+                TextColumn::make('badge')
+                    ->label('Promo Badge')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('slug')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),

@@ -7,6 +7,9 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Repeater;
 use Filament\Schemas\Schema;
 
 class CourseForm
@@ -15,35 +18,59 @@ class CourseForm
     {
         return $schema
             ->components([
-                Select::make('category_id')
-                    ->relationship('category', 'name', fn ($query) => $query->where('type', 'academy')),
-                TextInput::make('title')
-                    ->required(),
-                TextInput::make('slug')
-                    ->required(),
-                Textarea::make('description')
-                    ->columnSpanFull(),
-                Textarea::make('syllabus')
-                    ->columnSpanFull(),
-                TextInput::make('instructor_name'),
-                TextInput::make('instructor_title'),
-                TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->default(0)
-                    ->prefix('$'),
-                Toggle::make('is_active')
-                    ->required(),
-                Toggle::make('is_featured')
-                    ->required(),
-                FileUpload::make('image')
-                    ->image(),
+                Grid::make(3)->schema([
+                    Section::make('General Information')->schema([
+                        TextInput::make('title')->required(),
+                        TextInput::make('slug')->required(),
+                        Select::make('type')->options([
+                            'online_course' => 'Online Course',
+                            'bootcamp' => 'Bootcamp',
+                            'learning_path' => 'Learning Path',
+                        ])->default('online_course')->required(),
+                        Select::make('category_id')
+                            ->relationship('category', 'name', fn ($query) => $query->where('type', 'academy')),
+                        Textarea::make('description')->columnSpanFull(),
+                        Textarea::make('syllabus')->columnSpanFull(),
+                        FileUpload::make('image')->image()->columnSpanFull(),
+                    ])->columnSpan(2),
+
+                    Section::make('Pricing & Stats')->schema([
+                        TextInput::make('price')->required()->numeric()->default(0)->prefix('Rp'),
+                        TextInput::make('original_price')->numeric()->prefix('Rp')->label('Discounted From'),
+                        TextInput::make('duration')->label('Total Duration (e.g., 24.5 Hours)'),
+                        TextInput::make('total_students')->numeric()->default(0),
+                        TextInput::make('rating')->numeric()->inputMode('decimal')->step(0.1)->default(5.0),
+                        TextInput::make('reviews_count')->numeric()->default(0),
+                        TextInput::make('badge')->label('Badge (e.g., Best Seller)'),
+                        Toggle::make('is_active')->default(true),
+                        Toggle::make('is_featured')->default(false),
+                    ])->columnSpan(1),
+                ]),
+
+                Grid::make(2)->schema([
+                    Section::make('Instructor Details')->schema([
+                        TextInput::make('instructor_name'),
+                        TextInput::make('instructor_title'),
+                        Textarea::make('instructor_bio')->columnSpanFull(),
+                        FileUpload::make('instructor_avatar')->image()->avatar(),
+                    ])->columnSpan(1),
+
+                    Section::make('Course Features (Benefits)')->schema([
+                        Repeater::make('benefits')
+                            ->schema([
+                                TextInput::make('feature')->required(),
+                            ])
+                            ->columnSpanFull()
+                    ])->columnSpan(1),
+                ]),
+
                 \App\Filament\Resources\Support\SeoForm::make(),
                 \App\Filament\Resources\Support\TranslationForm::make([
                     'title' => 'text',
                     'description' => 'textarea',
                     'syllabus' => 'textarea',
                     'instructor_title' => 'text',
+                    'instructor_bio' => 'textarea',
                 ]),
             ]);
     }
