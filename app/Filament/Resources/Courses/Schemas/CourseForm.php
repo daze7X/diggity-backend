@@ -26,6 +26,12 @@ class CourseForm
                             'online_course' => 'Online Course',
                             'bootcamp' => 'Bootcamp',
                             'learning_path' => 'Learning Path',
+                            'e_book' => 'E-Book / Digital Product',
+                            'webinar' => 'Webinar / Seminar',
+                            'workshop' => 'Workshop / Event',
+                            'corporate_training' => 'Corporate Training',
+                            'certification' => 'Professional Certification',
+                            'scholarship' => 'CSR / Scholarship',
                         ])->default('online_course')->required(),
                         Select::make('category_id')
                             ->relationship('category', 'name', fn ($query) => $query->where('type', 'academy')),
@@ -37,7 +43,7 @@ class CourseForm
                     Section::make('Pricing & Stats')->schema([
                         TextInput::make('price')->required()->numeric()->default(0)->prefix('Rp'),
                         TextInput::make('original_price')->numeric()->prefix('Rp')->label('Discounted From'),
-                        TextInput::make('duration')->label('Total Duration (e.g., 24.5 Hours)'),
+                        TextInput::make('duration')->label('Duration / Length (e.g., 24.5 Hours, 150 Pages, 3 Days)'),
                         TextInput::make('total_students')->numeric()->default(0),
                         TextInput::make('rating')->numeric()->inputMode('decimal')->step(0.1)->default(5.0),
                         TextInput::make('reviews_count')->numeric()->default(0),
@@ -48,11 +54,11 @@ class CourseForm
                 ]),
 
                 Grid::make(2)->schema([
-                    Section::make('Instructor Details')->schema([
-                        TextInput::make('instructor_name'),
-                        TextInput::make('instructor_title'),
-                        Textarea::make('instructor_bio')->columnSpanFull(),
-                        FileUpload::make('instructor_avatar')->image()->avatar(),
+                    Section::make('Instructor / Author Details')->schema([
+                        TextInput::make('instructor_name')->label('Name'),
+                        TextInput::make('instructor_title')->label('Title / Role'),
+                        Textarea::make('instructor_bio')->columnSpanFull()->label('Bio'),
+                        FileUpload::make('instructor_avatar')->image()->avatar()->label('Avatar'),
                     ])->columnSpan(1),
 
                     Section::make('Course Features (Benefits)')->schema([

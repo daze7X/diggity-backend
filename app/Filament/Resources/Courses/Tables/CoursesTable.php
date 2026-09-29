@@ -26,11 +26,20 @@ class CoursesTable
                         'primary' => 'online_course',
                         'success' => 'bootcamp',
                         'warning' => 'learning_path',
+                        'danger' => 'e_book',
+                        'info' => fn ($state) => in_array($state, ['webinar', 'workshop']),
+                        'gray' => fn ($state) => in_array($state, ['corporate_training', 'certification', 'scholarship']),
                     ])
                     ->formatStateUsing(fn (string $state): string => match ($state) {
                         'online_course' => 'Online Course',
                         'bootcamp' => 'Bootcamp',
                         'learning_path' => 'Learning Path',
+                        'e_book' => 'E-Book',
+                        'webinar' => 'Webinar',
+                        'workshop' => 'Workshop',
+                        'corporate_training' => 'Corporate Training',
+                        'certification' => 'Certification',
+                        'scholarship' => 'Scholarship',
                         default => $state,
                     })
                     ->sortable(),
