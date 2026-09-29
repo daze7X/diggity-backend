@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\ActivityLogs\Schemas;
 
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
