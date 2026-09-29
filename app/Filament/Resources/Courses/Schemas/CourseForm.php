@@ -51,7 +51,7 @@ class CourseForm
                         Toggle::make('is_active')->default(true),
                         Toggle::make('is_featured')->default(false),
                     ])->columnSpan(1),
-                ]),
+                ])->columnSpanFull(),
 
                 Grid::make(2)->schema([
                     Section::make('Instructor / Author Details')->schema([
@@ -68,7 +68,7 @@ class CourseForm
                             ])
                             ->columnSpanFull()
                     ])->columnSpan(1),
-                ]),
+                ])->columnSpanFull(),
 
                 \App\Filament\Resources\Support\SeoForm::make(),
                 \App\Filament\Resources\Support\TranslationForm::make([
