@@ -253,11 +253,11 @@ class AcademySeeder extends Seeder
             $course->fill($courseData);
             
             // Translate the title & description automatically for bilingual frontend
-            $course->setTranslation('title', 'en', $courseData['title']);
-            $course->setTranslation('description', 'en', $courseData['description']);
-            $course->setTranslation('syllabus', 'en', $courseData['syllabus']);
-            $course->setTranslation('instructor_bio', 'en', $courseData['instructor_bio']);
-            $course->setTranslation('instructor_title', 'en', $courseData['instructor_title']);
+            $course->en_title = $courseData['title'];
+            $course->en_description = $courseData['description'];
+            $course->en_syllabus = $courseData['syllabus'];
+            $course->en_instructor_bio = $courseData['instructor_bio'];
+            $course->en_instructor_title = $courseData['instructor_title'];
             
             $course->save();
         }
